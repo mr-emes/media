@@ -299,6 +299,11 @@
                             <div id="studentInfoSection" class="hidden mb-6">
                                 <div class="bg-white text-gray-800 p-6 rounded-xl shadow-lg mx-auto max-w-md mb-4">
                                     <h4 class="text-xl font-bold text-green-600 mb-4">📝 Isi Data untuk Sertifikat</h4>
+                                    <div class="bg-blue-50 p-3 rounded-lg mb-4">
+                                        <p class="text-sm text-blue-700">
+                                            <strong>📊 Info:</strong> Hasil kuis akan otomatis tersimpan ke Google Sheets untuk evaluasi guru
+                                        </p>
+                                    </div>
                                     <div class="space-y-4">
                                         <div>
                                             <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap:</label>
@@ -309,7 +314,7 @@
                                             <input type="text" id="studentClass" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none" placeholder="Contoh: 5A">
                                         </div>
                                         <button onclick="generateCertificate()" class="w-full bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition-colors font-semibold">
-                                            🏆 Buat Sertifikat
+                                            🏆 Simpan & Buat Sertifikat
                                         </button>
                                     </div>
                                 </div>
@@ -772,10 +777,8 @@
             
             document.getElementById('scoreMessage').textContent = message;
             
-            // Show student info input if grade >= 70
-            if (grade >= 70) {
-                document.getElementById('studentInfoSection').classList.remove('hidden');
-            }
+            // Always show student info input for data collection
+            document.getElementById('studentInfoSection').classList.remove('hidden');
         }
 
         function resetKuis() {
@@ -785,6 +788,37 @@
             document.getElementById('studentName').value = '';
             document.getElementById('studentClass').value = '';
             initKuis();
+        }
+
+        // Google Sheets Configuration
+        const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzbzyMXRcFuyMmqbjDFPA9i9ixUJ3qoY_9mWkraa3RPBNNePRTpOi5PG6c8iS_G8DdI1w/exec';
+        
+        async function saveToGoogleSheets(name, studentClass, score, grade, timestamp) {
+            try {
+                const data = {
+                    nama: name,
+                    kelas: studentClass,
+                    skor: score,
+                    nilai: grade,
+                    waktu: timestamp,
+                    materi: 'Hukum Bacaan Mim Mati'
+                };
+                
+                const response = await fetch(GOOGLE_SHEETS_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                console.log('Data berhasil dikirim ke Google Sheets');
+                return true;
+            } catch (error) {
+                console.error('Error mengirim data ke Google Sheets:', error);
+                return false;
+            }
         }
 
         function generateCertificate() {
@@ -798,11 +832,6 @@
             
             const grade = Math.round((kuisScore / kuisData.length) * 100);
             
-            // Update certificate display
-            document.getElementById('certificateName').textContent = name.toUpperCase();
-            document.getElementById('certificateClass').textContent = studentClass;
-            document.getElementById('certificateGrade').textContent = grade;
-            
             // Set current date
             const now = new Date();
             const dateStr = now.toLocaleDateString('id-ID', { 
@@ -810,6 +839,15 @@
                 month: 'long', 
                 day: 'numeric' 
             });
+            const timestamp = now.toLocaleString('id-ID');
+            
+            // Save to Google Sheets
+            saveToGoogleSheets(name, studentClass, kuisScore, grade, timestamp);
+            
+            // Update certificate display
+            document.getElementById('certificateName').textContent = name.toUpperCase();
+            document.getElementById('certificateClass').textContent = studentClass;
+            document.getElementById('certificateGrade').textContent = grade;
             document.getElementById('certificateDate').textContent = dateStr;
             
             // Hide input section and show certificate
@@ -1002,5 +1040,5 @@ Selamat! Anda telah tuntas dalam materi Hukum Bacaan Mim Mati.`;
             }
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96cfeaeb01c3a3dc',t:'MTc1NDgzMzM1OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96cff747943d1ecc',t:'MTc1NDgzMzg2NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
