@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Infak - Kelas 5</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+        }
+        
+        .slide-enter {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .bounce-in {
+            animation: bounceIn 0.6s ease-out;
+        }
+        
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .coin-animation {
+            animation: coinFlip 1s ease-in-out;
+        }
+        
+        @keyframes coinFlip {
+            0% { transform: rotateY(0deg) translateY(0px); }
+            50% { transform: rotateY(180deg) translateY(-20px); }
+            100% { transform: rotateY(360deg) translateY(0px); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-100 via-green-50 to-yellow-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-green-500 to-blue-600 text-white p-6 shadow-lg">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl font-bold mb-2">🕌 Belajar Infak 💰</h1>
+            <p class="text-xl">Pembelajaran Fikih Kelas 5 MI</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md p-4 sticky top-0 z-50">
+        <div class="container mx-auto">
+            <div class="flex flex-wrap justify-center gap-4">
+                <button onclick="showSection('materi')" class="nav-btn bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
+                    📚 Materi
+                </button>
+                <button onclick="showSection('kuis')" class="nav-btn bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
+                    🧩 Kuis
+                </button>
+                <button onclick="showSection('simulasi')" class="nav-btn bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
+                    🎮 Simulasi
+                </button>
+                <button onclick="showSection('latihan')" class="nav-btn bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
+                    📝 Latihan
+                </button>
+                <button onclick="showSection('evaluasi')" class="nav-btn bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
+                    ⭐ Evaluasi
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-6">
+        <!-- Materi Section -->
+        <section id="materi" class="section-content">
+            <div class="bg-white rounded-3xl shadow-xl p-8 mb-8">
+                <h2 class="text-3xl font-bold text-center mb-8 text-green-600">📖 Apa itu Infak?</h2>
+                
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-4 text-blue-700">🔍 Pengertian Infak</h3>
+                        <p class="text-lg leading-relaxed text-gray-700 mb-4">
+                            Infak adalah memberikan sebagian harta yang kita miliki kepada orang lain dengan tujuan mencari ridha Allah SWT. Infak bisa diberikan kapan saja dan dalam jumlah berapa saja sesuai kemampuan kita.
+                        </p>
+                        <div class="bg-white p-4 rounded-xl">
+                            <h4 class="font-bold text-blue-600 mb-2">📖 Dalil Al-Quran:</h4>
+                            <p class="text-sm italic text-gray-600">"Dan belanjakanlah sebagian dari apa yang telah Kami berikan kepadamu sebelum datang kematian kepada salah seorang di antara kamu." (QS. Al-Munafiqun: 10)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-4 text-green-700">🎯 Tujuan Infak</h3>
+                        <ul class="text-lg space-y-2 text-gray-700 mb-4">
+                            <li>• Mencari ridha Allah SWT</li>
+                            <li>• Membantu sesama yang membutuhkan</li>
+                            <li>• Membersihkan harta kita</li>
+                            <li>• Melatih sifat dermawan</li>
+                            <li>• Mendekatkan diri kepada Allah</li>
+                            <li>• Mempererat tali silaturahmi</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-2xl mb-8">
+                    <h3 class="text-2xl font-bold mb-4 text-indigo-700">📚 Jenis-Jenis Infak</h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-xl text-center">
+                            <div class="text-3xl mb-2">💰</div>
+                            <h4 class="font-bold text-lg text-green-600 mb-2">Infak Harta</h4>
+                            <p class="text-sm text-gray-600">Memberikan uang, makanan, pakaian, atau barang berharga lainnya</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl text-center">
+                            <div class="text-3xl mb-2">💪</div>
+                            <h4 class="font-bold text-lg text-blue-600 mb-2">Infak Tenaga</h4>
+                            <p class="text-sm text-gray-600">Membantu dengan tenaga seperti gotong royong, membersihkan masjid</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl text-center">
+                            <div class="text-3xl mb-2">🧠</div>
+                            <h4 class="font-bold text-lg text-purple-600 mb-2">Infak Ilmu</h4>
+                            <p class="text-sm text-gray-600">Mengajarkan ilmu, berbagi pengetahuan kepada orang lain</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-teal-50 to-cyan-50 p-6 rounded-2xl mb-8">
+                    <h3 class="text-2xl font-bold mb-4 text-teal-700">👥 Siapa yang Berhak Menerima Infak?</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-3">
+                            <div class="bg-white p-3 rounded-lg flex items-center">
+                                <span class="text-2xl mr-3">🤲</span>
+                                <span class="font-semibold">Fakir dan Miskin</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg flex items-center">
+                                <span class="text-2xl mr-3">👶</span>
+                                <span class="font-semibold">Anak Yatim</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg flex items-center">
+                                <span class="text-2xl mr-3">🏥</span>
+                                <span class="font-semibold">Orang Sakit</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg flex items-center">
+                                <span class="text-2xl mr-3">🎓</span>
+                                <span class="font-semibold">Pelajar yang Membutuhkan</span>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="bg-white p-3 rounded-lg flex items-center">
+                                <span class="text-2xl mr-3">🕌</span>
+                                <span class="font-semibold">Pembangunan Masjid</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg flex items-center">
+                                <span class="text-2xl mr-3">🌍</span>
+                                <span class="font-semibold">Korban Bencana Alam</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg flex items-center">
+                                <span class="text-2xl mr-3">📚</span>
+                                <span class="font-semibold">Pendidikan Islam</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg flex items-center">
+                                <span class="text-2xl mr-3">🚑</span>
+                                <span class="font-semibold">Fasilitas Kesehatan</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-2xl mb-8">
+                    <h3 class="text-2xl font-bold mb-4 text-orange-700">📋 Perbedaan Infak dan Zakat</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-white p-4 rounded-xl">
+                            <h4 class="font-bold text-lg text-blue-600 mb-2">💰 Zakat</h4>
+                            <ul class="text-gray-700 space-y-1">
+                                <li>• Wajib bagi yang mampu</li>
+                                <li>• Ada nisab (batas minimum)</li>
+                                <li>• Jumlah sudah ditentukan</li>
+                                <li>• Waktu tertentu</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl">
+                            <h4 class="font-bold text-lg text-green-600 mb-2">🤲 Infak</h4>
+                            <ul class="text-gray-700 space-y-1">
+                                <li>• Sunnah (dianjurkan)</li>
+                                <li>• Tidak ada batas minimum</li>
+                                <li>• Sesuai kemampuan</li>
+                                <li>• Kapan saja</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-2xl mb-8">
+                    <h3 class="text-2xl font-bold mb-4 text-purple-700">🌟 Manfaat Infak</h3>
+                    <div class="grid md:grid-cols-3 gap-4 mb-6">
+                        <div class="text-center p-4 bg-white rounded-xl">
+                            <div class="text-4xl mb-2">😊</div>
+                            <p class="font-bold text-purple-600">Hati Tenang</p>
+                            <p class="text-sm text-gray-600">Merasa bahagia karena membantu</p>
+                        </div>
+                        <div class="text-center p-4 bg-white rounded-xl">
+                            <div class="text-4xl mb-2">🤝</div>
+                            <p class="font-bold text-purple-600">Persaudaraan</p>
+                            <p class="text-sm text-gray-600">Mempererat hubungan sesama</p>
+                        </div>
+                        <div class="text-center p-4 bg-white rounded-xl">
+                            <div class="text-4xl mb-2">📈</div>
+                            <p class="font-bold text-purple-600">Berkah</p>
+                            <p class="text-sm text-gray-600">Harta menjadi berkah</p>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="text-center p-4 bg-white rounded-xl">
+                            <div class="text-4xl mb-2">🏆</div>
+                            <p class="font-bold text-purple-600">Pahala Berlipat</p>
+                            <p class="text-sm text-gray-600">Allah memberikan pahala yang besar</p>
+                        </div>
+                        <div class="text-center p-4 bg-white rounded-xl">
+                            <div class="text-4xl mb-2">🛡️</div>
+                            <p class="font-bold text-purple-600">Perlindungan</p>
+                            <p class="text-sm text-gray-600">Dilindungi dari musibah</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-rose-50 to-red-50 p-6 rounded-2xl mb-8">
+                    <h3 class="text-2xl font-bold mb-4 text-rose-700">⚖️ Adab dan Etika Berinfak</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-3">
+                            <h4 class="font-bold text-lg text-green-600 mb-3">✅ Yang Dianjurkan:</h4>
+                            <div class="bg-white p-3 rounded-lg">
+                                <span class="font-semibold">🤲 Ikhlas karena Allah</span>
+                                <p class="text-sm text-gray-600">Berinfak dengan niat mencari ridha Allah</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <span class="font-semibold">🤫 Tidak Sombong</span>
+                                <p class="text-sm text-gray-600">Jangan membanggakan diri setelah berinfak</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <span class="font-semibold">💝 Memberikan yang Baik</span>
+                                <p class="text-sm text-gray-600">Berikan yang terbaik yang kita miliki</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <span class="font-semibold">😊 Dengan Senyuman</span>
+                                <p class="text-sm text-gray-600">Berikan dengan wajah yang ramah</p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <h4 class="font-bold text-lg text-red-600 mb-3">❌ Yang Dihindari:</h4>
+                            <div class="bg-white p-3 rounded-lg">
+                                <span class="font-semibold">🚫 Riya (Pamer)</span>
+                                <p class="text-sm text-gray-600">Jangan berinfak untuk dipuji orang</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <span class="font-semibold">😤 Menyakiti Hati</span>
+                                <p class="text-sm text-gray-600">Jangan menyinggung yang diberi</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <span class="font-semibold">🗣️ Menyebarkan Aib</span>
+                                <p class="text-sm text-gray-600">Jangan ceritakan keburukan penerima</p>
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <span class="font-semibold">💔 Mengungkit-ungkit</span>
+                                <p class="text-sm text-gray-600">Jangan mengingatkan kebaikan kita</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-amber-50 to-yellow-50 p-6 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-4 text-amber-700">🌱 Contoh Infak dalam Kehidupan Sehari-hari</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-bold text-lg text-blue-600 mb-3">🏠 Di Rumah:</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li>• Berbagi makanan dengan tetangga</li>
+                                <li>• Memberikan pakaian yang masih bagus</li>
+                                <li>• Membantu pekerjaan rumah tangga</li>
+                                <li>• Mengajarkan adik mengaji</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-green-600 mb-3">🏫 Di Sekolah:</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li>• Meminjamkan alat tulis kepada teman</li>
+                                <li>• Membantu teman yang kesulitan belajar</li>
+                                <li>• Ikut serta dalam kegiatan sosial sekolah</li>
+                                <li>• Menjaga kebersihan lingkungan sekolah</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Kuis Section -->
+        <section id="kuis" class="section-content hidden">
+            <div class="bg-white rounded-3xl shadow-xl p-8">
+                <h2 class="text-3xl font-bold text-center mb-8 text-green-600">🧩 Kuis Interaktif</h2>
+                
+                <div id="quiz-container">
+                    <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-2xl mb-6">
+                        <h3 class="text-xl font-bold mb-4" id="question-text">Pertanyaan akan muncul di sini</h3>
+                        <div id="options-container" class="space-y-3">
+                            <!-- Options will be inserted here -->
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="mb-4">
+                            <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-bold">
+                                Pertanyaan <span id="current-question">1</span> dari <span id="total-questions">5</span>
+                            </span>
+                        </div>
+                        <div class="mb-4">
+                            <span class="bg-green-100 text-green-800 px-4 py-2 rounded-full font-bold">
+                                Skor: <span id="quiz-score">0</span>
+                            </span>
+                        </div>
+                        <button onclick="startQuiz()" id="start-quiz-btn" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105">
+                            🚀 Mulai Kuis
+                        </button>
+                    </div>
+                </div>
+
+                <div id="quiz-result" class="hidden text-center">
+                    <div class="bg-gradient-to-r from-yellow-100 to-orange-100 p-8 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-4" id="result-title">Hasil Kuis</h3>
+                        <div class="text-6xl mb-4" id="result-emoji">🎉</div>
+                        <p class="text-xl mb-4" id="result-message">Pesan hasil</p>
+                        <button onclick="resetQuiz()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full font-bold transition-all duration-300">
+                            🔄 Ulangi Kuis
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Simulasi Section -->
+        <section id="simulasi" class="section-content hidden">
+            <div class="bg-white rounded-3xl shadow-xl p-8">
+                <h2 class="text-3xl font-bold text-center mb-8 text-green-600">🎮 Simulasi Infak</h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-gradient-to-br from-green-50 to-blue-50 p-6 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-4 text-green-700">💰 Uang Saku Kamu</h3>
+                        <div class="text-center mb-6">
+                            <div class="text-6xl mb-2">💵</div>
+                            <div class="text-3xl font-bold text-green-600">Rp <span id="money-amount">10000</span></div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <button onclick="addMoney(5000)" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-bold transition-all duration-300">
+                                + Rp 5.000 (Uang Jajan)
+                            </button>
+                            <button onclick="addMoney(10000)" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-xl font-bold transition-all duration-300">
+                                + Rp 10.000 (Uang Lebaran)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-4 text-orange-700">🤲 Berinfak</h3>
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-xl">
+                                <h4 class="font-bold text-lg mb-2">🏥 Untuk Rumah Sakit</h4>
+                                <div class="flex gap-2">
+                                    <button onclick="giveInfaq(1000, 'rumah sakit')" class="flex-1 bg-red-400 hover:bg-red-500 text-white py-2 rounded-lg font-bold transition-all duration-300">
+                                        Rp 1.000
+                                    </button>
+                                    <button onclick="giveInfaq(2000, 'rumah sakit')" class="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg font-bold transition-all duration-300">
+                                        Rp 2.000
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-xl">
+                                <h4 class="font-bold text-lg mb-2">🕌 Untuk Masjid</h4>
+                                <div class="flex gap-2">
+                                    <button onclick="giveInfaq(1500, 'masjid')" class="flex-1 bg-green-400 hover:bg-green-500 text-white py-2 rounded-lg font-bold transition-all duration-300">
+                                        Rp 1.500
+                                    </button>
+                                    <button onclick="giveInfaq(3000, 'masjid')" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg font-bold transition-all duration-300">
+                                        Rp 3.000
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-xl">
+                                <h4 class="font-bold text-lg mb-2">👨‍👩‍👧‍👦 Untuk Yatim</h4>
+                                <div class="flex gap-2">
+                                    <button onclick="giveInfaq(2500, 'anak yatim')" class="flex-1 bg-purple-400 hover:bg-purple-500 text-white py-2 rounded-lg font-bold transition-all duration-300">
+                                        Rp 2.500
+                                    </button>
+                                    <button onclick="giveInfaq(5000, 'anak yatim')" class="flex-1 bg-purple-500 hover:bg-purple-600 text-white py-2 rounded-lg font-bold transition-all duration-300">
+                                        Rp 5.000
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-4 text-purple-700 text-center">📊 Catatan Infak Kamu</h3>
+                    <div class="grid md:grid-cols-3 gap-4 mb-4">
+                        <div class="bg-white p-4 rounded-xl text-center">
+                            <div class="text-2xl mb-2">💰</div>
+                            <div class="font-bold text-lg">Total Infak</div>
+                            <div class="text-2xl font-bold text-green-600">Rp <span id="total-infaq">0</span></div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl text-center">
+                            <div class="text-2xl mb-2">🎯</div>
+                            <div class="font-bold text-lg">Jumlah Kebaikan</div>
+                            <div class="text-2xl font-bold text-blue-600"><span id="good-deeds">0</span> kali</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl text-center">
+                            <div class="text-2xl mb-2">⭐</div>
+                            <div class="font-bold text-lg">Level Dermawan</div>
+                            <div class="text-lg font-bold text-purple-600" id="generosity-level">Pemula</div>
+                        </div>
+                    </div>
+                    <div id="infaq-log" class="bg-white p-4 rounded-xl max-h-40 overflow-y-auto">
+                        <p class="text-gray-500 text-center">Belum ada catatan infak</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Latihan Section -->
+        <section id="latihan" class="section-content hidden">
+            <div class="bg-white rounded-3xl shadow-xl p-8 mb-8">
+                <h2 class="text-3xl font-bold text-center mb-8 text-orange-600">📝 Latihan Soal</h2>
+                
+                <!-- Latihan Pilihan Ganda -->
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl mb-8">
+                    <h3 class="text-2xl font-bold mb-6 text-blue-700">🔤 Latihan Pilihan Ganda</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-xl">
+                            <h4 class="font-bold text-lg mb-4">1. Manakah yang termasuk jenis infak harta?</h4>
+                            <div class="space-y-2">
+                                <label class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="radio" name="q1" value="a" class="text-blue-600">
+                                    <span>a) Mengajarkan mengaji kepada tetangga</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="radio" name="q1" value="b" class="text-blue-600">
+                                    <span>b) Memberikan makanan kepada fakir miskin</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="radio" name="q1" value="c" class="text-blue-600">
+                                    <span>c) Membantu membersihkan masjid</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="radio" name="q1" value="d" class="text-blue-600">
+                                    <span>d) Menasehati teman yang berbuat salah</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-xl">
+                            <h4 class="font-bold text-lg mb-4">2. Sikap yang benar saat berinfak adalah...</h4>
+                            <div class="space-y-2">
+                                <label class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="radio" name="q2" value="a" class="text-blue-600">
+                                    <span>a) Memberitahu semua orang tentang kebaikan kita</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="radio" name="q2" value="b" class="text-blue-600">
+                                    <span>b) Ikhlas dan tidak mengharap pujian</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="radio" name="q2" value="c" class="text-blue-600">
+                                    <span>c) Mengungkit-ungkit kebaikan yang telah diberikan</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="radio" name="q2" value="d" class="text-blue-600">
+                                    <span>d) Memberikan dengan wajah masam</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-xl">
+                            <h4 class="font-bold text-lg mb-4">3. Infak berbeda dengan zakat karena...</h4>
+                            <div class="space-y-2">
+                                <label class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="radio" name="q3" value="a" class="text-blue-600">
+                                    <span>a) Infak hanya untuk orang kaya</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="radio" name="q3" value="b" class="text-blue-600">
+                                    <span>b) Infak tidak ada batas minimum dan bersifat sunnah</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="radio" name="q3" value="c" class="text-blue-600">
+                                    <span>c) Infak hanya diberikan saat Ramadan</span>
+                                </label>
+                                <label class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="radio" name="q3" value="d" class="text-blue-600">
+                                    <span>d) Infak jumlahnya harus besar</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-6">
+                        <button onclick="checkPracticeAnswers()" class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105">
+                            ✅ Periksa Jawaban
+                        </button>
+                    </div>
+                    
+                    <div id="practice-result" class="hidden mt-6 p-4 rounded-xl"></div>
+                </div>
+
+                <!-- Latihan Isian -->
+                <div class="bg-gradient-to-r from-green-50 to-teal-50 p-6 rounded-2xl mb-8">
+                    <h3 class="text-2xl font-bold mb-6 text-green-700">✏️ Latihan Isian Singkat</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-xl">
+                            <h4 class="font-bold text-lg mb-4">Lengkapi kalimat berikut:</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="mb-2">1. Infak adalah memberikan sebagian <input type="text" id="fill1" class="border-b-2 border-green-400 bg-transparent outline-none px-2 py-1 font-bold text-green-600" placeholder="..."> untuk mencari ridha Allah SWT.</p>
+                                </div>
+                                <div>
+                                    <p class="mb-2">2. Tiga jenis infak adalah infak harta, infak <input type="text" id="fill2" class="border-b-2 border-green-400 bg-transparent outline-none px-2 py-1 font-bold text-green-600" placeholder="...">, dan infak ilmu.</p>
+                                </div>
+                                <div>
+                                    <p class="mb-2">3. Sikap yang harus dihindari saat berinfak adalah <input type="text" id="fill3" class="border-b-2 border-green-400 bg-transparent outline-none px-2 py-1 font-bold text-green-600" placeholder="..."> atau pamer.</p>
+                                </div>
+                                <div>
+                                    <p class="mb-2">4. Dalil tentang infak terdapat dalam surat <input type="text" id="fill4" class="border-b-2 border-green-400 bg-transparent outline-none px-2 py-1 font-bold text-green-600" placeholder="..."> ayat 10.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-6">
+                        <button onclick="checkFillAnswers()" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105">
+                            ✅ Periksa Isian
+                        </button>
+                    </div>
+                    
+                    <div id="fill-result" class="hidden mt-6 p-4 rounded-xl"></div>
+                </div>
+
+                <!-- Latihan Mencocokkan -->
+                <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-6 text-purple-700">🔗 Latihan Mencocokkan</h3>
+                    
+                    <div class="bg-white p-6 rounded-xl">
+                        <h4 class="font-bold text-lg mb-4">Cocokkan pernyataan di sebelah kiri dengan jawaban yang tepat di sebelah kanan:</h4>
+                        
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h5 class="font-bold mb-4 text-purple-600">Pernyataan:</h5>
+                                <div class="space-y-3">
+                                    <div class="bg-purple-100 p-3 rounded-lg">
+                                        <span class="font-semibold">A.</span> Memberikan uang kepada fakir miskin
+                                    </div>
+                                    <div class="bg-purple-100 p-3 rounded-lg">
+                                        <span class="font-semibold">B.</span> Membantu gotong royong di kampung
+                                    </div>
+                                    <div class="bg-purple-100 p-3 rounded-lg">
+                                        <span class="font-semibold">C.</span> Mengajarkan teman mengaji
+                                    </div>
+                                    <div class="bg-purple-100 p-3 rounded-lg">
+                                        <span class="font-semibold">D.</span> Berinfak untuk dipuji orang
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h5 class="font-bold mb-4 text-purple-600">Jawaban:</h5>
+                                <div class="space-y-3">
+                                    <div class="bg-pink-100 p-3 rounded-lg">
+                                        <span class="font-semibold">1.</span> Infak Ilmu
+                                    </div>
+                                    <div class="bg-pink-100 p-3 rounded-lg">
+                                        <span class="font-semibold">2.</span> Infak Harta
+                                    </div>
+                                    <div class="bg-pink-100 p-3 rounded-lg">
+                                        <span class="font-semibold">3.</span> Riya (yang harus dihindari)
+                                    </div>
+                                    <div class="bg-pink-100 p-3 rounded-lg">
+                                        <span class="font-semibold">4.</span> Infak Tenaga
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h5 class="font-bold mb-3">Tuliskan jawabanmu:</h5>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div class="text-center">
+                                    <label class="block font-semibold mb-2">A =</label>
+                                    <input type="number" id="match1" min="1" max="4" class="w-16 h-16 text-center text-xl font-bold border-2 border-purple-300 rounded-lg">
+                                </div>
+                                <div class="text-center">
+                                    <label class="block font-semibold mb-2">B =</label>
+                                    <input type="number" id="match2" min="1" max="4" class="w-16 h-16 text-center text-xl font-bold border-2 border-purple-300 rounded-lg">
+                                </div>
+                                <div class="text-center">
+                                    <label class="block font-semibold mb-2">C =</label>
+                                    <input type="number" id="match3" min="1" max="4" class="w-16 h-16 text-center text-xl font-bold border-2 border-purple-300 rounded-lg">
+                                </div>
+                                <div class="text-center">
+                                    <label class="block font-semibold mb-2">D =</label>
+                                    <input type="number" id="match4" min="1" max="4" class="w-16 h-16 text-center text-xl font-bold border-2 border-purple-300 rounded-lg">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-6">
+                        <button onclick="checkMatchAnswers()" class="bg-purple-500 hover:bg-purple-600 text-white px-8 py-3 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105">
+                            ✅ Periksa Mencocokkan
+                        </button>
+                    </div>
+                    
+                    <div id="match-result" class="hidden mt-6 p-4 rounded-xl"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Evaluasi Section -->
+        <section id="evaluasi" class="section-content hidden">
+            <div class="bg-white rounded-3xl shadow-xl p-8">
+                <h2 class="text-3xl font-bold text-center mb-8 text-green-600">⭐ Evaluasi Pembelajaran</h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-4 text-blue-700">📝 Rangkuman Materi</h3>
+                        <div class="space-y-3">
+                            <div class="bg-white p-3 rounded-lg">
+                                <span class="font-bold text-green-600">✓</span> Infak adalah memberikan sebagian harta untuk mencari ridha Allah
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <span class="font-bold text-green-600">✓</span> Infak bersifat sunnah dan tidak ada batas minimum
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <span class="font-bold text-green-600">✓</span> Infak dapat diberikan kapan saja sesuai kemampuan
+                            </div>
+                            <div class="bg-white p-3 rounded-lg">
+                                <span class="font-bold text-green-600">✓</span> Infak membawa berkah dan kebahagiaan
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-green-50 to-yellow-50 p-6 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-4 text-green-700">🎯 Pencapaian Kamu</h3>
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-xl">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-bold">Materi Dipelajari</span>
+                                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-bold" id="material-status">Selesai ✓</span>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-bold">Skor Kuis Tertinggi</span>
+                                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-bold" id="best-score">0/5</span>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-bold">Simulasi Infak</span>
+                                    <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-bold" id="simulation-status">Belum Dicoba</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 bg-gradient-to-r from-yellow-100 to-orange-100 p-6 rounded-2xl text-center">
+                    <h3 class="text-2xl font-bold mb-4 text-orange-700">🏆 Sertifikat Pembelajaran</h3>
+                    <div class="bg-white p-6 rounded-xl border-4 border-yellow-400 mb-4">
+                        <div class="text-4xl mb-2">🏅</div>
+                        <h4 class="text-xl font-bold mb-2">Sertifikat Belajar Infak</h4>
+                        <p class="text-lg mb-2">Diberikan kepada:</p>
+                        <input type="text" id="student-name" placeholder="Tulis nama kamu di sini" class="text-2xl font-bold text-center border-b-2 border-yellow-400 bg-transparent outline-none mb-4 w-64">
+                        <p class="text-sm text-gray-600">Telah menyelesaikan pembelajaran Fikih tentang Infak</p>
+                        <p class="text-sm text-gray-600">dengan baik dan benar</p>
+                    </div>
+                    <button onclick="generateCertificate()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-8 py-3 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105">
+                        🎉 Dapatkan Sertifikat
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-r from-green-500 to-blue-600 text-white p-6 mt-12">
+        <div class="container mx-auto text-center">
+            <p class="text-lg font-bold mb-2">🌟 Semoga Allah SWT membalas kebaikan kita 🌟</p>
+            <p class="text-sm opacity-80 mb-1">MIN SINGKAWANG</p>
+            <p class="text-sm opacity-80 mb-1">Media Pembelajaran Fikih - Materi Infak Kelas 5 SD</p>
+            <p class="text-xs opacity-70">Guru Pengampu: MAHFUD SIDIK, S.Pd.I</p>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables
+        let currentMoney = 10000;
+        let totalInfaq = 0;
+        let goodDeeds = 0;
+        let bestQuizScore = 0;
+        let currentQuizScore = 0;
+        let currentQuestionIndex = 0;
+        let quizQuestions = [
+            {
+                question: "Apa pengertian infak menurut Islam?",
+                options: [
+                    "Memberikan sebagian harta untuk mencari ridha Allah SWT",
+                    "Meminjam uang kepada teman dengan bunga",
+                    "Menyimpan uang di bank untuk masa depan",
+                    "Membeli barang mewah yang diinginkan"
+                ],
+                correct: 0
+            },
+            {
+                question: "Kapan waktu yang tepat untuk berinfak?",
+                options: [
+                    "Hanya saat bulan Ramadan saja",
+                    "Hanya saat hari raya Idul Fitri",
+                    "Kapan saja sesuai kemampuan kita",
+                    "Hanya saat ada bencana alam"
+                ],
+                correct: 2
+            },
+            {
+                question: "Apa perbedaan utama antara zakat dan infak?",
+                options: [
+                    "Zakat wajib dan ada nisabnya, infak sunnah tanpa batas minimum",
+                    "Zakat sunnah, infak wajib bagi semua orang",
+                    "Keduanya sama saja, tidak ada perbedaan",
+                    "Zakat untuk orang kaya, infak untuk orang miskin"
+                ],
+                correct: 0
+            },
+            {
+                question: "Siapa saja yang berhak menerima infak?",
+                options: [
+                    "Hanya keluarga dan saudara sendiri",
+                    "Hanya orang kaya yang membutuhkan",
+                    "Fakir miskin, yatim piatu, dan siapa saja yang membutuhkan",
+                    "Hanya tetangga yang tinggal di sekitar rumah"
+                ],
+                correct: 2
+            },
+            {
+                question: "Apa manfaat berinfak bagi diri sendiri?",
+                options: [
+                    "Uang akan bertambah banyak secara langsung",
+                    "Hati menjadi tenang, bahagia, dan mendapat berkah Allah",
+                    "Menjadi terkenal dan dipuji banyak orang",
+                    "Mendapat kedudukan tinggi di masyarakat"
+                ],
+                correct: 1
+            },
+            {
+                question: "Apa yang dimaksud dengan infak tenaga?",
+                options: [
+                    "Memberikan uang untuk membayar pekerja",
+                    "Membantu dengan tenaga seperti gotong royong dan kerja bakti",
+                    "Menyewa orang lain untuk bekerja",
+                    "Memberikan alat-alat kerja kepada orang lain"
+                ],
+                correct: 1
+            },
+            {
+                question: "Sikap yang harus dihindari saat berinfak adalah...",
+                options: [
+                    "Memberikan dengan ikhlas dan tersenyum",
+                    "Riya (pamer) dan mengungkit-ungkit kebaikan",
+                    "Memberikan yang terbaik yang kita miliki",
+                    "Berinfak secara diam-diam tanpa diketahui orang"
+                ],
+                correct: 1
+            },
+            {
+                question: "Contoh infak ilmu yang bisa dilakukan siswa adalah...",
+                options: [
+                    "Memberikan buku pelajaran yang sudah tidak terpakai",
+                    "Mengajarkan teman yang kesulitan memahami pelajaran",
+                    "Meminjamkan alat tulis kepada teman",
+                    "Berbagi makanan saat istirahat"
+                ],
+                correct: 1
+            },
+            {
+                question: "Dalil Al-Quran tentang infak terdapat dalam surat...",
+                options: [
+                    "Al-Fatihah ayat 1",
+                    "Al-Baqarah ayat 255",
+                    "Al-Munafiqun ayat 10",
+                    "An-Nas ayat 6"
+                ],
+                correct: 2
+            },
+            {
+                question: "Infak yang paling utama adalah infak yang...",
+                options: [
+                    "Jumlahnya paling besar dan banyak",
+                    "Dilakukan dengan ikhlas karena Allah SWT",
+                    "Diberikan kepada orang terkenal",
+                    "Diketahui dan dipuji banyak orang"
+                ],
+                correct: 1
+            }
+        ];
+
+        // Navigation functions
+        function showSection(sectionName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section-content');
+            sections.forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.remove('hidden');
+            document.getElementById(sectionName).classList.add('slide-enter');
+            
+            // Update navigation buttons
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => {
+                btn.classList.remove('ring-4', 'ring-white');
+            });
+            event.target.classList.add('ring-4', 'ring-white');
+        }
+
+        // Quiz functions
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            currentQuizScore = 0;
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('start-quiz-btn').classList.add('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = quizQuestions[currentQuestionIndex];
+            document.getElementById('question-text').textContent = question.question;
+            document.getElementById('current-question').textContent = currentQuestionIndex + 1;
+            document.getElementById('total-questions').textContent = quizQuestions.length;
+            document.getElementById('quiz-score').textContent = currentQuizScore;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'w-full text-left p-4 bg-white hover:bg-blue-50 border-2 border-gray-200 hover:border-blue-300 rounded-xl transition-all duration-300 transform hover:scale-102';
+                button.textContent = option;
+                button.onclick = () => selectAnswer(index);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function selectAnswer(selectedIndex) {
+            const question = quizQuestions[currentQuestionIndex];
+            const options = document.querySelectorAll('#options-container button');
+            
+            // Disable all buttons
+            options.forEach(btn => btn.disabled = true);
+            
+            // Show correct/incorrect
+            options.forEach((btn, index) => {
+                if (index === question.correct) {
+                    btn.classList.add('bg-green-100', 'border-green-500', 'text-green-800');
+                } else if (index === selectedIndex && index !== question.correct) {
+                    btn.classList.add('bg-red-100', 'border-red-500', 'text-red-800');
+                }
+            });
+            
+            // Update score
+            if (selectedIndex === question.correct) {
+                currentQuizScore++;
+                document.getElementById('quiz-score').textContent = currentQuizScore;
+            }
+            
+            // Next question after delay
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < quizQuestions.length) {
+                    showQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }, 2000);
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('quiz-result').classList.remove('hidden');
+            
+            if (currentQuizScore > bestQuizScore) {
+                bestQuizScore = currentQuizScore;
+                document.getElementById('best-score').textContent = bestQuizScore + '/10';
+            }
+            
+            const resultTitle = document.getElementById('result-title');
+            const resultEmoji = document.getElementById('result-emoji');
+            const resultMessage = document.getElementById('result-message');
+            
+            if (currentQuizScore === 10) {
+                resultTitle.textContent = 'Sempurna! 🏆';
+                resultEmoji.textContent = '🎉';
+                resultMessage.textContent = 'Luar biasa! Kamu memahami materi infak dengan sangat baik!';
+            } else if (currentQuizScore >= 8) {
+                resultTitle.textContent = 'Excellent! 🌟';
+                resultEmoji.textContent = '😊';
+                resultMessage.textContent = 'Hebat sekali! Pemahaman kamu sangat baik. Skor: ' + currentQuizScore + '/10';
+            } else if (currentQuizScore >= 6) {
+                resultTitle.textContent = 'Bagus Sekali! 👏';
+                resultEmoji.textContent = '😊';
+                resultMessage.textContent = 'Kamu sudah memahami materi dengan baik. Skor: ' + currentQuizScore + '/10';
+            } else {
+                resultTitle.textContent = 'Tetap Semangat! 💪';
+                resultEmoji.textContent = '📚';
+                resultMessage.textContent = 'Ayo belajar lagi materi infak. Skor: ' + currentQuizScore + '/10';
+            }
+        }
+
+        function resetQuiz() {
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('start-quiz-btn').classList.remove('hidden');
+            document.getElementById('question-text').textContent = 'Pertanyaan akan muncul di sini';
+            document.getElementById('options-container').innerHTML = '';
+        }
+
+        // Simulation functions
+        function addMoney(amount) {
+            currentMoney += amount;
+            document.getElementById('money-amount').textContent = currentMoney.toLocaleString();
+            
+            // Add coin animation
+            const moneyDisplay = document.querySelector('#money-amount').parentElement;
+            moneyDisplay.classList.add('coin-animation');
+            setTimeout(() => {
+                moneyDisplay.classList.remove('coin-animation');
+            }, 1000);
+        }
+
+        function giveInfaq(amount, purpose) {
+            if (currentMoney >= amount) {
+                currentMoney -= amount;
+                totalInfaq += amount;
+                goodDeeds++;
+                
+                document.getElementById('money-amount').textContent = currentMoney.toLocaleString();
+                document.getElementById('total-infaq').textContent = totalInfaq.toLocaleString();
+                document.getElementById('good-deeds').textContent = goodDeeds;
+                
+                // Update generosity level
+                updateGenerosityLevel();
+                
+                // Add to log
+                addToInfaqLog(amount, purpose);
+                
+                // Update simulation status
+                document.getElementById('simulation-status').textContent = 'Sudah Dicoba ✓';
+                document.getElementById('simulation-status').className = 'bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-bold';
+                
+                // Show success message
+                showInfaqSuccess(amount, purpose);
+            } else {
+                alert('Uang kamu tidak cukup! Tambah uang saku dulu ya 😊');
+            }
+        }
+
+        function updateGenerosityLevel() {
+            const levelElement = document.getElementById('generosity-level');
+            if (totalInfaq >= 20000) {
+                levelElement.textContent = 'Dermawan Sejati 🌟';
+            } else if (totalInfaq >= 10000) {
+                levelElement.textContent = 'Dermawan Hebat 👑';
+            } else if (totalInfaq >= 5000) {
+                levelElement.textContent = 'Dermawan Baik 🎖️';
+            } else if (totalInfaq > 0) {
+                levelElement.textContent = 'Dermawan Pemula 🌱';
+            }
+        }
+
+        function addToInfaqLog(amount, purpose) {
+            const logElement = document.getElementById('infaq-log');
+            if (logElement.children[0].textContent.includes('Belum ada')) {
+                logElement.innerHTML = '';
+            }
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = 'flex justify-between items-center p-2 bg-gray-50 rounded-lg mb-2 bounce-in';
+            logEntry.innerHTML = `
+                <span>💰 Rp ${amount.toLocaleString()} untuk ${purpose}</span>
+                <span class="text-sm text-gray-500">${new Date().toLocaleTimeString()}</span>
+            `;
+            logElement.insertBefore(logEntry, logElement.firstChild);
+        }
+
+        function showInfaqSuccess(amount, purpose) {
+            // Create temporary success message
+            const successDiv = document.createElement('div');
+            successDiv.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500 text-white p-6 rounded-2xl shadow-2xl z-50 bounce-in';
+            successDiv.innerHTML = `
+                <div class="text-center">
+                    <div class="text-4xl mb-2">🎉</div>
+                    <h3 class="text-xl font-bold mb-2">Barakallahu fiik!</h3>
+                    <p>Kamu telah berinfak Rp ${amount.toLocaleString()}</p>
+                    <p>untuk ${purpose}</p>
+                </div>
+            `;
+            
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                document.body.removeChild(successDiv);
+            }, 3000);
+        }
+
+        // Certificate function
+        function generateCertificate() {
+            const studentName = document.getElementById('student-name').value.trim();
+            if (!studentName) {
+                alert('Tulis nama kamu dulu ya! 😊');
+                return;
+            }
+            
+            // Create certificate modal
+            const certificateModal = document.createElement('div');
+            certificateModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            certificateModal.innerHTML = `
+                <div class="bg-white p-8 rounded-3xl shadow-2xl max-w-2xl w-full mx-4 bounce-in">
+                    <div id="certificate-content" class="text-center border-8 border-yellow-400 p-8 rounded-2xl bg-gradient-to-br from-yellow-50 to-orange-50">
+                        <div class="text-6xl mb-4">🏆</div>
+                        <h2 class="text-3xl font-bold text-yellow-700 mb-4">SERTIFIKAT PEMBELAJARAN</h2>
+                        <div class="text-lg mb-4">Diberikan kepada:</div>
+                        <div class="text-4xl font-bold text-green-600 mb-4">${studentName}</div>
+                        <div class="text-lg mb-2">Telah menyelesaikan pembelajaran</div>
+                        <div class="text-2xl font-bold text-blue-600 mb-4">FIKIH - MATERI INFAK</div>
+                        <div class="text-lg mb-4">dengan penuh semangat dan dedikasi</div>
+                        <div class="flex justify-center items-center gap-4 mb-4">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-green-600">${bestQuizScore}/10</div>
+                                <div class="text-sm">Skor Kuis</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-purple-600">Rp ${totalInfaq.toLocaleString()}</div>
+                                <div class="text-sm">Total Infak</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-blue-600">${goodDeeds}</div>
+                                <div class="text-sm">Kebaikan</div>
+                            </div>
+                        </div>
+                        <div class="text-sm text-gray-600 mb-4">${new Date().toLocaleDateString('id-ID', { 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                        })}</div>
+                        <div class="text-lg font-bold text-green-700">🌟 Barakallahu fiik 🌟</div>
+                    </div>
+                    <div class="text-center mt-6 space-x-4">
+                        <button onclick="downloadCertificate('${studentName}')" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105">
+                            📥 Download JPG
+                        </button>
+                        <button onclick="closeCertificate()" class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full font-bold transition-all duration-300">
+                            Tutup
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(certificateModal);
+            window.currentCertificateModal = certificateModal;
+        }
+
+        function downloadCertificate(studentName) {
+            // Create canvas for certificate
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size (A4 landscape proportions)
+            canvas.width = 1200;
+            canvas.height = 850;
+            
+            // Create gradient background
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#fef3c7'); // yellow-100
+            gradient.addColorStop(1, '#fed7aa'); // orange-100
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw border
+            ctx.strokeStyle = '#f59e0b'; // yellow-500
+            ctx.lineWidth = 20;
+            ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
+            
+            // Inner border
+            ctx.strokeStyle = '#d97706'; // yellow-600
+            ctx.lineWidth = 8;
+            ctx.strokeRect(60, 60, canvas.width - 120, canvas.height - 120);
+            
+            // Draw decorative corners
+            ctx.fillStyle = '#f59e0b';
+            const cornerSize = 30;
+            // Top left
+            ctx.fillRect(40, 40, cornerSize, cornerSize);
+            // Top right
+            ctx.fillRect(canvas.width - 70, 40, cornerSize, cornerSize);
+            // Bottom left
+            ctx.fillRect(40, canvas.height - 70, cornerSize, cornerSize);
+            // Bottom right
+            ctx.fillRect(canvas.width - 70, canvas.height - 70, cornerSize, cornerSize);
+            
+            // Set text properties
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#000000';
+            
+            // Title
+            ctx.font = 'bold 48px Arial';
+            ctx.fillStyle = '#b45309'; // yellow-700
+            ctx.fillText('🏆 SERTIFIKAT PEMBELAJARAN 🏆', canvas.width / 2, 180);
+            
+            // Subtitle
+            ctx.font = '28px Arial';
+            ctx.fillStyle = '#374151'; // gray-700
+            ctx.fillText('Diberikan kepada:', canvas.width / 2, 240);
+            
+            // Student name
+            ctx.font = 'bold 56px Arial';
+            ctx.fillStyle = '#059669'; // green-600
+            ctx.fillText(studentName, canvas.width / 2, 320);
+            
+            // Course info
+            ctx.font = '24px Arial';
+            ctx.fillStyle = '#374151';
+            ctx.fillText('Telah menyelesaikan pembelajaran', canvas.width / 2, 380);
+            
+            ctx.font = 'bold 36px Arial';
+            ctx.fillStyle = '#2563eb'; // blue-600
+            ctx.fillText('FIKIH - MATERI INFAK', canvas.width / 2, 430);
+            
+            ctx.font = '24px Arial';
+            ctx.fillStyle = '#374151';
+            ctx.fillText('dengan penuh semangat dan dedikasi', canvas.width / 2, 480);
+            
+            // Achievement stats
+            ctx.font = 'bold 24px Arial';
+            ctx.fillStyle = '#059669'; // green-600
+            ctx.fillText(`Skor Kuis: ${bestQuizScore}/10`, canvas.width / 2 - 200, 550);
+            
+            ctx.fillStyle = '#7c3aed'; // purple-600
+            ctx.fillText(`Total Infak: Rp ${totalInfaq.toLocaleString()}`, canvas.width / 2, 550);
+            
+            ctx.fillStyle = '#2563eb'; // blue-600
+            ctx.fillText(`Kebaikan: ${goodDeeds} kali`, canvas.width / 2 + 200, 550);
+            
+            // Date
+            ctx.font = '20px Arial';
+            ctx.fillStyle = '#6b7280'; // gray-500
+            const currentDate = new Date().toLocaleDateString('id-ID', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            ctx.fillText(currentDate, canvas.width / 2, 620);
+            
+            // Blessing
+            ctx.font = 'bold 28px Arial';
+            ctx.fillStyle = '#059669'; // green-600
+            ctx.fillText('🌟 Barakallahu fiik 🌟', canvas.width / 2, 680);
+            
+            // School/Institution info
+            ctx.font = 'bold 20px Arial';
+            ctx.fillStyle = '#374151';
+            ctx.fillText('MIN SINGKAWANG', canvas.width / 2, 730);
+            
+            ctx.font = '16px Arial';
+            ctx.fillStyle = '#6b7280';
+            ctx.fillText('Media Pembelajaran Fikih - Kelas 5 SD', canvas.width / 2, 755);
+            
+            ctx.font = '16px Arial';
+            ctx.fillStyle = '#6b7280';
+            ctx.fillText('Guru Pengampu: MAHFUD SIDIK, S.Pd.I', canvas.width / 2, 775);
+            
+            // Add decorative elements
+            ctx.font = '40px Arial';
+            ctx.fillText('🕌', 150, 400);
+            ctx.fillText('📚', canvas.width - 150, 400);
+            ctx.fillText('💰', 150, 600);
+            ctx.fillText('⭐', canvas.width - 150, 600);
+            
+            // Convert canvas to blob and download
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Sertifikat_Infak_${studentName.replace(/\s+/g, '_')}.jpg`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                // Show success message
+                showDownloadSuccess();
+            }, 'image/jpeg', 0.9);
+        }
+
+        function showDownloadSuccess() {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500 text-white p-6 rounded-2xl shadow-2xl z-50 bounce-in';
+            successDiv.innerHTML = `
+                <div class="text-center">
+                    <div class="text-4xl mb-2">📥</div>
+                    <h3 class="text-xl font-bold mb-2">Download Berhasil!</h3>
+                    <p>Sertifikat telah diunduh sebagai file JPG</p>
+                    <p class="text-sm mt-2">Cek folder Download kamu ya! 😊</p>
+                </div>
+            `;
+            
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                if (document.body.contains(successDiv)) {
+                    document.body.removeChild(successDiv);
+                }
+            }, 4000);
+        }
+
+        function closeCertificate() {
+            if (window.currentCertificateModal) {
+                document.body.removeChild(window.currentCertificateModal);
+                window.currentCertificateModal = null;
+            }
+        }
+
+        // Practice exercise functions
+        function checkPracticeAnswers() {
+            const answers = {
+                q1: 'b', // Memberikan makanan kepada fakir miskin (infak harta)
+                q2: 'b', // Ikhlas dan tidak mengharap pujian
+                q3: 'b'  // Infak tidak ada batas minimum dan bersifat sunnah
+            };
+            
+            let score = 0;
+            let total = 3;
+            let results = [];
+            
+            for (let q in answers) {
+                const selected = document.querySelector(`input[name="${q}"]:checked`);
+                if (selected && selected.value === answers[q]) {
+                    score++;
+                    results.push(`✅ Soal ${q.slice(1)}: Benar`);
+                } else {
+                    results.push(`❌ Soal ${q.slice(1)}: Salah`);
+                }
+            }
+            
+            const resultDiv = document.getElementById('practice-result');
+            resultDiv.classList.remove('hidden');
+            
+            if (score === total) {
+                resultDiv.className = 'mt-6 p-4 rounded-xl bg-green-100 border-2 border-green-300';
+                resultDiv.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">🎉</div>
+                        <h4 class="text-xl font-bold text-green-700 mb-2">Sempurna!</h4>
+                        <p class="text-green-600 mb-3">Skor: ${score}/${total} - Semua jawaban benar!</p>
+                        <div class="text-left">
+                            ${results.map(r => `<p class="text-sm">${r}</p>`).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                resultDiv.className = 'mt-6 p-4 rounded-xl bg-yellow-100 border-2 border-yellow-300';
+                resultDiv.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">📚</div>
+                        <h4 class="text-xl font-bold text-yellow-700 mb-2">Tetap Semangat!</h4>
+                        <p class="text-yellow-600 mb-3">Skor: ${score}/${total} - Ayo belajar lagi!</p>
+                        <div class="text-left">
+                            ${results.map(r => `<p class="text-sm">${r}</p>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function checkFillAnswers() {
+            const answers = {
+                fill1: ['harta', 'hartanya'],
+                fill2: ['tenaga'],
+                fill3: ['riya', 'sombong', 'pamer'],
+                fill4: ['al-munafiqun', 'almunafiqun', 'munafiqun']
+            };
+            
+            let score = 0;
+            let total = 4;
+            let results = [];
+            
+            for (let i = 1; i <= 4; i++) {
+                const input = document.getElementById(`fill${i}`);
+                const userAnswer = input.value.toLowerCase().trim();
+                const correctAnswers = answers[`fill${i}`];
+                
+                if (correctAnswers.some(answer => userAnswer.includes(answer))) {
+                    score++;
+                    results.push(`✅ Nomor ${i}: Benar`);
+                    input.classList.add('bg-green-100', 'border-green-400');
+                } else {
+                    results.push(`❌ Nomor ${i}: Salah (Jawaban: ${correctAnswers[0]})`);
+                    input.classList.add('bg-red-100', 'border-red-400');
+                }
+            }
+            
+            const resultDiv = document.getElementById('fill-result');
+            resultDiv.classList.remove('hidden');
+            
+            if (score === total) {
+                resultDiv.className = 'mt-6 p-4 rounded-xl bg-green-100 border-2 border-green-300';
+                resultDiv.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">🌟</div>
+                        <h4 class="text-xl font-bold text-green-700 mb-2">Excellent!</h4>
+                        <p class="text-green-600 mb-3">Skor: ${score}/${total} - Semua isian benar!</p>
+                    </div>
+                `;
+            } else {
+                resultDiv.className = 'mt-6 p-4 rounded-xl bg-yellow-100 border-2 border-yellow-300';
+                resultDiv.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">💪</div>
+                        <h4 class="text-xl font-bold text-yellow-700 mb-2">Hampir Benar!</h4>
+                        <p class="text-yellow-600 mb-3">Skor: ${score}/${total}</p>
+                        <div class="text-left text-sm">
+                            ${results.map(r => `<p>${r}</p>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function checkMatchAnswers() {
+            const correctAnswers = {
+                match1: 2, // A = 2 (Infak Harta)
+                match2: 4, // B = 4 (Infak Tenaga)
+                match3: 1, // C = 1 (Infak Ilmu)
+                match4: 3  // D = 3 (Riya)
+            };
+            
+            let score = 0;
+            let total = 4;
+            let results = [];
+            
+            for (let i = 1; i <= 4; i++) {
+                const input = document.getElementById(`match${i}`);
+                const userAnswer = parseInt(input.value);
+                const correctAnswer = correctAnswers[`match${i}`];
+                
+                if (userAnswer === correctAnswer) {
+                    score++;
+                    results.push(`✅ ${String.fromCharCode(64 + i)} = ${correctAnswer}: Benar`);
+                    input.classList.add('bg-green-100', 'border-green-400');
+                } else {
+                    results.push(`❌ ${String.fromCharCode(64 + i)} = ${correctAnswer}: Salah`);
+                    input.classList.add('bg-red-100', 'border-red-400');
+                }
+            }
+            
+            const resultDiv = document.getElementById('match-result');
+            resultDiv.classList.remove('hidden');
+            
+            if (score === total) {
+                resultDiv.className = 'mt-6 p-4 rounded-xl bg-green-100 border-2 border-green-300';
+                resultDiv.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">🎯</div>
+                        <h4 class="text-xl font-bold text-green-700 mb-2">Perfect Match!</h4>
+                        <p class="text-green-600 mb-3">Skor: ${score}/${total} - Semua cocokkan benar!</p>
+                        <div class="text-left text-sm">
+                            <p>A = 2 (Infak Harta)</p>
+                            <p>B = 4 (Infak Tenaga)</p>
+                            <p>C = 1 (Infak Ilmu)</p>
+                            <p>D = 3 (Riya - yang harus dihindari)</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                resultDiv.className = 'mt-6 p-4 rounded-xl bg-yellow-100 border-2 border-yellow-300';
+                resultDiv.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">🔄</div>
+                        <h4 class="text-xl font-bold text-yellow-700 mb-2">Coba Lagi!</h4>
+                        <p class="text-yellow-600 mb-3">Skor: ${score}/${total}</p>
+                        <div class="text-left text-sm">
+                            <p><strong>Jawaban yang benar:</strong></p>
+                            <p>A = 2 (Infak Harta)</p>
+                            <p>B = 4 (Infak Tenaga)</p>
+                            <p>C = 1 (Infak Ilmu)</p>
+                            <p>D = 3 (Riya - yang harus dihindari)</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show materi section by default
+            showSection('materi');
+            
+            // Set initial values
+            document.getElementById('money-amount').textContent = currentMoney.toLocaleString();
+            document.getElementById('total-infaq').textContent = totalInfaq.toLocaleString();
+            document.getElementById('good-deeds').textContent = goodDeeds;
+            document.getElementById('best-score').textContent = bestQuizScore + '/10';
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96cf0f3082c67e2e',t:'MTc1NDgyNDM1OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
