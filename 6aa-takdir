@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Pembelajaran Akidah Akhlak Kelas 6 MI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .quiz-option { transition: all 0.2s ease; }
+        .quiz-option:hover { background-color: #f3f4f6; }
+        .quiz-option.selected { background-color: #dbeafe; border-color: #3b82f6; }
+        .quiz-option.correct { background-color: #dcfce7; border-color: #16a34a; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #dc2626; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .simulation-card { background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%); }
+        .certificate-bg { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .scenario-card { transition: all 0.3s ease; cursor: pointer; }
+        .scenario-card:hover { transform: scale(1.02); }
+        .scenario-card.selected { border: 3px solid #3b82f6; background: #dbeafe; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-6 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <h1 class="text-xl font-bold mb-2">Media Pembelajaran Akidah Akhlak Kelas 6 MI</h1>
+                <h2 class="text-3xl font-semibold mb-1">MIN SINGKAWANG</h2>
+                <p class="text-sm opacity-90 mb-2">Madrasah Maju, Bermutu, Mendunia</p>
+                <p class="text-sm">Guru Pengampu: MAHFUD SIDIK, S.Pd.I</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center space-x-1 py-3 overflow-x-auto">
+                <button onclick="showSection('home')" class="nav-btn px-4 py-2 rounded-lg font-medium transition-colors bg-blue-500 text-white">🏠 Beranda</button>
+                <button onclick="showSection('materi')" class="nav-btn px-4 py-2 rounded-lg font-medium transition-colors hover:bg-gray-100">📚 Materi</button>
+                <button onclick="showSection('quiz')" class="nav-btn px-4 py-2 rounded-lg font-medium transition-colors hover:bg-gray-100">📝 Latihan</button>
+                <button onclick="showSection('kuis')" class="nav-btn px-4 py-2 rounded-lg font-medium transition-colors hover:bg-gray-100">🎯 Kuis</button>
+                <button onclick="showSection('simulasi')" class="nav-btn px-4 py-2 rounded-lg font-medium transition-colors hover:bg-gray-100">🎮 Simulasi</button>
+                <button onclick="showSection('sertifikat')" class="nav-btn px-4 py-2 rounded-lg font-medium transition-colors hover:bg-gray-100">🏆 Sertifikat</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Student Info Modal -->
+    <div id="student-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+            <h3 class="text-xl font-bold mb-4 text-center">Data Siswa</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Nama Lengkap</label>
+                    <input type="text" id="student-name" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Masukkan nama lengkap">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Kelas</label>
+                    <select id="student-class" class="w-full p-3 border border-gray-300 rounded-lg">
+                        <option value="">Pilih Kelas</option>
+                        <option value="6A">6A</option>
+                        <option value="6B">6B</option>
+                        <option value="6C">6C</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">NISN</label>
+                    <input type="text" id="student-nisn" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Masukkan NISN">
+                </div>
+            </div>
+            <div class="flex space-x-3 mt-6">
+                <button onclick="closeStudentModal()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 rounded-lg font-medium">Batal</button>
+                <button onclick="saveStudentData()" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-medium">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Home Section -->
+    <section id="home" class="section-content py-12">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="bg-white rounded-2xl shadow-xl p-8 mb-8 card-hover">
+                    <div class="text-6xl mb-4">🕌</div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Beriman kepada Qadha dan Qadar</h2>
+                    <p class="text-lg text-gray-600 mb-6">Pelajari tentang rukun iman yang keenam dengan materi lengkap, simulasi interaktif, dan dapatkan sertifikat!</p>
+                    <div class="text-center">
+                        <button onclick="showSection('materi')" class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-lg font-bold text-lg transition-colors">
+                            Mulai Belajar 🚀
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <div class="text-3xl mb-3">📖</div>
+                        <h3 class="font-semibold text-gray-800 mb-2">5 Sub Materi</h3>
+                        <p class="text-gray-600 text-sm">Materi lengkap tentang Qadha dan Qadar</p>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <div class="text-3xl mb-3">✅</div>
+                        <h3 class="font-semibold text-gray-800 mb-2">30 Soal Latihan</h3>
+                        <p class="text-gray-600 text-sm">20 Pilihan Ganda, 5 Menjodohkan, 5 Isian</p>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <div class="text-3xl mb-3">🎯</div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Kuis Komprehensif</h3>
+                        <p class="text-gray-600 text-sm">Evaluasi pemahaman menyeluruh</p>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <div class="text-3xl mb-3">🎮</div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Simulasi Interaktif</h3>
+                        <p class="text-gray-600 text-sm">Praktik penerapan dalam kehidupan</p>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <div class="text-3xl mb-3">🏆</div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Sertifikat Digital</h3>
+                        <p class="text-gray-600 text-sm">Sertifikat otomatis ke WhatsApp guru</p>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <div class="text-3xl mb-3">📱</div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Notifikasi WhatsApp</h3>
+                        <p class="text-gray-600 text-sm">Laporan otomatis ke guru pengampu</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Materi Section -->
+    <section id="materi" class="section-content py-12 hidden">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">📚 Materi Pembelajaran</h2>
+                
+                <div class="space-y-6">
+                    <!-- Materi 1 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                        <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4">
+                            <h3 class="text-xl font-semibold flex items-center">
+                                <span class="bg-white text-blue-500 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">1</span>
+                                Pengertian Qadha dan Qadar
+                            </h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="prose max-w-none">
+                                <p class="text-gray-700 mb-4"><strong>Qadha</strong> artinya ketetapan Allah SWT yang sudah terjadi atau sudah berlalu.</p>
+                                <p class="text-gray-700 mb-4"><strong>Qadar</strong> artinya ketetapan Allah SWT yang akan terjadi di masa yang akan datang.</p>
+                                <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                                    <p class="text-blue-800"><strong>Kesimpulan:</strong> Beriman kepada Qadha dan Qadar berarti meyakini bahwa segala sesuatu yang terjadi di alam semesta ini sudah ditetapkan oleh Allah SWT sejak zaman azali.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Materi 2 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                        <div class="bg-gradient-to-r from-green-500 to-teal-600 text-white p-4">
+                            <h3 class="text-xl font-semibold flex items-center">
+                                <span class="bg-white text-green-500 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">2</span>
+                                Dalil Qadha dan Qadar
+                            </h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="prose max-w-none">
+                                <h4 class="font-semibold text-gray-800 mb-3">Al-Qur'an:</h4>
+                                <div class="bg-green-50 p-4 rounded-lg mb-4 text-center">
+                                    <p class="text-xl text-green-800 mb-2" dir="rtl">إِنَّا كُلَّ شَيْءٍ خَلَقْنَاهُ بِقَدَرٍ</p>
+                                    <p class="text-green-700 italic">"Sesungguhnya Kami menciptakan segala sesuatu menurut ukuran (takdir)." (QS. Al-Qamar: 49)</p>
+                                </div>
+                                <h4 class="font-semibold text-gray-800 mb-3">Hadits:</h4>
+                                <div class="bg-yellow-50 p-4 rounded-lg">
+                                    <p class="text-yellow-800 italic">"Takdir itu ada yang baik dan ada yang buruk." (HR. Muslim)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Materi 3 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                        <div class="bg-gradient-to-r from-purple-500 to-pink-600 text-white p-4">
+                            <h3 class="text-xl font-semibold flex items-center">
+                                <span class="bg-white text-purple-500 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">3</span>
+                                Pembagian Takdir
+                            </h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-purple-50 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-purple-800 mb-2">1. Takdir Mubram</h4>
+                                    <p class="text-purple-700 text-sm">Takdir yang pasti terjadi dan tidak dapat diubah. Contoh: kematian, jenis kelamin.</p>
+                                </div>
+                                <div class="bg-pink-50 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-pink-800 mb-2">2. Takdir Muallaq</h4>
+                                    <p class="text-pink-700 text-sm">Takdir yang dapat berubah dengan usaha dan doa. Contoh: rezeki, kesehatan.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Materi 4 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                        <div class="bg-gradient-to-r from-orange-500 to-red-600 text-white p-4">
+                            <h3 class="text-xl font-semibold flex items-center">
+                                <span class="bg-white text-orange-500 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">4</span>
+                                Meneladani Qadha dan Qadar
+                            </h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-3">
+                                    <div class="bg-orange-100 text-orange-600 rounded-full p-2 text-sm">✓</div>
+                                    <p class="text-gray-700">Bersabar ketika mendapat musibah</p>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="bg-orange-100 text-orange-600 rounded-full p-2 text-sm">✓</div>
+                                    <p class="text-gray-700">Bersyukur ketika mendapat nikmat</p>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="bg-orange-100 text-orange-600 rounded-full p-2 text-sm">✓</div>
+                                    <p class="text-gray-700">Tetap berusaha dan berdoa</p>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="bg-orange-100 text-orange-600 rounded-full p-2 text-sm">✓</div>
+                                    <p class="text-gray-700">Tawakal kepada Allah SWT</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Materi 5 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                        <div class="bg-gradient-to-r from-indigo-500 to-blue-600 text-white p-4">
+                            <h3 class="text-xl font-semibold flex items-center">
+                                <span class="bg-white text-indigo-500 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">5</span>
+                                Hikmah Iman kepada Qadha dan Qadar
+                            </h3>
+                        </div>
+                        <div class="p-6">
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="space-y-3">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-indigo-500">🌟</span>
+                                        <p class="text-gray-700">Hati menjadi tenang</p>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-indigo-500">💪</span>
+                                        <p class="text-gray-700">Menumbuhkan sikap sabar</p>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-indigo-500">🙏</span>
+                                        <p class="text-gray-700">Meningkatkan rasa syukur</p>
+                                    </div>
+                                </div>
+                                <div class="space-y-3">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-indigo-500">⚡</span>
+                                        <p class="text-gray-700">Mendorong untuk berusaha</p>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-indigo-500">🎯</span>
+                                        <p class="text-gray-700">Menguatkan keimanan</p>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-indigo-500">🤝</span>
+                                        <p class="text-gray-700">Menumbuhkan sikap tawakal</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-8">
+                    <button onclick="showSection('quiz')" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+                        Lanjut ke Latihan Soal 📝
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section (Latihan) -->
+    <section id="quiz" class="section-content py-12 hidden">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">📝 Latihan Soal</h2>
+                
+                <!-- Quiz Navigation -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                    <div class="flex justify-center space-x-4 mb-4">
+                        <button onclick="showQuizType('pilgan')" class="quiz-nav-btn bg-blue-500 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                            Pilihan Ganda (20)
+                        </button>
+                        <button onclick="showQuizType('menjodohkan')" class="quiz-nav-btn hover:bg-gray-100 px-6 py-2 rounded-lg font-medium transition-colors">
+                            Menjodohkan (5)
+                        </button>
+                        <button onclick="showQuizType('isian')" class="quiz-nav-btn hover:bg-gray-100 px-6 py-2 rounded-lg font-medium transition-colors">
+                            Isian (5)
+                        </button>
+                    </div>
+                    <div class="text-center">
+                        <div id="quiz-progress" class="text-sm text-gray-600 mb-2">Soal 1 dari 20</div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div id="progress-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 5%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pilihan Ganda -->
+                <div id="pilgan-quiz" class="quiz-type">
+                    <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                        <div id="pilgan-question" class="mb-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Soal 1</h3>
+                            <p class="text-gray-700">Apa arti dari kata "Qadha"?</p>
+                        </div>
+                        <div id="pilgan-options" class="space-y-3">
+                            <label class="quiz-option block p-4 border-2 border-gray-200 rounded-lg cursor-pointer">
+                                <input type="radio" name="pilgan-answer" value="a" class="mr-3">
+                                <span>a. Ketetapan Allah yang akan terjadi</span>
+                            </label>
+                            <label class="quiz-option block p-4 border-2 border-gray-200 rounded-lg cursor-pointer">
+                                <input type="radio" name="pilgan-answer" value="b" class="mr-3">
+                                <span>b. Ketetapan Allah yang sudah terjadi</span>
+                            </label>
+                            <label class="quiz-option block p-4 border-2 border-gray-200 rounded-lg cursor-pointer">
+                                <input type="radio" name="pilgan-answer" value="c" class="mr-3">
+                                <span>c. Ketetapan manusia</span>
+                            </label>
+                            <label class="quiz-option block p-4 border-2 border-gray-200 rounded-lg cursor-pointer">
+                                <input type="radio" name="pilgan-answer" value="d" class="mr-3">
+                                <span>d. Ketetapan alam</span>
+                            </label>
+                        </div>
+                        <div class="flex justify-between mt-6">
+                            <button id="pilgan-prev" onclick="prevPilganQuestion()" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors" disabled>
+                                ← Sebelumnya
+                            </button>
+                            <button id="pilgan-next" onclick="nextPilganQuestion()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                                Selanjutnya →
+                            </button>
+                        </div>
+                    </div>
+                    <div id="pilgan-result" class="bg-white rounded-xl shadow-lg p-6 hidden">
+                        <h3 class="text-xl font-semibold text-center mb-4">Hasil Pilihan Ganda</h3>
+                        <div class="text-center">
+                            <div class="text-4xl mb-4">🎉</div>
+                            <p class="text-lg mb-2">Skor Anda: <span id="pilgan-score" class="font-bold text-blue-600">0</span>/20</p>
+                            <p class="text-gray-600 mb-4">Persentase: <span id="pilgan-percentage" class="font-bold">0%</span></p>
+                            <button onclick="resetPilganQuiz()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                                Ulangi Quiz
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Menjodohkan -->
+                <div id="menjodohkan-quiz" class="quiz-type hidden">
+                    <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-6">Menjodohkan</h3>
+                        <p class="text-gray-600 mb-6">Cocokkan pernyataan di kolom A dengan jawaban yang tepat di kolom B</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-semibold mb-4 text-center bg-blue-100 p-2 rounded">Kolom A</h4>
+                                <div class="space-y-3">
+                                    <div class="p-3 border-2 border-gray-200 rounded-lg">
+                                        <span class="font-medium">1.</span> Takdir yang pasti terjadi
+                                    </div>
+                                    <div class="p-3 border-2 border-gray-200 rounded-lg">
+                                        <span class="font-medium">2.</span> Takdir yang dapat berubah
+                                    </div>
+                                    <div class="p-3 border-2 border-gray-200 rounded-lg">
+                                        <span class="font-medium">3.</span> Sikap ketika mendapat musibah
+                                    </div>
+                                    <div class="p-3 border-2 border-gray-200 rounded-lg">
+                                        <span class="font-medium">4.</span> Sikap ketika mendapat nikmat
+                                    </div>
+                                    <div class="p-3 border-2 border-gray-200 rounded-lg">
+                                        <span class="font-medium">5.</span> Menyerahkan hasil kepada Allah
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-4 text-center bg-green-100 p-2 rounded">Kolom B</h4>
+                                <div class="space-y-3">
+                                    <select class="w-full p-3 border-2 border-gray-200 rounded-lg" data-answer="1">
+                                        <option value="">Pilih jawaban...</option>
+                                        <option value="a">a. Sabar</option>
+                                        <option value="b">b. Syukur</option>
+                                        <option value="c">c. Takdir Mubram</option>
+                                        <option value="d">d. Takdir Muallaq</option>
+                                        <option value="e">e. Tawakal</option>
+                                    </select>
+                                    <select class="w-full p-3 border-2 border-gray-200 rounded-lg" data-answer="2">
+                                        <option value="">Pilih jawaban...</option>
+                                        <option value="a">a. Sabar</option>
+                                        <option value="b">b. Syukur</option>
+                                        <option value="c">c. Takdir Mubram</option>
+                                        <option value="d">d. Takdir Muallaq</option>
+                                        <option value="e">e. Tawakal</option>
+                                    </select>
+                                    <select class="w-full p-3 border-2 border-gray-200 rounded-lg" data-answer="3">
+                                        <option value="">Pilih jawaban...</option>
+                                        <option value="a">a. Sabar</option>
+                                        <option value="b">b. Syukur</option>
+                                        <option value="c">c. Takdir Mubram</option>
+                                        <option value="d">d. Takdir Muallaq</option>
+                                        <option value="e">e. Tawakal</option>
+                                    </select>
+                                    <select class="w-full p-3 border-2 border-gray-200 rounded-lg" data-answer="4">
+                                        <option value="">Pilih jawaban...</option>
+                                        <option value="a">a. Sabar</option>
+                                        <option value="b">b. Syukur</option>
+                                        <option value="c">c. Takdir Mubram</option>
+                                        <option value="d">d. Takdir Muallaq</option>
+                                        <option value="e">e. Tawakal</option>
+                                    </select>
+                                    <select class="w-full p-3 border-2 border-gray-200 rounded-lg" data-answer="5">
+                                        <option value="">Pilih jawaban...</option>
+                                        <option value="a">a. Sabar</option>
+                                        <option value="b">b. Syukur</option>
+                                        <option value="c">c. Takdir Mubram</option>
+                                        <option value="d">d. Takdir Muallaq</option>
+                                        <option value="e">e. Tawakal</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-6">
+                            <button onclick="checkMenjodohkan()" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+                                Periksa Jawaban
+                            </button>
+                        </div>
+                        
+                        <div id="menjodohkan-result" class="mt-6 p-4 rounded-lg hidden">
+                            <h4 class="font-semibold mb-2">Hasil:</h4>
+                            <p>Skor: <span id="menjodohkan-score">0</span>/5</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Isian -->
+                <div id="isian-quiz" class="quiz-type hidden">
+                    <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-6">Soal Isian</h3>
+                        <p class="text-gray-600 mb-6">Lengkapi kalimat-kalimat berikut dengan jawaban yang tepat!</p>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <p class="mb-2"><span class="font-medium">1.</span> Beriman kepada Qadha dan Qadar merupakan rukun iman yang ke-...</p>
+                                <input type="text" class="isian-input w-full p-3 border-2 border-gray-200 rounded-lg" data-answer="enam" placeholder="Jawaban Anda">
+                            </div>
+                            <div>
+                                <p class="mb-2"><span class="font-medium">2.</span> Takdir yang pasti terjadi dan tidak dapat diubah disebut takdir...</p>
+                                <input type="text" class="isian-input w-full p-3 border-2 border-gray-200 rounded-lg" data-answer="mubram" placeholder="Jawaban Anda">
+                            </div>
+                            <div>
+                                <p class="mb-2"><span class="font-medium">3.</span> Sikap yang harus ditunjukkan ketika mendapat musibah adalah...</p>
+                                <input type="text" class="isian-input w-full p-3 border-2 border-gray-200 rounded-lg" data-answer="sabar" placeholder="Jawaban Anda">
+                            </div>
+                            <div>
+                                <p class="mb-2"><span class="font-medium">4.</span> Ayat Al-Qur'an yang menjelaskan tentang takdir terdapat dalam surat...</p>
+                                <input type="text" class="isian-input w-full p-3 border-2 border-gray-200 rounded-lg" data-answer="al-qamar" placeholder="Jawaban Anda">
+                            </div>
+                            <div>
+                                <p class="mb-2"><span class="font-medium">5.</span> Menyerahkan hasil usaha kepada Allah SWT disebut...</p>
+                                <input type="text" class="isian-input w-full p-3 border-2 border-gray-200 rounded-lg" data-answer="tawakal" placeholder="Jawaban Anda">
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-6">
+                            <button onclick="checkIsian()" class="bg-purple-500 hover:bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+                                Periksa Jawaban
+                            </button>
+                        </div>
+                        
+                        <div id="isian-result" class="mt-6 p-4 rounded-lg hidden">
+                            <h4 class="font-semibold mb-2">Hasil:</h4>
+                            <p>Skor: <span id="isian-score">0</span>/5</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-8">
+                    <button onclick="showSection('kuis')" class="bg-yellow-500 hover:bg-yellow-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+                        Lanjut ke Kuis Komprehensif 🎯
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kuis Komprehensif Section -->
+    <section id="kuis" class="section-content py-12 hidden">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">🎯 Kuis Komprehensif</h2>
+                
+                <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                    <div class="text-center mb-6">
+                        <div class="text-6xl mb-4">🏆</div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Evaluasi Pemahaman Menyeluruh</h3>
+                        <p class="text-gray-600 mb-4">Kuis ini akan menguji pemahaman Anda tentang seluruh materi Qadha dan Qadar</p>
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                            <p class="text-yellow-800"><strong>Ketentuan:</strong></p>
+                            <ul class="text-yellow-700 text-sm mt-2 space-y-1">
+                                <li>• 15 soal pilihan ganda</li>
+                                <li>• Waktu: 20 menit</li>
+                                <li>• Nilai minimal untuk sertifikat: 80</li>
+                                <li>• Hasil otomatis dikirim ke WhatsApp guru</li>
+                            </ul>
+                        </div>
+                        <button onclick="startKuisKomprehensif()" class="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-lg font-bold text-lg transition-colors">
+                            Mulai Kuis 🚀
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Kuis Interface -->
+                <div id="kuis-interface" class="hidden">
+                    <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <span class="text-sm text-gray-600">Soal <span id="kuis-current">1</span> dari 15</span>
+                                <div class="w-64 bg-gray-200 rounded-full h-2 mt-1">
+                                    <div id="kuis-progress" class="bg-green-500 h-2 rounded-full transition-all duration-300" style="width: 6.67%"></div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold text-red-500" id="timer">20:00</div>
+                                <div class="text-sm text-gray-600">Waktu tersisa</div>
+                            </div>
+                        </div>
+
+                        <div id="kuis-question" class="mb-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Loading...</h3>
+                        </div>
+
+                        <div id="kuis-options" class="space-y-3 mb-6">
+                            <!-- Options will be loaded here -->
+                        </div>
+
+                        <div class="flex justify-between">
+                            <button id="kuis-prev" onclick="prevKuisQuestion()" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors" disabled>
+                                ← Sebelumnya
+                            </button>
+                            <button id="kuis-next" onclick="nextKuisQuestion()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                                Selanjutnya →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kuis Result -->
+                <div id="kuis-result" class="bg-white rounded-xl shadow-lg p-8 hidden">
+                    <div class="text-center">
+                        <div id="result-icon" class="text-6xl mb-4">🎉</div>
+                        <h3 class="text-2xl font-bold mb-4" id="result-title">Selamat!</h3>
+                        <div class="mb-6">
+                            <p class="text-lg mb-2">Skor Anda: <span id="kuis-final-score" class="font-bold text-blue-600">0</span>/15</p>
+                            <p class="text-gray-600 mb-2">Persentase: <span id="kuis-percentage" class="font-bold">0%</span></p>
+                            <p class="text-gray-600">Waktu yang digunakan: <span id="time-used" class="font-bold">0 menit</span></p>
+                        </div>
+                        <div id="certificate-info" class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 hidden">
+                            <p class="text-green-800 font-semibold">🏆 Anda berhak mendapatkan sertifikat!</p>
+                            <p class="text-green-700 text-sm mt-1">Sertifikat akan dikirim otomatis ke WhatsApp guru</p>
+                        </div>
+                        <div class="space-x-4">
+                            <button onclick="resetKuis()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                                Ulangi Kuis
+                            </button>
+                            <button onclick="showSection('simulasi')" class="bg-purple-500 hover:bg-purple-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                                Lanjut ke Simulasi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simulasi Section -->
+    <section id="simulasi" class="section-content py-12 hidden">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">🎮 Simulasi Interaktif</h2>
+                
+                <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                    <div class="text-center mb-6">
+                        <div class="text-6xl mb-4">🎭</div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Praktik Penerapan Qadha dan Qadar</h3>
+                        <p class="text-gray-600 mb-6">Pilih skenario dan tunjukkan bagaimana Anda menerapkan iman kepada Qadha dan Qadar dalam kehidupan sehari-hari</p>
+                    </div>
+
+                    <!-- Scenario Selection -->
+                    <div id="scenario-selection">
+                        <h4 class="text-lg font-semibold mb-4 text-center">Pilih Skenario:</h4>
+                        <div class="grid md:grid-cols-2 gap-4 mb-6">
+                            <div class="scenario-card bg-blue-50 border-2 border-blue-200 rounded-lg p-4" onclick="selectScenario(1)">
+                                <div class="text-3xl mb-2">📚</div>
+                                <h5 class="font-semibold text-blue-800">Nilai Ujian Jelek</h5>
+                                <p class="text-blue-600 text-sm">Bagaimana sikap Anda ketika mendapat nilai ujian yang mengecewakan?</p>
+                            </div>
+                            <div class="scenario-card bg-green-50 border-2 border-green-200 rounded-lg p-4" onclick="selectScenario(2)">
+                                <div class="text-3xl mb-2">🎁</div>
+                                <h5 class="font-semibold text-green-800">Mendapat Hadiah</h5>
+                                <p class="text-green-600 text-sm">Bagaimana sikap Anda ketika mendapat hadiah yang tidak terduga?</p>
+                            </div>
+                            <div class="scenario-card bg-red-50 border-2 border-red-200 rounded-lg p-4" onclick="selectScenario(3)">
+                                <div class="text-3xl mb-2">🤒</div>
+                                <h5 class="font-semibold text-red-800">Sakit Mendadak</h5>
+                                <p class="text-red-600 text-sm">Bagaimana sikap Anda ketika tiba-tiba jatuh sakit?</p>
+                            </div>
+                            <div class="scenario-card bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4" onclick="selectScenario(4)">
+                                <div class="text-3xl mb-2">🏆</div>
+                                <h5 class="font-semibold text-yellow-800">Menang Lomba</h5>
+                                <p class="text-yellow-600 text-sm">Bagaimana sikap Anda ketika memenangkan lomba?</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Simulation Interface -->
+                    <div id="simulation-interface" class="hidden">
+                        <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                            <h4 class="font-semibold mb-4">Skenario: <span id="scenario-title"></span></h4>
+                            <p id="scenario-description" class="text-gray-700 mb-4"></p>
+                            
+                            <div class="mb-6">
+                                <h5 class="font-semibold mb-3">Pilih respons yang paling tepat:</h5>
+                                <div id="response-options" class="space-y-3">
+                                    <!-- Response options will be loaded here -->
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <button onclick="checkSimulationResponse()" class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+                                    Periksa Jawaban
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="simulation-feedback" class="hidden">
+                            <div class="rounded-lg p-6 mb-6">
+                                <h5 class="font-semibold mb-3">Feedback:</h5>
+                                <p id="feedback-text" class="mb-4"></p>
+                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                    <h6 class="font-semibold text-blue-800 mb-2">Penjelasan Islami:</h6>
+                                    <p id="islamic-explanation" class="text-blue-700 text-sm"></p>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center">
+                                <button onclick="resetSimulation()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium transition-colors mr-3">
+                                    Coba Skenario Lain
+                                </button>
+                                <button onclick="showSection('sertifikat')" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                                    Lihat Sertifikat
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sertifikat Section -->
+    <section id="sertifikat" class="section-content py-12 hidden">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">🏆 Sertifikat Digital</h2>
+                
+                <div id="certificate-check" class="bg-white rounded-xl shadow-lg p-8 text-center">
+                    <div class="text-6xl mb-4">📜</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Periksa Kelayakan Sertifikat</h3>
+                    <p class="text-gray-600 mb-6">Untuk mendapatkan sertifikat, Anda harus menyelesaikan kuis komprehensif dengan nilai minimal 80</p>
+                    
+                    <div id="certificate-status" class="mb-6">
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                            <p class="text-yellow-800">Silakan selesaikan kuis komprehensif terlebih dahulu</p>
+                        </div>
+                    </div>
+                    
+                    <button onclick="showSection('kuis')" class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+                        Kerjakan Kuis Komprehensif
+                    </button>
+                </div>
+
+                <!-- Certificate Display -->
+                <div id="certificate-display" class="hidden">
+                    <div class="certificate-bg rounded-xl shadow-2xl p-8 mb-8 border-4 border-yellow-400">
+                        <div class="text-center">
+                            <div class="text-6xl mb-4">🏆</div>
+                            <h3 class="text-3xl font-bold text-gray-800 mb-2">SERTIFIKAT PENGHARGAAN</h3>
+                            <div class="w-32 h-1 bg-yellow-500 mx-auto mb-6"></div>
+                            
+                            <p class="text-lg text-gray-700 mb-4">Diberikan kepada:</p>
+                            <h4 class="text-2xl font-bold text-blue-600 mb-6" id="cert-student-name">Nama Siswa</h4>
+                            
+                            <p class="text-gray-700 mb-2">Telah menyelesaikan pembelajaran</p>
+                            <h5 class="text-xl font-semibold text-gray-800 mb-4">BERIMAN KEPADA QADHA DAN QADAR</h5>
+                            
+                            <div class="grid md:grid-cols-2 gap-4 mb-6 text-sm">
+                                <div class="bg-white bg-opacity-50 rounded-lg p-3">
+                                    <p class="font-semibold">Kelas: <span id="cert-class">-</span></p>
+                                    <p class="font-semibold">NISN: <span id="cert-nisn">-</span></p>
+                                </div>
+                                <div class="bg-white bg-opacity-50 rounded-lg p-3">
+                                    <p class="font-semibold">Nilai: <span id="cert-score">-</span></p>
+                                    <p class="font-semibold">Tanggal: <span id="cert-date">-</span></p>
+                                </div>
+                            </div>
+                            
+                            <div class="border-t border-gray-300 pt-6">
+                                <div class="grid md:grid-cols-2 gap-8">
+                                    <div>
+                                        <p class="text-sm text-gray-600 mb-2">Guru Pengampu</p>
+                                        <p class="font-semibold">MAHFUD SIDIK, S.Pd.I</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-600 mb-2">Kepala Madrasah</p>
+                                        <p class="font-semibold">MUSLIMAH, S.Pd.I</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                            <p class="text-green-800 font-semibold">✅ Sertifikat telah dikirim ke WhatsApp guru!</p>
+                            <p class="text-green-700 text-sm mt-1">Guru akan menerima notifikasi tentang pencapaian Anda</p>
+                        </div>
+                        
+                        <div class="space-x-4">
+                            <button onclick="downloadCertificate()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                                📥 Simpan Sertifikat
+                            </button>
+                            <button onclick="shareCertificate()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                                📤 Bagikan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Global Variables
+        let studentData = {
+            name: '',
+            class: '',
+            nisn: ''
+        };
+        
+        let kuisData = {
+            score: 0,
+            percentage: 0,
+            timeUsed: 0,
+            completed: false
+        };
+
+        // Student Data Management
+        function showStudentModal() {
+            document.getElementById('student-modal').classList.remove('hidden');
+        }
+
+        function closeStudentModal() {
+            document.getElementById('student-modal').classList.add('hidden');
+        }
+
+        function saveStudentData() {
+            const name = document.getElementById('student-name').value.trim();
+            const studentClass = document.getElementById('student-class').value;
+            const nisn = document.getElementById('student-nisn').value.trim();
+            
+            if (!name || !studentClass || !nisn) {
+                alert('Mohon lengkapi semua data siswa!');
+                return;
+            }
+            
+            studentData = { name, class: studentClass, nisn };
+            localStorage.setItem('studentData', JSON.stringify(studentData));
+            closeStudentModal();
+            
+            // Show success message
+            const successDiv = document.createElement('div');
+            successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            successDiv.innerHTML = '✅ Data siswa berhasil disimpan!';
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                document.body.removeChild(successDiv);
+            }, 3000);
+        }
+
+        // Load student data on page load
+        function loadStudentData() {
+            const saved = localStorage.getItem('studentData');
+            if (saved) {
+                studentData = JSON.parse(saved);
+                document.getElementById('student-name').value = studentData.name;
+                document.getElementById('student-class').value = studentData.class;
+                document.getElementById('student-nisn').value = studentData.nisn;
+            }
+        }
+
+        // Navigation
+        function showSection(section) {
+            document.querySelectorAll('.section-content').forEach(s => s.classList.add('hidden'));
+            document.getElementById(section).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-500', 'text-white');
+                btn.classList.add('hover:bg-gray-100');
+            });
+            event.target.classList.add('bg-blue-500', 'text-white');
+            event.target.classList.remove('hover:bg-gray-100');
+        }
+
+        // Quiz Navigation (Latihan)
+        function showQuizType(type) {
+            document.querySelectorAll('.quiz-type').forEach(q => q.classList.add('hidden'));
+            document.getElementById(type + '-quiz').classList.remove('hidden');
+            
+            document.querySelectorAll('.quiz-nav-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-500', 'text-white');
+                btn.classList.add('hover:bg-gray-100');
+            });
+            event.target.classList.add('bg-blue-500', 'text-white');
+            event.target.classList.remove('hover:bg-gray-100');
+            
+            if (type === 'pilgan') {
+                updateProgress();
+            }
+        }
+
+        // Pilihan Ganda Data (Latihan)
+        const pilganQuestions = [
+            {
+                question: "Apa arti dari kata 'Qadha'?",
+                options: ["a. Ketetapan Allah yang akan terjadi", "b. Ketetapan Allah yang sudah terjadi", "c. Ketetapan manusia", "d. Ketetapan alam"],
+                correct: "b"
+            },
+            {
+                question: "Apa arti dari kata 'Qadar'?",
+                options: ["a. Ketetapan Allah yang sudah terjadi", "b. Ketetapan Allah yang akan terjadi", "c. Ketetapan malaikat", "d. Ketetapan jin"],
+                correct: "b"
+            },
+            {
+                question: "Beriman kepada Qadha dan Qadar merupakan rukun iman yang ke-...",
+                options: ["a. Lima", "b. Empat", "c. Enam", "d. Tiga"],
+                correct: "c"
+            },
+            {
+                question: "Ayat yang menjelaskan tentang takdir terdapat dalam surat...",
+                options: ["a. Al-Baqarah", "b. Al-Qamar", "c. Al-Fatihah", "d. An-Nas"],
+                correct: "b"
+            },
+            {
+                question: "Takdir yang pasti terjadi dan tidak dapat diubah disebut...",
+                options: ["a. Takdir Muallaq", "b. Takdir Mubram", "c. Takdir Umum", "d. Takdir Khusus"],
+                correct: "b"
+            },
+            {
+                question: "Takdir yang dapat berubah dengan usaha dan doa disebut...",
+                options: ["a. Takdir Mubram", "b. Takdir Muallaq", "c. Takdir Tetap", "d. Takdir Mutlak"],
+                correct: "b"
+            },
+            {
+                question: "Contoh takdir mubram adalah...",
+                options: ["a. Rezeki", "b. Kesehatan", "c. Kematian", "d. Pekerjaan"],
+                correct: "c"
+            },
+            {
+                question: "Contoh takdir muallaq adalah...",
+                options: ["a. Jenis kelamin", "b. Tempat lahir", "c. Rezeki", "d. Kematian"],
+                correct: "c"
+            },
+            {
+                question: "Sikap yang harus ditunjukkan ketika mendapat musibah adalah...",
+                options: ["a. Marah", "b. Putus asa", "c. Sabar", "d. Menyalahkan orang lain"],
+                correct: "c"
+            },
+            {
+                question: "Sikap yang harus ditunjukkan ketika mendapat nikmat adalah...",
+                options: ["a. Sombong", "b. Syukur", "c. Lupa diri", "d. Pelit"],
+                correct: "b"
+            },
+            {
+                question: "Menyerahkan hasil usaha kepada Allah SWT disebut...",
+                options: ["a. Tawakal", "b. Takabur", "c. Tawadhu", "d. Takwa"],
+                correct: "a"
+            },
+            {
+                question: "Hikmah beriman kepada Qadha dan Qadar adalah...",
+                options: ["a. Hati menjadi gelisah", "b. Hati menjadi tenang", "c. Mudah putus asa", "d. Suka menyalahkan orang lain"],
+                correct: "b"
+            },
+            {
+                question: "Yang termasuk dalam meneladani Qadha dan Qadar adalah...",
+                options: ["a. Berputus asa", "b. Tidak berusaha", "c. Tetap berusaha dan berdoa", "d. Menyalahkan takdir"],
+                correct: "c"
+            },
+            {
+                question: "Beriman kepada Qadha dan Qadar dapat menumbuhkan sikap...",
+                options: ["a. Pesimis", "b. Sabar", "c. Sombong", "d. Malas"],
+                correct: "b"
+            },
+            {
+                question: "Dalam hadits disebutkan bahwa takdir itu ada yang...",
+                options: ["a. Besar dan kecil", "b. Jauh dan dekat", "c. Baik dan buruk", "d. Tinggi dan rendah"],
+                correct: "c"
+            },
+            {
+                question: "Orang yang beriman kepada Qadha dan Qadar akan...",
+                options: ["a. Mudah menyerah", "b. Selalu optimis", "c. Suka mengeluh", "d. Tidak mau berusaha"],
+                correct: "b"
+            },
+            {
+                question: "Ketika mendapat nilai jelek, sikap yang benar adalah...",
+                options: ["a. Menyalahkan guru", "b. Putus asa", "c. Sabar dan berusaha lebih giat", "d. Marah-marah"],
+                correct: "c"
+            },
+            {
+                question: "Beriman kepada Qadha dan Qadar dapat meningkatkan...",
+                options: ["a. Keangkuhan", "b. Keimanan", "c. Kesombongan", "d. Kemarahan"],
+                correct: "b"
+            },
+            {
+                question: "Yang bukan termasuk hikmah beriman kepada Qadha dan Qadar adalah...",
+                options: ["a. Hati tenang", "b. Sabar", "c. Syukur", "d. Sombong"],
+                correct: "d"
+            },
+            {
+                question: "Beriman kepada Qadha dan Qadar berarti meyakini bahwa segala sesuatu sudah ditetapkan Allah sejak...",
+                options: ["a. Zaman dahulu", "b. Zaman azali", "c. Zaman sekarang", "d. Zaman nanti"],
+                correct: "b"
+            }
+        ];
+
+        let currentPilganQuestion = 0;
+        let pilganAnswers = [];
+        let pilganScore = 0;
+
+        function displayPilganQuestion() {
+            const question = pilganQuestions[currentPilganQuestion];
+            document.getElementById('pilgan-question').innerHTML = `
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Soal ${currentPilganQuestion + 1}</h3>
+                <p class="text-gray-700">${question.question}</p>
+            `;
+            
+            const optionsHtml = question.options.map((option, index) => `
+                <label class="quiz-option block p-4 border-2 border-gray-200 rounded-lg cursor-pointer">
+                    <input type="radio" name="pilgan-answer" value="${String.fromCharCode(97 + index)}" class="mr-3">
+                    <span>${option}</span>
+                </label>
+            `).join('');
+            
+            document.getElementById('pilgan-options').innerHTML = optionsHtml;
+            
+            // Restore previous answer if exists
+            if (pilganAnswers[currentPilganQuestion]) {
+                const radio = document.querySelector(`input[value="${pilganAnswers[currentPilganQuestion]}"]`);
+                if (radio) {
+                    radio.checked = true;
+                    radio.closest('.quiz-option').classList.add('selected');
+                }
+            }
+            
+            // Add event listeners
+            document.querySelectorAll('input[name="pilgan-answer"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    document.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+                    this.closest('.quiz-option').classList.add('selected');
+                    pilganAnswers[currentPilganQuestion] = this.value;
+                });
+            });
+            
+            updatePilganButtons();
+            updateProgress();
+        }
+
+        function updatePilganButtons() {
+            document.getElementById('pilgan-prev').disabled = currentPilganQuestion === 0;
+            const nextBtn = document.getElementById('pilgan-next');
+            if (currentPilganQuestion === pilganQuestions.length - 1) {
+                nextBtn.textContent = 'Selesai';
+                nextBtn.onclick = finishPilganQuiz;
+            } else {
+                nextBtn.textContent = 'Selanjutnya →';
+                nextBtn.onclick = nextPilganQuestion;
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentPilganQuestion + 1) / pilganQuestions.length) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+            document.getElementById('quiz-progress').textContent = `Soal ${currentPilganQuestion + 1} dari ${pilganQuestions.length}`;
+        }
+
+        function nextPilganQuestion() {
+            if (currentPilganQuestion < pilganQuestions.length - 1) {
+                currentPilganQuestion++;
+                displayPilganQuestion();
+            }
+        }
+
+        function prevPilganQuestion() {
+            if (currentPilganQuestion > 0) {
+                currentPilganQuestion--;
+                displayPilganQuestion();
+            }
+        }
+
+        function finishPilganQuiz() {
+            // Calculate score
+            pilganScore = 0;
+            for (let i = 0; i < pilganQuestions.length; i++) {
+                if (pilganAnswers[i] === pilganQuestions[i].correct) {
+                    pilganScore++;
+                }
+            }
+            
+            // Show results
+            document.querySelector('#pilgan-quiz > div:first-child').classList.add('hidden');
+            document.getElementById('pilgan-result').classList.remove('hidden');
+            document.getElementById('pilgan-score').textContent = pilganScore;
+            document.getElementById('pilgan-percentage').textContent = Math.round((pilganScore / pilganQuestions.length) * 100) + '%';
+        }
+
+        function resetPilganQuiz() {
+            currentPilganQuestion = 0;
+            pilganAnswers = [];
+            pilganScore = 0;
+            document.querySelector('#pilgan-quiz > div:first-child').classList.remove('hidden');
+            document.getElementById('pilgan-result').classList.add('hidden');
+            displayPilganQuestion();
+        }
+
+        // Menjodohkan
+        function checkMenjodohkan() {
+            const answers = {1: 'c', 2: 'd', 3: 'a', 4: 'b', 5: 'e'};
+            let score = 0;
+            
+            document.querySelectorAll('select[data-answer]').forEach(select => {
+                const questionNum = select.getAttribute('data-answer');
+                const userAnswer = select.value;
+                const correctAnswer = answers[questionNum];
+                
+                if (userAnswer === correctAnswer) {
+                    score++;
+                    select.classList.add('border-green-500', 'bg-green-50');
+                } else {
+                    select.classList.add('border-red-500', 'bg-red-50');
+                }
+            });
+            
+            const resultDiv = document.getElementById('menjodohkan-result');
+            resultDiv.classList.remove('hidden');
+            resultDiv.className = score >= 3 ? 'mt-6 p-4 rounded-lg bg-green-100 border border-green-300' : 'mt-6 p-4 rounded-lg bg-red-100 border border-red-300';
+            document.getElementById('menjodohkan-score').textContent = score;
+        }
+
+        // Isian
+        function checkIsian() {
+            let score = 0;
+            
+            document.querySelectorAll('.isian-input').forEach(input => {
+                const userAnswer = input.value.toLowerCase().trim();
+                const correctAnswer = input.getAttribute('data-answer').toLowerCase();
+                
+                if (userAnswer === correctAnswer) {
+                    score++;
+                    input.classList.add('border-green-500', 'bg-green-50');
+                } else {
+                    input.classList.add('border-red-500', 'bg-red-50');
+                }
+            });
+            
+            const resultDiv = document.getElementById('isian-result');
+            resultDiv.classList.remove('hidden');
+            resultDiv.className = score >= 3 ? 'mt-6 p-4 rounded-lg bg-green-100 border border-green-300' : 'mt-6 p-4 rounded-lg bg-red-100 border border-red-300';
+            document.getElementById('isian-score').textContent = score;
+        }
+
+        // Kuis Komprehensif
+        const kuisQuestions = [
+            {
+                question: "Beriman kepada Qadha dan Qadar adalah rukun iman yang ke-...",
+                options: ["a. Lima", "b. Enam", "c. Empat", "d. Tiga"],
+                correct: "b"
+            },
+            {
+                question: "Qadha artinya...",
+                options: ["a. Ketetapan Allah yang akan datang", "b. Ketetapan Allah yang sudah terjadi", "c. Usaha manusia", "d. Doa kepada Allah"],
+                correct: "b"
+            },
+            {
+                question: "Qadar artinya...",
+                options: ["a. Ketetapan Allah yang sudah terjadi", "b. Ketetapan Allah yang akan terjadi", "c. Takdir buruk", "d. Takdir baik"],
+                correct: "b"
+            },
+            {
+                question: "Ayat Al-Qur'an tentang takdir terdapat dalam surat...",
+                options: ["a. Al-Fatihah", "b. Al-Baqarah", "c. Al-Qamar", "d. An-Nas"],
+                correct: "c"
+            },
+            {
+                question: "Takdir Mubram adalah...",
+                options: ["a. Takdir yang dapat berubah", "b. Takdir yang pasti terjadi", "c. Takdir yang buruk", "d. Takdir yang baik"],
+                correct: "b"
+            },
+            {
+                question: "Contoh Takdir Mubram adalah...",
+                options: ["a. Rezeki", "b. Kesehatan", "c. Kematian", "d. Pekerjaan"],
+                correct: "c"
+            },
+            {
+                question: "Takdir Muallaq adalah...",
+                options: ["a. Takdir yang pasti", "b. Takdir yang dapat berubah dengan usaha dan doa", "c. Takdir yang buruk", "d. Takdir yang tidak ada"],
+                correct: "b"
+            },
+            {
+                question: "Sikap yang benar ketika mendapat musibah adalah...",
+                options: ["a. Marah", "b. Putus asa", "c. Sabar", "d. Menyalahkan orang lain"],
+                correct: "c"
+            },
+            {
+                question: "Sikap yang benar ketika mendapat nikmat adalah...",
+                options: ["a. Sombong", "b. Syukur", "c. Lupa diri", "d. Pelit"],
+                correct: "b"
+            },
+            {
+                question: "Tawakal artinya...",
+                options: ["a. Berserah diri kepada Allah", "b. Tidak berusaha", "c. Putus asa", "d. Sombong"],
+                correct: "a"
+            },
+            {
+                question: "Hikmah beriman kepada Qadha dan Qadar adalah...",
+                options: ["a. Hati gelisah", "b. Hati tenang", "c. Mudah marah", "d. Suka mengeluh"],
+                correct: "b"
+            },
+            {
+                question: "Dalam hadits disebutkan takdir ada yang...",
+                options: ["a. Besar dan kecil", "b. Jauh dan dekat", "c. Baik dan buruk", "d. Tinggi dan rendah"],
+                correct: "c"
+            },
+            {
+                question: "Beriman kepada Qadha dan Qadar dapat menumbuhkan sikap...",
+                options: ["a. Pesimis", "b. Optimis", "c. Malas", "d. Sombong"],
+                correct: "b"
+            },
+            {
+                question: "Yang bukan hikmah beriman kepada Qadha dan Qadar adalah...",
+                options: ["a. Hati tenang", "b. Sabar", "c. Syukur", "d. Sombong"],
+                correct: "d"
+            },
+            {
+                question: "Segala sesuatu sudah ditetapkan Allah sejak...",
+                options: ["a. Zaman dahulu", "b. Zaman azali", "c. Zaman sekarang", "d. Zaman nanti"],
+                correct: "b"
+            }
+        ];
+
+        let currentKuisQuestion = 0;
+        let kuisAnswers = [];
+        let kuisScore = 0;
+        let kuisTimer;
+        let timeRemaining = 1200; // 20 minutes in seconds
+        let startTime;
+
+        function startKuisKomprehensif() {
+            if (!studentData.name) {
+                alert('Mohon input data siswa terlebih dahulu!');
+                showStudentModal();
+                return;
+            }
+            
+            // Reset quiz state
+            currentKuisQuestion = 0;
+            kuisAnswers = [];
+            kuisScore = 0;
+            timeRemaining = 1200;
+            startTime = Date.now();
+            
+            // Show quiz interface
+            document.querySelector('#kuis .bg-white.rounded-xl.shadow-lg.p-8.mb-8').classList.add('hidden');
+            document.getElementById('kuis-interface').classList.remove('hidden');
+            
+            // Start timer
+            startKuisTimer();
+            
+            // Display first question
+            setTimeout(() => {
+                displayKuisQuestion();
+            }, 100);
+        }
+
+        function startKuisTimer() {
+            kuisTimer = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(kuisTimer);
+                    finishKuis();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function displayKuisQuestion() {
+            const question = kuisQuestions[currentKuisQuestion];
+            
+            document.getElementById('kuis-current').textContent = currentKuisQuestion + 1;
+            const progress = ((currentKuisQuestion + 1) / kuisQuestions.length) * 100;
+            document.getElementById('kuis-progress').style.width = progress + '%';
+            
+            document.getElementById('kuis-question').innerHTML = `
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Soal ${currentKuisQuestion + 1}</h3>
+                <p class="text-gray-700">${question.question}</p>
+            `;
+            
+            const optionsHtml = question.options.map((option, index) => `
+                <label class="quiz-option block p-4 border-2 border-gray-200 rounded-lg cursor-pointer">
+                    <input type="radio" name="kuis-answer" value="${String.fromCharCode(97 + index)}" class="mr-3">
+                    <span>${option}</span>
+                </label>
+            `).join('');
+            
+            document.getElementById('kuis-options').innerHTML = optionsHtml;
+            
+            // Restore previous answer if exists
+            if (kuisAnswers[currentKuisQuestion]) {
+                const radio = document.querySelector(`input[name="kuis-answer"][value="${kuisAnswers[currentKuisQuestion]}"]`);
+                if (radio) {
+                    radio.checked = true;
+                    radio.closest('.quiz-option').classList.add('selected');
+                }
+            }
+            
+            // Add event listeners
+            document.querySelectorAll('input[name="kuis-answer"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    document.querySelectorAll('#kuis-options .quiz-option').forEach(opt => opt.classList.remove('selected'));
+                    this.closest('.quiz-option').classList.add('selected');
+                    kuisAnswers[currentKuisQuestion] = this.value;
+                });
+            });
+            
+            updateKuisButtons();
+        }
+
+        function updateKuisButtons() {
+            document.getElementById('kuis-prev').disabled = currentKuisQuestion === 0;
+            const nextBtn = document.getElementById('kuis-next');
+            if (currentKuisQuestion === kuisQuestions.length - 1) {
+                nextBtn.textContent = 'Selesai';
+                nextBtn.onclick = finishKuis;
+            } else {
+                nextBtn.textContent = 'Selanjutnya →';
+                nextBtn.onclick = nextKuisQuestion;
+            }
+        }
+
+        function nextKuisQuestion() {
+            if (currentKuisQuestion < kuisQuestions.length - 1) {
+                currentKuisQuestion++;
+                displayKuisQuestion();
+            }
+        }
+
+        function prevKuisQuestion() {
+            if (currentKuisQuestion > 0) {
+                currentKuisQuestion--;
+                displayKuisQuestion();
+            }
+        }
+
+        function finishKuis() {
+            clearInterval(kuisTimer);
+            
+            // Calculate score
+            kuisScore = 0;
+            for (let i = 0; i < kuisQuestions.length; i++) {
+                if (kuisAnswers[i] === kuisQuestions[i].correct) {
+                    kuisScore++;
+                }
+            }
+            
+            const percentage = Math.round((kuisScore / kuisQuestions.length) * 100);
+            const timeUsed = Math.round((Date.now() - startTime) / 60000); // in minutes
+            
+            // Update global kuis data
+            kuisData = {
+                score: kuisScore,
+                percentage: percentage,
+                timeUsed: timeUsed,
+                completed: true
+            };
+            
+            // Show results
+            document.getElementById('kuis-interface').classList.add('hidden');
+            document.getElementById('kuis-result').classList.remove('hidden');
+            
+            document.getElementById('kuis-final-score').textContent = kuisScore;
+            document.getElementById('kuis-percentage').textContent = percentage + '%';
+            document.getElementById('time-used').textContent = timeUsed + ' menit';
+            
+            // Check if eligible for certificate
+            if (percentage >= 80) {
+                document.getElementById('result-icon').textContent = '🏆';
+                document.getElementById('result-title').textContent = 'Selamat! Anda Lulus!';
+                document.getElementById('certificate-info').classList.remove('hidden');
+                
+                // Send WhatsApp notification
+                sendWhatsAppNotification();
+                
+                // Update certificate section
+                updateCertificateSection();
+            } else {
+                document.getElementById('result-icon').textContent = '😔';
+                document.getElementById('result-title').textContent = 'Belum Lulus';
+                document.getElementById('certificate-info').classList.add('hidden');
+            }
+        }
+
+        function resetKuis() {
+            document.getElementById('kuis-result').classList.add('hidden');
+            document.getElementById('kuis-interface').classList.add('hidden');
+            document.querySelector('#kuis .bg-white.rounded-xl.shadow-lg.p-8.mb-8').classList.remove('hidden');
+            currentKuisQuestion = 0;
+            kuisAnswers = [];
+            kuisScore = 0;
+            clearInterval(kuisTimer);
+        }
+
+        // Simulasi
+        const scenarios = {
+            1: {
+                title: "Nilai Ujian Jelek",
+                description: "Anda baru saja menerima hasil ujian matematika dengan nilai 60. Padahal Anda sudah belajar dengan giat. Bagaimana sikap Anda?",
+                responses: [
+                    { text: "Marah dan menyalahkan guru karena soalnya terlalu sulit", correct: false },
+                    { text: "Sabar, introspeksi diri, dan berencana belajar lebih giat lagi", correct: true },
+                    { text: "Putus asa dan tidak mau belajar lagi", correct: false },
+                    { text: "Menyalahkan takdir dan tidak mau berusaha", correct: false }
+                ],
+                feedback: "Jawaban yang benar adalah bersabar dan tetap berusaha. Nilai jelek bisa menjadi motivasi untuk belajar lebih giat.",
+                islamic: "Dalam Islam, kita diajarkan untuk bersabar ketika mendapat ujian dan tetap berusaha. Allah SWT berfirman: 'Dan barangsiapa bertakwa kepada Allah, niscaya Dia akan mengadakan baginya jalan keluar.' (QS. At-Talaq: 2)"
+            },
+            2: {
+                title: "Mendapat Hadiah",
+                description: "Anda mendapat hadiah sepeda baru dari orang tua tanpa diminta. Bagaimana sikap Anda?",
+                responses: [
+                    { text: "Sombong dan memamerkan kepada teman-teman", correct: false },
+                    { text: "Bersyukur kepada Allah dan berterima kasih kepada orang tua", correct: true },
+                    { text: "Menganggap itu hak Anda dan biasa saja", correct: false },
+                    { text: "Merasa tidak pantas dan menolak hadiah tersebut", correct: false }
+                ],
+                feedback: "Sikap yang benar adalah bersyukur kepada Allah dan berterima kasih kepada orang tua yang telah memberikan hadiah.",
+                islamic: "Allah SWT berfirman: 'Dan (ingatlah juga), tatkala Tuhanmu memaklumkan: Sesungguhnya jika kamu bersyukur, pasti Kami akan menambah (nikmat) kepadamu.' (QS. Ibrahim: 7)"
+            },
+            3: {
+                title: "Sakit Mendadak",
+                description: "Anda tiba-tiba demam tinggi menjelang ujian penting. Bagaimana sikap Anda?",
+                responses: [
+                    { text: "Marah dan bertanya mengapa harus sakit di waktu yang tidak tepat", correct: false },
+                    { text: "Sabar, berobat, dan tetap berdoa sambil berusaha sembuh", correct: true },
+                    { text: "Putus asa dan menyerah begitu saja", correct: false },
+                    { text: "Menyalahkan orang lain yang mungkin menularkan penyakit", correct: false }
+                ],
+                feedback: "Sikap yang benar adalah bersabar, berobat, dan tetap berdoa. Sakit adalah ujian dari Allah yang harus dihadapi dengan sabar.",
+                islamic: "Rasulullah SAW bersabda: 'Tidaklah seorang muslim tertimpa suatu penyakit dan semacamnya, melainkan Allah akan menggugurkan kesalahan-kesalahannya sebagaimana pohon menggugurkan daun-daunnya.' (HR. Bukhari)"
+            },
+            4: {
+                title: "Menang Lomba",
+                description: "Anda berhasil menjuarai lomba pidato tingkat sekolah. Bagaimana sikap Anda?",
+                responses: [
+                    { text: "Sombong dan merasa paling pintar di sekolah", correct: false },
+                    { text: "Bersyukur kepada Allah dan berterima kasih kepada guru pembimbing", correct: true },
+                    { text: "Menganggap kemenangan itu murni karena kemampuan sendiri", correct: false },
+                    { text: "Meremehkan peserta lain yang kalah", correct: false }
+                ],
+                feedback: "Sikap yang benar adalah bersyukur kepada Allah dan berterima kasih kepada semua pihak yang telah membantu.",
+                islamic: "Segala keberhasilan adalah anugerah dari Allah SWT. Kita harus selalu bersyukur dan tidak sombong. 'Dan apa saja nikmat yang ada pada kamu, maka dari Allah-lah (datangnya).' (QS. An-Nahl: 53)"
+            }
+        };
+
+        let selectedScenario = null;
+        let selectedResponse = null;
+
+        function selectScenario(scenarioId) {
+            selectedScenario = scenarioId;
+            
+            // Update UI
+            document.querySelectorAll('.scenario-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            
+            // Show simulation interface
+            setTimeout(() => {
+                document.getElementById('scenario-selection').classList.add('hidden');
+                document.getElementById('simulation-interface').classList.remove('hidden');
+                loadScenario(scenarioId);
+            }, 500);
+        }
+
+        function loadScenario(scenarioId) {
+            const scenario = scenarios[scenarioId];
+            
+            document.getElementById('scenario-title').textContent = scenario.title;
+            document.getElementById('scenario-description').textContent = scenario.description;
+            
+            const responsesHtml = scenario.responses.map((response, index) => `
+                <label class="quiz-option block p-4 border-2 border-gray-200 rounded-lg cursor-pointer">
+                    <input type="radio" name="simulation-response" value="${index}" class="mr-3">
+                    <span>${response.text}</span>
+                </label>
+            `).join('');
+            
+            document.getElementById('response-options').innerHTML = responsesHtml;
+            
+            // Add event listeners
+            document.querySelectorAll('input[name="simulation-response"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    document.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+                    this.closest('.quiz-option').classList.add('selected');
+                    selectedResponse = parseInt(this.value);
+                });
+            });
+        }
+
+        function checkSimulationResponse() {
+            if (selectedResponse === null) {
+                alert('Mohon pilih salah satu respons!');
+                return;
+            }
+            
+            const scenario = scenarios[selectedScenario];
+            const response = scenario.responses[selectedResponse];
+            
+            // Show feedback
+            document.getElementById('simulation-feedback').classList.remove('hidden');
+            
+            if (response.correct) {
+                document.getElementById('simulation-feedback').className = 'bg-green-50 border border-green-200 rounded-lg p-6 mb-6';
+                document.getElementById('feedback-text').innerHTML = `
+                    <span class="text-green-600 font-semibold">✅ Jawaban Anda benar!</span><br>
+                    ${scenario.feedback}
+                `;
+            } else {
+                document.getElementById('simulation-feedback').className = 'bg-red-50 border border-red-200 rounded-lg p-6 mb-6';
+                document.getElementById('feedback-text').innerHTML = `
+                    <span class="text-red-600 font-semibold">❌ Jawaban kurang tepat.</span><br>
+                    ${scenario.feedback}
+                `;
+            }
+            
+            document.getElementById('islamic-explanation').textContent = scenario.islamic;
+        }
+
+        function resetSimulation() {
+            selectedScenario = null;
+            selectedResponse = null;
+            
+            document.getElementById('simulation-interface').classList.add('hidden');
+            document.getElementById('simulation-feedback').classList.add('hidden');
+            document.getElementById('scenario-selection').classList.remove('hidden');
+            
+            document.querySelectorAll('.scenario-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+        }
+
+        // Certificate Management
+        function updateCertificateSection() {
+            if (kuisData.completed && kuisData.percentage >= 80) {
+                document.getElementById('certificate-check').classList.add('hidden');
+                document.getElementById('certificate-display').classList.remove('hidden');
+                
+                // Fill certificate data
+                document.getElementById('cert-student-name').textContent = studentData.name;
+                document.getElementById('cert-class').textContent = studentData.class;
+                document.getElementById('cert-nisn').textContent = studentData.nisn;
+                document.getElementById('cert-score').textContent = kuisData.score + '/15 (' + kuisData.percentage + '%)';
+                document.getElementById('cert-date').textContent = new Date().toLocaleDateString('id-ID');
+            } else {
+                const statusDiv = document.getElementById('certificate-status');
+                if (kuisData.completed) {
+                    statusDiv.innerHTML = `
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                            <p class="text-red-800">Nilai Anda: ${kuisData.percentage}%</p>
+                            <p class="text-red-700">Nilai minimal untuk sertifikat: 80%</p>
+                            <p class="text-red-600 text-sm mt-2">Silakan ulangi kuis untuk mendapatkan sertifikat</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function downloadCertificate() {
+            // Create a simple text version for download
+            const certificateText = `
+SERTIFIKAT PENGHARGAAN
+MIN SINGKAWANG
+
+Diberikan kepada:
+${studentData.name}
+
+Telah menyelesaikan pembelajaran
+BERIMAN KEPADA QADHA DAN QADAR
+
+Kelas: ${studentData.class}
+NISN: ${studentData.nisn}
+Nilai: ${kuisData.score}/15 (${kuisData.percentage}%)
+Tanggal: ${new Date().toLocaleDateString('id-ID')}
+
+Guru Pengampu: MAHFUD SIDIK, S.Pd.I
+MIN SINGKAWANG - Madrasah Maju, Bermutu, Mendunia
+            `;
+            
+            const blob = new Blob([certificateText], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Sertifikat_${studentData.name.replace(/\s+/g, '_')}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function shareCertificate() {
+            const text = `🏆 Alhamdulillah! Saya telah menyelesaikan pembelajaran "Beriman kepada Qadha dan Qadar" di MIN Singkawang dengan nilai ${kuisData.percentage}%! 
+
+#BelajarAkidahAkhlak #MINSingkawang #MadrasahMaju`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Sertifikat Pembelajaran Akidah Akhlak',
+                    text: text
+                });
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('Teks sertifikat telah disalin ke clipboard!');
+                });
+            }
+        }
+
+        // WhatsApp Integration
+        function sendWhatsAppNotification() {
+            const teacherPhone = '6281234567890'; // Ganti dengan nomor WhatsApp guru yang sebenarnya
+            const message = `🎉 *NOTIFIKASI PEMBELAJARAN*
+
+Siswa telah menyelesaikan pembelajaran:
+
+👤 *Nama:* ${studentData.name}
+🏫 *Kelas:* ${studentData.class}
+🆔 *NISN:* ${studentData.nisn}
+
+📚 *Materi:* Beriman kepada Qadha dan Qadar
+📊 *Nilai Kuis:* ${kuisData.score}/15 (${kuisData.percentage}%)
+⏱️ *Waktu Pengerjaan:* ${kuisData.timeUsed} menit
+📅 *Tanggal:* ${new Date().toLocaleDateString('id-ID')}
+🏆 *Status:* ${kuisData.percentage >= 80 ? 'LULUS - Berhak Sertifikat' : 'BELUM LULUS'}
+
+_Dikirim otomatis dari Media Pembelajaran Akidah Akhlak MIN Singkawang_`;
+
+            // Copy message to clipboard for manual sending
+            navigator.clipboard.writeText(message).then(() => {
+                // Show notification with instructions
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-4 right-4 bg-green-500 text-white p-4 rounded-lg shadow-lg z-50 max-w-sm';
+                notification.innerHTML = `
+                    <div class="font-semibold mb-2">📋 Pesan Tersalin!</div>
+                    <div class="text-sm">
+                        Pesan laporan telah disalin ke clipboard. 
+                        Silakan buka WhatsApp dan kirim ke guru: 
+                        <strong>${teacherPhone}</strong>
+                    </div>
+                `;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 8000);
+            }).catch(() => {
+                // Fallback: show message in modal for manual copy
+                showMessageModal(message, teacherPhone);
+            });
+        }
+
+        function showMessageModal(message, phone) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="bg-white rounded-xl p-6 max-w-md w-full max-h-96 overflow-y-auto">
+                    <h3 class="text-lg font-bold mb-4">📱 Kirim ke WhatsApp Guru</h3>
+                    <p class="text-sm text-gray-600 mb-3">Nomor guru: <strong>${phone}</strong></p>
+                    <textarea class="w-full h-48 p-3 border border-gray-300 rounded-lg text-sm" readonly>${message}</textarea>
+                    <div class="flex space-x-3 mt-4">
+                        <button onclick="copyMessageText()" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-medium">
+                            📋 Salin Pesan
+                        </button>
+                        <button onclick="closeMessageModal()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 rounded-lg font-medium">
+                            Tutup
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            window.currentMessageModal = modal;
+        }
+
+        function copyMessageText() {
+            const textarea = document.querySelector('#currentMessageModal textarea');
+            if (textarea) {
+                textarea.select();
+                document.execCommand('copy');
+                alert('Pesan berhasil disalin!');
+            }
+        }
+
+        function closeMessageModal() {
+            if (window.currentMessageModal) {
+                document.body.removeChild(window.currentMessageModal);
+                window.currentMessageModal = null;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStudentData();
+            displayPilganQuestion();
+            
+            // Check if returning to certificate section
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('section') === 'sertifikat') {
+                showSection('sertifikat');
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96cf7fc79668ec6e',t:'MTc1NDgyODk3MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
