@@ -656,7 +656,7 @@
                 <div id="kuisContainer">
                     <div class="text-center mb-6">
                         <div class="bg-gradient-to-r from-orange-400 to-red-400 text-white p-4 rounded-lg inline-block">
-                            <p class="text-lg font-semibold">Pertanyaan <span id="currentQuestion">1</span> dari <span id="totalQuestions">15</span></p>
+                            <p class="text-lg font-semibold">Pertanyaan <span id="currentQuestion">1</span> dari <span id="totalQuestions">13</span></p>
                             <p class="text-sm opacity-90">Skor: <span id="score">0</span></p>
                         </div>
                     </div>
@@ -668,7 +668,7 @@
                     <div id="kuisResult" class="hidden text-center">
                         <div class="bg-gradient-to-r from-green-400 to-blue-400 text-white p-8 rounded-xl">
                             <h3 class="text-2xl font-bold mb-4">🎉 Kuis Selesai!</h3>
-                            <p class="text-xl mb-4">Skor Akhir: <span id="finalScore"></span>/15</p>
+                            <p class="text-xl mb-4">Skor Akhir: <span id="finalScore"></span>/13</p>
                             <p class="text-lg mb-4">Nilai: <span id="finalGrade"></span></p>
                             <div id="scoreMessage" class="text-lg mb-6"></div>
                             
@@ -739,7 +739,7 @@
     <footer class="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-6 mt-12">
         <div class="container mx-auto px-4 text-center">
             <p class="text-lg font-semibold mb-2">🌟 Semoga Bermanfaat! 🌟</p>
-            <p class="opacity-90">&copy; 2025 by MAHFUD SIDIK, S.Pd.I</p>
+            <p class="opacity-90">2025.08 &copy; MAHFUD SIDIK, S.Pd.I</p>
         </div>
     </footer>
 
@@ -889,53 +889,30 @@
             // 5 Soal Menjodohkan
             {
                 type: "matching",
-                question: "Jodohkan hukum bacaan dengan huruf yang tepat:",
+                question: "Jodohkan huruf dengan hukum bacaannya:",
                 pairs: [
-                    { left: "Hukum Izhar", right: "Hamzah (<span class='arabic-text'>ء</span>)" },
-                    { left: "Hukum Ikhfa", right: "Ta (<span class='arabic-text'>ت</span>)" },
-                    { left: "Huruf Izhar", right: "Ha (<span class='arabic-text'>ه</span>)" }
+                    { left: "Hamzah (<span class='arabic-text'>ء</span>)", right: "Izhar" },
+                    { left: "Ta (<span class='arabic-text'>ت</span>)", right: "Ikhfa" }
                 ],
-                explanation: "Izhar dengan huruf Hamzah dan Ha, Ikhfa dengan Ta"
+                explanation: "Hamzah menyebabkan Izhar, Ta menyebabkan Ikhfa"
             },
             {
                 type: "matching",
                 question: "Jodohkan contoh bacaan dengan hukumnya:",
                 pairs: [
-                    { left: "<span class='arabic-text'>مِنْ أَجْلِ</span>", right: "Hukum Izhar" },
-                    { left: "<span class='arabic-text'>مِنْ تَحْتِ</span>", right: "Hukum Ikhfa" },
-                    { left: "<span class='arabic-text'>مِنْ عِنْدِ</span>", right: "Bacaan Izhar" }
+                    { left: "<span class='arabic-text'>مِنْ أَجْلِ</span>", right: "Izhar" },
+                    { left: "<span class='arabic-text'>مِنْ تَحْتِ</span>", right: "Ikhfa" }
                 ],
-                explanation: "Contoh Izhar dengan huruf Hamzah dan Ain, Ikhfa dengan Ta"
+                explanation: "مِنْ أَجْلِ dibaca Izhar karena bertemu Hamzah, مِنْ تَحْتِ dibaca Ikhfa karena bertemu Ta"
             },
             {
                 type: "matching",
                 question: "Jodohkan hukum bacaan dengan cara membacanya:",
                 pairs: [
-                    { left: "Cara baca Izhar", right: "Jelas dan terang" },
-                    { left: "Cara baca Ikhfa", right: "Samar-samar dengan dengung" },
-                    { left: "Ciri Izhar", right: "Tanpa dengung" }
+                    { left: "Izhar", right: "Jelas dan terang" },
+                    { left: "Ikhfa", right: "Samar-samar dengan dengung" }
                 ],
-                explanation: "Izhar dibaca jelas tanpa dengung, Ikhfa samar-samar dengan dengung"
-            },
-            {
-                type: "matching",
-                question: "Jodohkan huruf dengan hukum bacaannya:",
-                pairs: [
-                    { left: "Ain (<span class='arabic-text'>ع</span>)", right: "Menyebabkan Izhar" },
-                    { left: "Sin (<span class='arabic-text'>س</span>)", right: "Menyebabkan Ikhfa" },
-                    { left: "Kha (<span class='arabic-text'>خ</span>)", right: "Termasuk huruf Izhar" }
-                ],
-                explanation: "Ain dan Kha menyebabkan Izhar, Sin menyebabkan Ikhfa"
-            },
-            {
-                type: "matching",
-                question: "Jodohkan istilah dengan artinya:",
-                pairs: [
-                    { left: "Izhar (<span class='arabic-text'>إظهار</span>)", right: "Menampakkan/Menjernihkan" },
-                    { left: "Ikhfa (<span class='arabic-text'>إخفاء</span>)", right: "Menyembunyikan/Menyamarkan" },
-                    { left: "Nun Mati (<span class='arabic-text'>نْ</span>)", right: "Nun tanpa harakat" }
-                ],
-                explanation: "Setiap istilah memiliki arti yang sesuai dengan cara bacaannya"
+                explanation: "Izhar dibaca jelas tanpa dengung, Ikhfa dibaca samar-samar dengan dengung"
             }
         ];
 
@@ -1474,5 +1451,5 @@ Selamat! Anda telah tuntas dalam materi Hukum Bacaan Izhar dan Ikhfa.`;
             }
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96d081829354fdfa',t:'MTc1NDgzOTUyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96d09cf234301d1c',t:'MTc1NDg0MDY1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
