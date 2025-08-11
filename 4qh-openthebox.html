@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buka Kotak - Hukum Bacaan Izhar dan Ikhfa'</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .start-form {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 0 auto;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .start-form h2 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .start-btn {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .start-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .game-container {
+            display: none;
+        }
+
+        .player-info {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .player-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .score-board {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .score-info {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .score-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px 25px;
+            border-radius: 10px;
+            min-width: 150px;
+        }
+
+        .score-item h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .score-item .number {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .box {
+            background: linear-gradient(145deg, #f0f0f0, #cacaca);
+            border-radius: 15px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+        }
+
+        .box.opened {
+            background: linear-gradient(145deg, #4CAF50, #45a049);
+            color: white;
+            cursor: default;
+        }
+
+        .box.opened:hover {
+            transform: none;
+        }
+
+        .box-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .box.opened .box-number {
+            color: white;
+        }
+
+        .box::before {
+            content: '🎁';
+            font-size: 1.5rem;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            opacity: 0.3;
+        }
+
+        .box.opened::before {
+            content: '✅';
+            opacity: 1;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .modal-header h2 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            color: #444;
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .option:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+        }
+
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .modal-buttons {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .btn {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .completion-message {
+            text-align: center;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            display: none;
+        }
+
+        .completion-message h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .completion-message p {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .result-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .whatsapp-btn {
+            background: linear-gradient(145deg, #25d366, #128c7e);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .whatsapp-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .reset-btn {
+            background: linear-gradient(145deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .start-form {
+                padding: 30px 20px;
+            }
+            
+            .game-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            
+            .box {
+                padding: 20px 15px;
+            }
+            
+            .modal-content {
+                margin: 10% auto;
+                padding: 20px;
+            }
+            
+            .question-text {
+                font-size: 1.1rem;
+            }
+
+            .result-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎁 Buka Kotak 🎁</h1>
+            <p>Hukum Bacaan Izhar dan Ikhfa' - Kelas 4 MI</p>
+        </div>
+
+        <!-- Start Form -->
+        <div class="start-form" id="start-form">
+            <h2>Selamat Datang!</h2>
+            <div class="form-group">
+                <label for="student-name">Nama Lengkap:</label>
+                <input type="text" id="student-name" placeholder="Masukkan nama lengkap Anda" required>
+            </div>
+            <div class="form-group">
+                <label for="student-class">Kelas:</label>
+                <select id="student-class" required>
+                    <option value="">Pilih Kelas</option>
+                    <option value="4A">4A</option>
+                    <option value="4B">4B</option>
+                    <option value="4C">4C</option>
+                    <option value="4D">4D</option>
+                </select>
+            </div>
+            <button class="start-btn" onclick="startGame()">Mulai Game</button>
+        </div>
+
+        <!-- Game Container -->
+        <div class="game-container" id="game-container">
+            <div class="player-info" id="player-info">
+                <h3 id="player-name"></h3>
+                <p id="player-class"></p>
+            </div>
+
+            <div class="score-board">
+                <div class="score-info">
+                    <div class="score-item">
+                        <h3>Kotak Dibuka</h3>
+                        <div class="number" id="opened-count">0</div>
+                    </div>
+                    <div class="score-item">
+                        <h3>Jawaban Benar</h3>
+                        <div class="number" id="correct-count">0</div>
+                    </div>
+                    <div class="score-item">
+                        <h3>Skor</h3>
+                        <div class="number" id="score">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-grid" id="game-grid">
+                <!-- Boxes will be generated by JavaScript -->
+            </div>
+
+            <div class="completion-message" id="completion-message">
+                <h2>🎉 Selamat! 🎉</h2>
+                <p>Kamu telah menyelesaikan semua soal!</p>
+                <p>Skor akhir: <span id="final-score">0</span>/20</p>
+                <div class="result-buttons">
+                    <a href="#" class="whatsapp-btn" id="whatsapp-btn" target="_blank">
+                        📱 Kirim Hasil ke WhatsApp
+                    </a>
+                    <button class="reset-btn" onclick="resetGame()">Main Lagi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="question-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                <h2>Soal <span id="question-number">1</span></h2>
+            </div>
+            <div class="question-text" id="question-text"></div>
+            <div class="options" id="options"></div>
+            <div class="modal-buttons">
+                <button class="btn" id="submit-btn" onclick="submitAnswer()" disabled>Jawab</button>
+                <button class="btn" id="next-btn" onclick="nextQuestion()" style="display: none;">Lanjut</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Apa yang dimaksud dengan hukum bacaan Izhar?",
+                options: ["Dibaca jelas dan terang", "Dibaca samar-samar", "Dibaca dengan dengung", "Dibaca cepat"],
+                correct: 0
+            },
+            {
+                question: "Berapa jumlah huruf Izhar?",
+                options: ["4 huruf", "5 huruf", "6 huruf", "7 huruf"],
+                correct: 2
+            },
+            {
+                question: "Sebutkan huruf-huruf Izhar yang benar!",
+                options: ["ء ه ع ح غ خ", "ب م ف و", "ت ث د ذ ز س", "ج ش ض"],
+                correct: 0
+            },
+            {
+                question: "Contoh bacaan Izhar yang benar adalah...",
+                options: ["مِنْ رَبِّهِمْ", "مِنْ خَيْرٍ", "مِنْ بَعْدِ", "مِنْ وَلَدٍ"],
+                correct: 1
+            },
+            {
+                question: "Apa yang dimaksud dengan hukum bacaan Ikhfa'?",
+                options: ["Dibaca jelas", "Dibaca samar-samar", "Dibaca dengan dengung panjang", "Dibaca cepat"],
+                correct: 1
+            },
+            {
+                question: "Berapa jumlah huruf Ikhfa'?",
+                options: ["13 huruf", "14 huruf", "15 huruf", "16 huruf"],
+                correct: 2
+            },
+            {
+                question: "Huruf-huruf Ikhfa' adalah...",
+                options: ["ء ه ع ح غ خ", "ت ث ج د ذ ز س ش ص ض ط ظ ف ق ك", "ب م ف و", "ل ر ن"],
+                correct: 1
+            },
+            {
+                question: "Contoh bacaan Ikhfa' yang benar adalah...",
+                options: ["مِنْ عِنْدِ", "مِنْ تَحْتِ", "مِنْ خَيْرٍ", "مِنْ رَبِّهِمْ"],
+                correct: 1
+            },
+            {
+                question: "Nun sukun atau tanwin bertemu huruf خ hukum bacaannya...",
+                options: ["Izhar", "Ikhfa'", "Idgham", "Iqlab"],
+                correct: 0
+            },
+            {
+                question: "Nun sukun atau tanwin bertemu huruf ت hukum bacaannya...",
+                options: ["Izhar", "Ikhfa'", "Idgham", "Iqlab"],
+                correct: 1
+            },
+            {
+                question: "Dalam ayat وَمِنْ شَرِّ النَّفَّاثَاتِ terdapat hukum bacaan...",
+                options: ["Izhar", "Ikhfa'", "Idgham", "Iqlab"],
+                correct: 1
+            },
+            {
+                question: "Huruf ع termasuk huruf...",
+                options: ["Izhar", "Ikhfa'", "Idgham", "Iqlab"],
+                correct: 0
+            },
+            {
+                question: "Contoh من قبل mengandung hukum bacaan...",
+                options: ["Izhar", "Ikhfa'", "Idgham", "Iqlab"],
+                correct: 1
+            },
+            {
+                question: "Huruf غ dalam hukum bacaan nun sukun termasuk huruf...",
+                options: ["Izhar", "Ikhfa'", "Idgham", "Iqlab"],
+                correct: 0
+            },
+            {
+                question: "Bacaan من ذهب hukum bacaannya adalah...",
+                options: ["Izhar", "Ikhfa'", "Idgham", "Iqlab"],
+                correct: 1
+            },
+            {
+                question: "Tanda bacaan Ikhfa' pada mushaf Al-Qur'an adalah...",
+                options: ["Tidak ada tanda khusus", "Tanda sukun saja", "Tanda sukun tanpa kepala", "Tanda tasydid"],
+                correct: 2
+            },
+            {
+                question: "Cara membaca Izhar adalah...",
+                options: ["Jelas tanpa dengung", "Samar dengan dengung", "Jelas dengan dengung", "Samar tanpa dengung"],
+                correct: 0
+            },
+            {
+                question: "Cara membaca Ikhfa' adalah...",
+                options: ["Jelas tanpa dengung", "Samar dengan dengung", "Jelas dengan dengung", "Samar tanpa dengung"],
+                correct: 1
+            },
+            {
+                question: "Huruf ح dalam hukum nun sukun termasuk...",
+                options: ["Huruf Izhar", "Huruf Ikhfa'", "Huruf Idgham", "Huruf Iqlab"],
+                correct: 0
+            },
+            {
+                question: "Dalam bacaan منْ كان terdapat hukum...",
+                options: ["Izhar", "Ikhfa'", "Idgham", "Iqlab"],
+                correct: 1
+            }
+        ];
+
+        let gameState = {
+            openedBoxes: new Set(),
+            correctAnswers: 0,
+            currentQuestion: null,
+            selectedOption: null,
+            playerName: '',
+            playerClass: '',
+            startTime: null,
+            endTime: null
+        };
+
+        function startGame() {
+            const name = document.getElementById('student-name').value.trim();
+            const studentClass = document.getElementById('student-class').value;
+            
+            if (!name || !studentClass) {
+                alert('Mohon lengkapi nama dan kelas terlebih dahulu!');
+                return;
+            }
+            
+            gameState.playerName = name;
+            gameState.playerClass = studentClass;
+            gameState.startTime = new Date();
+            
+            // Update player info
+            document.getElementById('player-name').textContent = name;
+            document.getElementById('player-class').textContent = `Kelas: ${studentClass}`;
+            
+            // Hide start form and show game
+            document.getElementById('start-form').style.display = 'none';
+            document.getElementById('game-container').style.display = 'block';
+            
+            initGame();
+        }
+
+        function initGame() {
+            const gameGrid = document.getElementById('game-grid');
+            gameGrid.innerHTML = '';
+            
+            for (let i = 1; i <= 20; i++) {
+                const box = document.createElement('div');
+                box.className = 'box';
+                box.innerHTML = `<div class="box-number">${i}</div>`;
+                box.onclick = () => openBox(i);
+                gameGrid.appendChild(box);
+            }
+            
+            updateScoreBoard();
+        }
+
+        function openBox(boxNumber) {
+            if (gameState.openedBoxes.has(boxNumber)) return;
+            
+            gameState.currentQuestion = boxNumber - 1;
+            showQuestion(gameState.currentQuestion);
+        }
+
+        function showQuestion(questionIndex) {
+            const modal = document.getElementById('question-modal');
+            const questionData = questions[questionIndex];
+            
+            document.getElementById('question-number').textContent = questionIndex + 1;
+            document.getElementById('question-text').textContent = questionData.question;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            questionData.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectOption(index, optionDiv);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('submit-btn').style.display = 'inline-block';
+            document.getElementById('next-btn').style.display = 'none';
+            gameState.selectedOption = null;
+            
+            modal.style.display = 'block';
+        }
+
+        function selectOption(optionIndex, optionElement) {
+            // Remove previous selection
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.style.background = '#f8f9fa';
+                opt.style.borderColor = '#e9ecef';
+            });
+            
+            // Highlight selected option
+            optionElement.style.background = '#e3f2fd';
+            optionElement.style.borderColor = '#2196f3';
+            
+            gameState.selectedOption = optionIndex;
+            document.getElementById('submit-btn').disabled = false;
+        }
+
+        function submitAnswer() {
+            if (gameState.selectedOption === null) return;
+            
+            const questionData = questions[gameState.currentQuestion];
+            const options = document.querySelectorAll('.option');
+            const isCorrect = gameState.selectedOption === questionData.correct;
+            
+            // Show correct/incorrect styling
+            options.forEach((option, index) => {
+                if (index === questionData.correct) {
+                    option.classList.add('correct');
+                } else if (index === gameState.selectedOption && !isCorrect) {
+                    option.classList.add('incorrect');
+                }
+                option.onclick = null; // Disable further clicks
+            });
+            
+            // Update game state
+            const boxNumber = gameState.currentQuestion + 1;
+            gameState.openedBoxes.add(boxNumber);
+            
+            if (isCorrect) {
+                gameState.correctAnswers++;
+            }
+            
+            // Update box appearance
+            const boxes = document.querySelectorAll('.box');
+            boxes[gameState.currentQuestion].classList.add('opened');
+            boxes[gameState.currentQuestion].onclick = null;
+            
+            // Update UI
+            document.getElementById('submit-btn').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'inline-block';
+            
+            updateScoreBoard();
+            
+            // Check if game is complete
+            if (gameState.openedBoxes.size === 20) {
+                gameState.endTime = new Date();
+                setTimeout(() => {
+                    closeModal();
+                    showCompletionMessage();
+                }, 1500);
+            }
+        }
+
+        function nextQuestion() {
+            closeModal();
+        }
+
+        function closeModal() {
+            document.getElementById('question-modal').style.display = 'none';
+        }
+
+        function updateScoreBoard() {
+            document.getElementById('opened-count').textContent = gameState.openedBoxes.size;
+            document.getElementById('correct-count').textContent = gameState.correctAnswers;
+            document.getElementById('score').textContent = gameState.correctAnswers;
+        }
+
+        function showCompletionMessage() {
+            document.getElementById('final-score').textContent = gameState.correctAnswers;
+            
+            // Prepare WhatsApp message
+            const duration = Math.round((gameState.endTime - gameState.startTime) / 1000 / 60); // in minutes
+            const percentage = Math.round((gameState.correctAnswers / 20) * 100);
+            
+            let grade = '';
+            if (percentage >= 90) grade = 'A (Sangat Baik)';
+            else if (percentage >= 80) grade = 'B (Baik)';
+            else if (percentage >= 70) grade = 'C (Cukup)';
+            else if (percentage >= 60) grade = 'D (Kurang)';
+            else grade = 'E (Sangat Kurang)';
+            
+            const message = `🎮 HASIL GAME BUKA KOTAK 🎮
+            
+📚 Materi: Hukum Bacaan Izhar dan Ikhfa'
+👤 Nama: ${gameState.playerName}
+🏫 Kelas: ${gameState.playerClass}
+
+📊 HASIL:
+✅ Jawaban Benar: ${gameState.correctAnswers}/20
+📈 Persentase: ${percentage}%
+🏆 Nilai: ${grade}
+⏱️ Waktu: ${duration} menit
+
+📅 Tanggal: ${new Date().toLocaleDateString('id-ID')}
+🕐 Waktu: ${new Date().toLocaleTimeString('id-ID')}
+
+Terima kasih telah mengerjakan game ini! 🙏`;
+            
+            // WhatsApp number for sending results
+            const teacherWhatsApp = '6289619760801';
+            const whatsappUrl = `https://wa.me/${teacherWhatsApp}?text=${encodeURIComponent(message)}`;
+            document.getElementById('whatsapp-btn').href = whatsappUrl;
+            
+            document.getElementById('completion-message').style.display = 'block';
+        }
+
+        function resetGame() {
+            gameState = {
+                openedBoxes: new Set(),
+                correctAnswers: 0,
+                currentQuestion: null,
+                selectedOption: null,
+                playerName: '',
+                playerClass: '',
+                startTime: null,
+                endTime: null
+            };
+            
+            document.getElementById('completion-message').style.display = 'none';
+            document.getElementById('game-container').style.display = 'none';
+            document.getElementById('start-form').style.display = 'block';
+            
+            // Reset form
+            document.getElementById('student-name').value = '';
+            document.getElementById('student-class').value = '';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('question-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96d75fafc21aa3e9',t:'MTc1NDkxMTU0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
