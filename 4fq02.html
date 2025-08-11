@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Tanda-tanda Baligh - Fikih Kelas 4 MI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .star-animation {
+            animation: starTwinkle 1s ease-in-out infinite alternate;
+        }
+        
+        @keyframes starTwinkle {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.2); opacity: 1; }
+        }
+        
+        .bounce-in {
+            animation: bounceIn 0.6s ease-out;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .islamic-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f0f9ff' fill-opacity='0.3'%3E%3Cpath d='M30 30c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm0 0c0 11.046 8.954 20 20 20s20-8.954 20-20-8.954-20-20-20-20 8.954-20 20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-green-50 islamic-pattern min-h-screen">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="text-3xl">🕌</div>
+                <div>
+                    <h1 class="text-2xl font-bold">Belajar Fikih</h1>
+                    <p class="text-sm opacity-90">Tanda-tanda Baligh - Kelas 4 MI</p>
+                    <p class="text-sm opacity-80">&COPY; 2025 MAHFUD SIDIK, S.Pd.I</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-1">
+                    <span class="text-yellow-300">⭐</span>
+                    <span id="totalStars" class="font-bold">0</span>
+                </div>
+                <div class="text-sm">
+                    <div>Progress: <span id="progressText">0%</span></div>
+                    <div class="w-24 bg-white/20 rounded-full h-2 mt-1">
+                        <div id="progressBar" class="bg-yellow-400 h-2 rounded-full progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 max-w-6xl">
+        <!-- Navigation Menu -->
+        <nav id="mainMenu" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <button onclick="showSection('materi')" class="card-hover bg-white rounded-xl p-6 shadow-lg border-l-4 border-blue-500 text-center">
+                <div class="text-4xl mb-3">📚</div>
+                <h3 class="font-bold text-lg text-gray-800">Materi Pembelajaran</h3>
+                <p class="text-sm text-gray-600 mt-2">Pelajari definisi dan tanda-tanda baligh</p>
+            </button>
+            
+            <button onclick="showSection('games')" class="card-hover bg-white rounded-xl p-6 shadow-lg border-l-4 border-green-500 text-center">
+                <div class="text-4xl mb-3">🎮</div>
+                <h3 class="font-bold text-lg text-gray-800">Game Edukatif</h3>
+                <p class="text-sm text-gray-600 mt-2">Bermain sambil belajar</p>
+            </button>
+            
+            <button onclick="showSection('evaluasi')" class="card-hover bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500 text-center">
+                <div class="text-4xl mb-3">📝</div>
+                <h3 class="font-bold text-lg text-gray-800">Evaluasi</h3>
+                <p class="text-sm text-gray-600 mt-2">Uji pemahamanmu</p>
+            </button>
+            
+            <button onclick="showSection('sertifikat')" class="card-hover bg-white rounded-xl p-6 shadow-lg border-l-4 border-yellow-500 text-center">
+                <div class="text-4xl mb-3">🏆</div>
+                <h3 class="font-bold text-lg text-gray-800">Sertifikat</h3>
+                <p class="text-sm text-gray-600 mt-2">Dapatkan sertifikat digital</p>
+            </button>
+        </nav>
+
+        <!-- Materi Pembelajaran Section -->
+        <section id="materiSection" class="hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 flex items-center">
+                        <span class="text-3xl mr-3">📖</span>
+                        Materi Pembelajaran
+                    </h2>
+                    <button onclick="showMainMenu()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
+                        ← Kembali
+                    </button>
+                </div>
+                
+                <div class="space-y-6">
+                    <!-- Definisi Baligh -->
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h3 class="text-xl font-bold text-blue-800 mb-4 flex items-center">
+                            <span class="text-2xl mr-2">🌟</span>
+                            Apa itu Baligh?
+                        </h3>
+                        <div class="text-gray-700 leading-relaxed">
+                            <p class="mb-4">
+                                <strong>Baligh</strong> adalah masa ketika seorang anak sudah mulai dewasa menurut Islam. 
+                                Ketika seseorang sudah baligh, ia mulai bertanggung jawab atas perbuatannya di hadapan Allah SWT.
+                            </p>
+                            <div class="bg-white rounded-lg p-4 border-l-4 border-blue-400">
+                                <p class="font-semibold text-blue-800">💡 Ingat!</p>
+                                <p>Baligh = Sudah dewasa = Mulai ada tanggung jawab kepada Allah</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tanda-tanda Baligh -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Laki-laki -->
+                        <div class="bg-green-50 rounded-lg p-6">
+                            <h3 class="text-xl font-bold text-green-800 mb-4 flex items-center">
+                                <span class="text-2xl mr-2">👦</span>
+                                Tanda Baligh Laki-laki
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="bg-white rounded-lg p-4">
+                                    <h4 class="font-semibold text-green-700 mb-2">🔸 Tanda Fisik:</h4>
+                                    <ul class="text-sm text-gray-700 space-y-1">
+                                        <li>• Mimpi basah (ihtilam)</li>
+                                        <li>• Suara mulai berubah</li>
+                                        <li>• Tumbuh kumis dan jenggot</li>
+                                        <li>• Badan mulai tinggi</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white rounded-lg p-4">
+                                    <h4 class="font-semibold text-green-700 mb-2">🔸 Tanda Psikologis:</h4>
+                                    <ul class="text-sm text-gray-700 space-y-1">
+                                        <li>• Mulai malu dengan lawan jenis</li>
+                                        <li>• Lebih peduli penampilan</li>
+                                        <li>• Ingin mandiri</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Perempuan -->
+                        <div class="bg-pink-50 rounded-lg p-6">
+                            <h3 class="text-xl font-bold text-pink-800 mb-4 flex items-center">
+                                <span class="text-2xl mr-2">👧</span>
+                                Tanda Baligh Perempuan
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="bg-white rounded-lg p-4">
+                                    <h4 class="font-semibold text-pink-700 mb-2">🔸 Tanda Fisik:</h4>
+                                    <ul class="text-sm text-gray-700 space-y-1">
+                                        <li>• Menstruasi (haid)</li>
+                                        <li>• Payudara mulai tumbuh</li>
+                                        <li>• Badan mulai tinggi</li>
+                                        <li>• Pinggul mulai melebar</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white rounded-lg p-4">
+                                    <h4 class="font-semibold text-pink-700 mb-2">🔸 Tanda Psikologis:</h4>
+                                    <ul class="text-sm text-gray-700 space-y-1">
+                                        <li>• Mulai malu dengan lawan jenis</li>
+                                        <li>• Lebih peduli penampilan</li>
+                                        <li>• Emosi mudah berubah</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kewajiban Setelah Baligh -->
+                    <div class="bg-yellow-50 rounded-lg p-6">
+                        <h3 class="text-xl font-bold text-yellow-800 mb-4 flex items-center">
+                            <span class="text-2xl mr-2">📋</span>
+                            Kewajiban Setelah Baligh
+                        </h3>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="bg-white rounded-lg p-4 text-center">
+                                <div class="text-3xl mb-2">🕌</div>
+                                <h4 class="font-semibold text-gray-800">Shalat 5 Waktu</h4>
+                                <p class="text-sm text-gray-600 mt-2">Wajib shalat tepat waktu setiap hari</p>
+                            </div>
+                            <div class="bg-white rounded-lg p-4 text-center">
+                                <div class="text-3xl mb-2">🌙</div>
+                                <h4 class="font-semibold text-gray-800">Puasa Ramadhan</h4>
+                                <p class="text-sm text-gray-600 mt-2">Wajib puasa saat bulan Ramadhan</p>
+                            </div>
+                            <div class="bg-white rounded-lg p-4 text-center">
+                                <div class="text-3xl mb-2">💰</div>
+                                <h4 class="font-semibold text-gray-800">Zakat</h4>
+                                <p class="text-sm text-gray-600 mt-2">Wajib zakat jika sudah mampu</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <button onclick="completeMateri()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold">
+                        ✅ Selesai Belajar Materi
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Games Section -->
+        <section id="gamesSection" class="hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 flex items-center">
+                        <span class="text-3xl mr-3">🎮</span>
+                        Game Edukatif
+                    </h2>
+                    <button onclick="showMainMenu()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
+                        ← Kembali
+                    </button>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-6 mb-6">
+                    <button onclick="startGame('matching')" class="card-hover bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-6 text-center">
+                        <div class="text-4xl mb-3">🎯</div>
+                        <h3 class="font-bold text-lg">Pasangkan Tanda Baligh</h3>
+                        <p class="text-sm opacity-90 mt-2">Cocokkan tanda baligh dengan kategorinya</p>
+                    </button>
+                    
+                    <button onclick="startGame('quiz')" class="card-hover bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-6 text-center">
+                        <div class="text-4xl mb-3">⚡</div>
+                        <h3 class="font-bold text-lg">Kuis Cepat Tanggap</h3>
+                        <p class="text-sm opacity-90 mt-2">Jawab pertanyaan dengan cepat</p>
+                    </button>
+                    
+                    <button onclick="startGame('simulation')" class="card-hover bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl p-6 text-center">
+                        <div class="text-4xl mb-3">🎭</div>
+                        <h3 class="font-bold text-lg">Simulasi Tanggung Jawab</h3>
+                        <p class="text-sm opacity-90 mt-2">Pilih tindakan yang tepat</p>
+                    </button>
+                </div>
+                
+                <!-- Game Area -->
+                <div id="gameArea" class="hidden">
+                    <!-- Game content will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Evaluasi Section -->
+        <section id="evaluasiSection" class="hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 flex items-center">
+                        <span class="text-3xl mr-3">📝</span>
+                        Evaluasi Pembelajaran
+                    </h2>
+                    <button onclick="showMainMenu()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
+                        ← Kembali
+                    </button>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <button onclick="startEvaluasi('kuis')" class="card-hover bg-gradient-to-br from-indigo-500 to-indigo-600 text-white rounded-xl p-6 text-center">
+                        <div class="text-4xl mb-3">📊</div>
+                        <h3 class="font-bold text-lg">Kuis Akhir</h3>
+                        <p class="text-sm opacity-90 mt-2">20 soal untuk mengukur pemahaman</p>
+                    </button>
+                    
+                    <button onclick="startEvaluasi('refleksi')" class="card-hover bg-gradient-to-br from-teal-500 to-teal-600 text-white rounded-xl p-6 text-center">
+                        <div class="text-4xl mb-3">✍️</div>
+                        <h3 class="font-bold text-lg">Proyek Refleksi</h3>
+                        <p class="text-sm opacity-90 mt-2">Tulis rencanamu setelah baligh</p>
+                    </button>
+                </div>
+                
+                <!-- Evaluasi Area -->
+                <div id="evaluasiArea" class="hidden mt-6">
+                    <!-- Evaluasi content will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Sertifikat Section -->
+        <section id="sertifikatSection" class="hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 flex items-center">
+                        <span class="text-3xl mr-3">🏆</span>
+                        Sertifikat Digital
+                    </h2>
+                    <button onclick="showMainMenu()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
+                        ← Kembali
+                    </button>
+                </div>
+                
+                <div id="sertifikatContent">
+                    <div class="text-center py-12">
+                        <div class="text-6xl mb-4">🔒</div>
+                        <h3 class="text-xl font-bold text-gray-600 mb-4">Sertifikat Terkunci</h3>
+                        <p class="text-gray-500 mb-6">Selesaikan semua materi dan evaluasi untuk mendapatkan sertifikat</p>
+                        <div class="bg-gray-100 rounded-lg p-4 max-w-md mx-auto">
+                            <h4 class="font-semibold mb-2">Progress Penyelesaian:</h4>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span>Materi Pembelajaran</span>
+                                    <span id="materiStatus">❌</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Game Edukatif</span>
+                                    <span id="gameStatus">❌</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Evaluasi</span>
+                                    <span id="evaluasiStatus">❌</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 max-w-md mx-4 text-center bounce-in">
+            <div class="text-6xl mb-4">🎉</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Selamat!</h3>
+            <p id="successMessage" class="text-gray-600 mb-6"></p>
+            <div class="flex justify-center space-x-2 mb-6">
+                <span class="star-animation text-2xl">⭐</span>
+                <span class="star-animation text-2xl">⭐</span>
+                <span class="star-animation text-2xl">⭐</span>
+            </div>
+            <button onclick="closeSuccessModal()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg">
+                Lanjutkan
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let totalStars = 0;
+        let completedSections = {
+            materi: false,
+            games: false,
+            evaluasi: false
+        };
+        
+        let currentGame = null;
+        let gameScore = 0;
+        let currentQuestion = 0;
+        
+        // Game data
+        const matchingGameData = [
+            { id: 1, text: "Mimpi basah", category: "laki-laki", type: "fisik" },
+            { id: 2, text: "Menstruasi", category: "perempuan", type: "fisik" },
+            { id: 3, text: "Suara berubah", category: "laki-laki", type: "fisik" },
+            { id: 4, text: "Payudara tumbuh", category: "perempuan", type: "fisik" },
+            { id: 5, text: "Mulai malu dengan lawan jenis", category: "umum", type: "psikologis" },
+            { id: 6, text: "Lebih peduli penampilan", category: "umum", type: "psikologis" }
+        ];
+        
+        const quizQuestions = [
+            {
+                question: "Apa arti baligh dalam Islam?",
+                options: ["Sudah dewasa", "Masih kecil", "Sudah tua", "Belum lahir"],
+                correct: 0
+            },
+            {
+                question: "Tanda baligh utama pada perempuan adalah?",
+                options: ["Mimpi basah", "Menstruasi", "Suara berubah", "Tumbuh jenggot"],
+                correct: 1
+            },
+            {
+                question: "Tanda baligh utama pada laki-laki adalah?",
+                options: ["Menstruasi", "Payudara tumbuh", "Mimpi basah", "Pinggul melebar"],
+                correct: 2
+            },
+            {
+                question: "Setelah baligh, apa kewajiban utama dalam Islam?",
+                options: ["Bermain", "Shalat 5 waktu", "Tidur", "Menonton TV"],
+                correct: 1
+            },
+            {
+                question: "Kapan seseorang wajib puasa Ramadhan?",
+                options: ["Setelah lahir", "Setelah baligh", "Setelah menikah", "Setelah tua"],
+                correct: 1
+            }
+        ];
+        
+        const simulationScenarios = [
+            {
+                scenario: "Waktu Maghrib tiba, kamu sedang asyik bermain game. Apa yang kamu lakukan?",
+                options: [
+                    { text: "Terus bermain game", correct: false, feedback: "Kurang tepat. Setelah baligh, shalat adalah kewajiban yang harus didahulukan." },
+                    { text: "Shalat Maghrib dulu, lalu lanjut bermain", correct: true, feedback: "Benar! Shalat harus didahulukan karena sudah menjadi kewajiban setelah baligh." }
+                ]
+            },
+            {
+                scenario: "Temanmu mengajak berbuat tidak baik. Sebagai anak yang sudah baligh, apa sikapmu?",
+                options: [
+                    { text: "Ikut saja agar tidak dikucilkan", correct: false, feedback: "Kurang tepat. Setelah baligh, kita bertanggung jawab atas perbuatan kita." },
+                    { text: "Menolak dengan sopan dan mengajak berbuat baik", correct: true, feedback: "Benar! Setelah baligh, kita harus berani menolak yang salah dan mengajak kebaikan." }
+                ]
+            },
+            {
+                scenario: "Bulan Ramadhan tiba. Sebagai anak yang sudah baligh, apa kewajibanmu?",
+                options: [
+                    { text: "Tidak perlu puasa karena masih sekolah", correct: false, feedback: "Kurang tepat. Setelah baligh, puasa Ramadhan menjadi kewajiban." },
+                    { text: "Wajib berpuasa penuh selama Ramadhan", correct: true, feedback: "Benar! Puasa Ramadhan adalah kewajiban bagi yang sudah baligh." }
+                ]
+            }
+        ];
+        
+        const evaluasiQuestions = [
+            {
+                question: "Baligh artinya...",
+                options: ["Dewasa menurut Islam", "Masih kecil", "Sudah tua", "Belum lahir"],
+                correct: 0
+            },
+            {
+                question: "Tanda baligh pada laki-laki adalah...",
+                options: ["Menstruasi", "Mimpi basah", "Payudara tumbuh", "Pinggul melebar"],
+                correct: 1
+            },
+            {
+                question: "Tanda baligh pada perempuan adalah...",
+                options: ["Mimpi basah", "Suara berubah", "Menstruasi", "Tumbuh jenggot"],
+                correct: 2
+            },
+            {
+                question: "Setelah baligh, kewajiban shalat adalah...",
+                options: ["5 kali sehari", "3 kali sehari", "1 kali sehari", "Tidak wajib"],
+                correct: 0
+            },
+            {
+                question: "Puasa Ramadhan wajib bagi...",
+                options: ["Semua anak", "Yang sudah baligh", "Yang sudah menikah", "Yang sudah tua"],
+                correct: 1
+            }
+        ];
+
+        // Initialize app
+        function init() {
+            updateProgress();
+            updateStarDisplay();
+        }
+
+        // Navigation functions
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+            document.getElementById('mainMenu').classList.add('hidden');
+            
+            // Show selected section
+            document.getElementById(section + 'Section').classList.remove('hidden');
+        }
+
+        function showMainMenu() {
+            // Hide all sections
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+            
+            // Show main menu
+            document.getElementById('mainMenu').classList.remove('hidden');
+            
+            // Hide game and evaluasi areas
+            document.getElementById('gameArea').classList.add('hidden');
+            document.getElementById('evaluasiArea').classList.add('hidden');
+        }
+
+        // Progress and stars functions
+        function updateProgress() {
+            const completed = Object.values(completedSections).filter(Boolean).length;
+            const total = Object.keys(completedSections).length;
+            const percentage = Math.round((completed / total) * 100);
+            
+            document.getElementById('progressText').textContent = percentage + '%';
+            document.getElementById('progressBar').style.width = percentage + '%';
+            
+            // Update status indicators
+            document.getElementById('materiStatus').textContent = completedSections.materi ? '✅' : '❌';
+            document.getElementById('gameStatus').textContent = completedSections.games ? '✅' : '❌';
+            document.getElementById('evaluasiStatus').textContent = completedSections.evaluasi ? '✅' : '❌';
+            
+            // Check if all completed for certificate
+            if (completed === total) {
+                showCertificate();
+            }
+        }
+
+        function updateStarDisplay() {
+            document.getElementById('totalStars').textContent = totalStars;
+        }
+
+        function addStars(amount) {
+            totalStars += amount;
+            updateStarDisplay();
+            
+            // Show success modal
+            showSuccessModal(`Kamu mendapat ${amount} bintang! 🌟`);
+        }
+
+        function showSuccessModal(message) {
+            document.getElementById('successMessage').textContent = message;
+            document.getElementById('successModal').classList.remove('hidden');
+            document.getElementById('successModal').classList.add('flex');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+            document.getElementById('successModal').classList.remove('flex');
+        }
+
+        // Materi functions
+        function completeMateri() {
+            if (!completedSections.materi) {
+                completedSections.materi = true;
+                addStars(10);
+                updateProgress();
+            } else {
+                showSuccessModal("Kamu sudah menyelesaikan materi ini! 📚");
+            }
+        }
+
+        // Game functions
+        function startGame(gameType) {
+            currentGame = gameType;
+            document.getElementById('gameArea').classList.remove('hidden');
+            
+            switch(gameType) {
+                case 'matching':
+                    loadMatchingGame();
+                    break;
+                case 'quiz':
+                    loadQuizGame();
+                    break;
+                case 'simulation':
+                    loadSimulationGame();
+                    break;
+            }
+        }
+
+        function loadMatchingGame() {
+            const gameArea = document.getElementById('gameArea');
+            gameArea.innerHTML = `
+                <div class="bg-blue-50 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-blue-800 mb-4 text-center">🎯 Pasangkan Tanda Baligh</h3>
+                    <p class="text-center text-gray-600 mb-6">Seret kartu ke kategori yang tepat!</p>
+                    
+                    <div class="grid md:grid-cols-3 gap-6 mb-6">
+                        <div class="bg-green-100 rounded-lg p-4 min-h-32" id="lakiLakiZone">
+                            <h4 class="font-bold text-green-800 text-center mb-2">👦 Laki-laki</h4>
+                            <div class="space-y-2" id="lakiLakiCards"></div>
+                        </div>
+                        <div class="bg-pink-100 rounded-lg p-4 min-h-32" id="perempuanZone">
+                            <h4 class="font-bold text-pink-800 text-center mb-2">👧 Perempuan</h4>
+                            <div class="space-y-2" id="perempuanCards"></div>
+                        </div>
+                        <div class="bg-purple-100 rounded-lg p-4 min-h-32" id="umumZone">
+                            <h4 class="font-bold text-purple-800 text-center mb-2">👥 Umum</h4>
+                            <div class="space-y-2" id="umumCards"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-100 rounded-lg p-4 mb-4">
+                        <h4 class="font-bold text-gray-800 mb-2">Kartu Tanda Baligh:</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-2" id="matchingCards">
+                            ${matchingGameData.map(item => `
+                                <div class="bg-white rounded-lg p-3 cursor-pointer hover:shadow-md transition-all border-2 border-gray-200" 
+                                     draggable="true" ondragstart="dragStart(event)" data-id="${item.id}" data-category="${item.category}">
+                                    <p class="text-sm font-medium text-center">${item.text}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button onclick="checkMatchingAnswers()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
+                            Periksa Jawaban
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Add drag and drop functionality
+            setupDragAndDrop();
+        }
+
+        function setupDragAndDrop() {
+            const zones = ['lakiLakiZone', 'perempuanZone', 'umumZone'];
+            
+            zones.forEach(zoneId => {
+                const zone = document.getElementById(zoneId);
+                zone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    zone.classList.add('bg-opacity-75');
+                });
+                
+                zone.addEventListener('dragleave', (e) => {
+                    zone.classList.remove('bg-opacity-75');
+                });
+                
+                zone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    zone.classList.remove('bg-opacity-75');
+                    
+                    const cardId = e.dataTransfer.getData('text/plain');
+                    const card = document.querySelector(`[data-id="${cardId}"]`);
+                    
+                    if (card) {
+                        const targetContainer = zone.querySelector('div[id$="Cards"]');
+                        targetContainer.appendChild(card);
+                        card.classList.add('border-blue-400');
+                    }
+                });
+            });
+        }
+
+        function dragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.dataset.id);
+        }
+
+        function checkMatchingAnswers() {
+            let correct = 0;
+            const total = matchingGameData.length;
+            
+            matchingGameData.forEach(item => {
+                const card = document.querySelector(`[data-id="${item.id}"]`);
+                const parent = card.parentElement;
+                
+                let expectedZone = '';
+                if (item.category === 'laki-laki') expectedZone = 'lakiLakiCards';
+                else if (item.category === 'perempuan') expectedZone = 'perempuanCards';
+                else expectedZone = 'umumCards';
+                
+                if (parent.id === expectedZone) {
+                    correct++;
+                    card.classList.add('border-green-500', 'bg-green-50');
+                } else {
+                    card.classList.add('border-red-500', 'bg-red-50');
+                }
+            });
+            
+            const score = Math.round((correct / total) * 100);
+            const stars = Math.floor(score / 20);
+            
+            setTimeout(() => {
+                if (score >= 80) {
+                    completedSections.games = true;
+                    updateProgress();
+                    addStars(stars);
+                    showSuccessModal(`Hebat! Skor kamu ${score}%. Game selesai! 🎯`);
+                } else {
+                    showSuccessModal(`Skor kamu ${score}%. Coba lagi untuk hasil yang lebih baik! 💪`);
+                }
+            }, 1000);
+        }
+
+        function loadQuizGame() {
+            currentQuestion = 0;
+            gameScore = 0;
+            showQuizQuestion();
+        }
+
+        function showQuizQuestion() {
+            if (currentQuestion >= quizQuestions.length) {
+                finishQuizGame();
+                return;
+            }
+            
+            const question = quizQuestions[currentQuestion];
+            const gameArea = document.getElementById('gameArea');
+            
+            gameArea.innerHTML = `
+                <div class="bg-green-50 rounded-lg p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold text-green-800">⚡ Kuis Cepat Tanggap</h3>
+                        <div class="text-sm text-gray-600">
+                            Soal ${currentQuestion + 1} dari ${quizQuestions.length}
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg p-6 mb-6">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4">${question.question}</h4>
+                        <div class="space-y-3">
+                            ${question.options.map((option, index) => `
+                                <button onclick="selectQuizAnswer(${index})" 
+                                        class="w-full text-left p-4 rounded-lg border-2 border-gray-200 hover:border-green-400 hover:bg-green-50 transition-all">
+                                    ${String.fromCharCode(65 + index)}. ${option}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="text-sm text-gray-600">Skor: ${gameScore}/${currentQuestion}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectQuizAnswer(selectedIndex) {
+            const question = quizQuestions[currentQuestion];
+            const buttons = document.querySelectorAll('#gameArea button[onclick^="selectQuizAnswer"]');
+            
+            buttons.forEach((button, index) => {
+                button.disabled = true;
+                if (index === question.correct) {
+                    button.classList.add('border-green-500', 'bg-green-100');
+                } else if (index === selectedIndex && index !== question.correct) {
+                    button.classList.add('border-red-500', 'bg-red-100');
+                }
+            });
+            
+            if (selectedIndex === question.correct) {
+                gameScore++;
+            }
+            
+            setTimeout(() => {
+                currentQuestion++;
+                showQuizQuestion();
+            }, 1500);
+        }
+
+        function finishQuizGame() {
+            const percentage = Math.round((gameScore / quizQuestions.length) * 100);
+            const stars = Math.floor(percentage / 20);
+            
+            if (percentage >= 80) {
+                completedSections.games = true;
+                updateProgress();
+                addStars(stars);
+                showSuccessModal(`Luar biasa! Skor kamu ${percentage}%. Kuis selesai! ⚡`);
+            } else {
+                showSuccessModal(`Skor kamu ${percentage}%. Pelajari materi lagi dan coba lagi! 📚`);
+            }
+        }
+
+        function loadSimulationGame() {
+            currentQuestion = 0;
+            gameScore = 0;
+            showSimulationScenario();
+        }
+
+        function showSimulationScenario() {
+            if (currentQuestion >= simulationScenarios.length) {
+                finishSimulationGame();
+                return;
+            }
+            
+            const scenario = simulationScenarios[currentQuestion];
+            const gameArea = document.getElementById('gameArea');
+            
+            gameArea.innerHTML = `
+                <div class="bg-purple-50 rounded-lg p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold text-purple-800">🎭 Simulasi Tanggung Jawab</h3>
+                        <div class="text-sm text-gray-600">
+                            Skenario ${currentQuestion + 1} dari ${simulationScenarios.length}
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg p-6 mb-6">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4">Situasi:</h4>
+                        <p class="text-gray-700 mb-6">${scenario.scenario}</p>
+                        
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4">Pilihan:</h4>
+                        <div class="space-y-3">
+                            ${scenario.options.map((option, index) => `
+                                <button onclick="selectSimulationAnswer(${index})" 
+                                        class="w-full text-left p-4 rounded-lg border-2 border-gray-200 hover:border-purple-400 hover:bg-purple-50 transition-all">
+                                    ${option.text}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="text-sm text-gray-600">Skor: ${gameScore}/${currentQuestion}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectSimulationAnswer(selectedIndex) {
+            const scenario = simulationScenarios[currentQuestion];
+            const selectedOption = scenario.options[selectedIndex];
+            const buttons = document.querySelectorAll('#gameArea button[onclick^="selectSimulationAnswer"]');
+            
+            buttons.forEach((button, index) => {
+                button.disabled = true;
+                if (scenario.options[index].correct) {
+                    button.classList.add('border-green-500', 'bg-green-100');
+                } else if (index === selectedIndex && !selectedOption.correct) {
+                    button.classList.add('border-red-500', 'bg-red-100');
+                }
+            });
+            
+            if (selectedOption.correct) {
+                gameScore++;
+            }
+            
+            // Show feedback
+            const gameArea = document.getElementById('gameArea');
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.className = `mt-4 p-4 rounded-lg ${selectedOption.correct ? 'bg-green-100 border-green-400' : 'bg-red-100 border-red-400'} border-2`;
+            feedbackDiv.innerHTML = `
+                <p class="font-semibold ${selectedOption.correct ? 'text-green-800' : 'text-red-800'} mb-2">
+                    ${selectedOption.correct ? '✅ Benar!' : '❌ Kurang Tepat'}
+                </p>
+                <p class="text-gray-700">${selectedOption.feedback}</p>
+            `;
+            gameArea.querySelector('.bg-white').appendChild(feedbackDiv);
+            
+            setTimeout(() => {
+                currentQuestion++;
+                showSimulationScenario();
+            }, 3000);
+        }
+
+        function finishSimulationGame() {
+            const percentage = Math.round((gameScore / simulationScenarios.length) * 100);
+            const stars = Math.floor(percentage / 20);
+            
+            if (percentage >= 80) {
+                completedSections.games = true;
+                updateProgress();
+                addStars(stars);
+                showSuccessModal(`Hebat! Kamu memahami tanggung jawab dengan baik! Skor: ${percentage}% 🎭`);
+            } else {
+                showSuccessModal(`Skor kamu ${percentage}%. Pelajari lagi tentang tanggung jawab setelah baligh! 💪`);
+            }
+        }
+
+        // Evaluasi functions
+        function startEvaluasi(type) {
+            document.getElementById('evaluasiArea').classList.remove('hidden');
+            
+            if (type === 'kuis') {
+                loadEvaluasiKuis();
+            } else {
+                loadRefleksiProject();
+            }
+        }
+
+        function loadEvaluasiKuis() {
+            currentQuestion = 0;
+            gameScore = 0;
+            showEvaluasiQuestion();
+        }
+
+        function showEvaluasiQuestion() {
+            if (currentQuestion >= evaluasiQuestions.length) {
+                finishEvaluasiKuis();
+                return;
+            }
+            
+            const question = evaluasiQuestions[currentQuestion];
+            const evaluasiArea = document.getElementById('evaluasiArea');
+            
+            evaluasiArea.innerHTML = `
+                <div class="bg-indigo-50 rounded-lg p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold text-indigo-800">📊 Kuis Akhir</h3>
+                        <div class="text-sm text-gray-600">
+                            Soal ${currentQuestion + 1} dari ${evaluasiQuestions.length}
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg p-6 mb-6">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4">${question.question}</h4>
+                        <div class="space-y-3">
+                            ${question.options.map((option, index) => `
+                                <button onclick="selectEvaluasiAnswer(${index})" 
+                                        class="w-full text-left p-4 rounded-lg border-2 border-gray-200 hover:border-indigo-400 hover:bg-indigo-50 transition-all">
+                                    ${String.fromCharCode(65 + index)}. ${option}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="text-sm text-gray-600">Skor: ${gameScore}/${currentQuestion}</div>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                            <div class="bg-indigo-600 h-2 rounded-full transition-all" style="width: ${(currentQuestion / evaluasiQuestions.length) * 100}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectEvaluasiAnswer(selectedIndex) {
+            const question = evaluasiQuestions[currentQuestion];
+            const buttons = document.querySelectorAll('#evaluasiArea button[onclick^="selectEvaluasiAnswer"]');
+            
+            buttons.forEach((button, index) => {
+                button.disabled = true;
+                if (index === question.correct) {
+                    button.classList.add('border-green-500', 'bg-green-100');
+                } else if (index === selectedIndex && index !== question.correct) {
+                    button.classList.add('border-red-500', 'bg-red-100');
+                }
+            });
+            
+            if (selectedIndex === question.correct) {
+                gameScore++;
+            }
+            
+            setTimeout(() => {
+                currentQuestion++;
+                showEvaluasiQuestion();
+            }, 1500);
+        }
+
+        function finishEvaluasiKuis() {
+            const percentage = Math.round((gameScore / evaluasiQuestions.length) * 100);
+            const stars = Math.floor(percentage / 15);
+            
+            completedSections.evaluasi = true;
+            updateProgress();
+            addStars(stars);
+            
+            const evaluasiArea = document.getElementById('evaluasiArea');
+            evaluasiArea.innerHTML = `
+                <div class="bg-green-50 rounded-lg p-6 text-center">
+                    <div class="text-6xl mb-4">🎉</div>
+                    <h3 class="text-2xl font-bold text-green-800 mb-4">Kuis Selesai!</h3>
+                    <p class="text-lg text-gray-700 mb-4">Skor Akhir: ${percentage}%</p>
+                    <div class="bg-white rounded-lg p-4 max-w-md mx-auto mb-6">
+                        <h4 class="font-semibold mb-2">Hasil Evaluasi:</h4>
+                        <div class="text-left space-y-1">
+                            <div class="flex justify-between">
+                                <span>Jawaban Benar:</span>
+                                <span class="font-bold text-green-600">${gameScore}/${evaluasiQuestions.length}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Persentase:</span>
+                                <span class="font-bold text-blue-600">${percentage}%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Bintang Diperoleh:</span>
+                                <span class="font-bold text-yellow-600">${stars} ⭐</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="loadRefleksiProject()" class="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg">
+                        Lanjut ke Proyek Refleksi ✍️
+                    </button>
+                </div>
+            `;
+        }
+
+        function loadRefleksiProject() {
+            const evaluasiArea = document.getElementById('evaluasiArea');
+            evaluasiArea.innerHTML = `
+                <div class="bg-teal-50 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-teal-800 mb-4 text-center">✍️ Proyek Refleksi</h3>
+                    <p class="text-center text-gray-600 mb-6">Tuliskan rencanamu setelah baligh!</p>
+                    
+                    <div class="bg-white rounded-lg p-6">
+                        <h4 class="font-semibold text-gray-800 mb-4">Apa yang akan aku lakukan setelah baligh?</h4>
+                        <textarea id="refleksiText" placeholder="Contoh: Saya akan rajin shalat 5 waktu, berpuasa di bulan Ramadhan, berbakti kepada orang tua..." 
+                                  class="w-full h-32 p-4 border-2 border-gray-200 rounded-lg focus:border-teal-400 focus:outline-none resize-none"></textarea>
+                        
+                        <div class="mt-6">
+                            <h4 class="font-semibold text-gray-800 mb-4">Gambar rencana kamu (opsional):</h4>
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                                <div class="text-4xl mb-2">🎨</div>
+                                <p class="text-gray-500">Area untuk menggambar atau mendeskripsikan rencana visual</p>
+                                <textarea id="gambarDeskripsi" placeholder="Deskripsikan gambar yang ingin kamu buat..." 
+                                          class="w-full h-20 mt-4 p-3 border border-gray-200 rounded-lg focus:border-teal-400 focus:outline-none resize-none"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 text-center">
+                            <button onclick="submitRefleksi()" class="bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 rounded-lg font-semibold">
+                                💾 Simpan Refleksi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function submitRefleksi() {
+            const refleksiText = document.getElementById('refleksiText').value.trim();
+            const gambarDeskripsi = document.getElementById('gambarDeskripsi').value.trim();
+            
+            if (refleksiText.length < 50) {
+                showSuccessModal("Tuliskan refleksi yang lebih lengkap (minimal 50 karakter) 📝");
+                return;
+            }
+            
+            // Save reflection (in real app, this would be saved to database)
+            localStorage.setItem('refleksiBaligh', JSON.stringify({
+                text: refleksiText,
+                gambar: gambarDeskripsi,
+                tanggal: new Date().toLocaleDateString('id-ID')
+            }));
+            
+            addStars(15);
+            showSuccessModal("Refleksi berhasil disimpan! Semoga kamu bisa menjalankan rencana tersebut. 🌟");
+            
+            // Show completion message
+            setTimeout(() => {
+                const evaluasiArea = document.getElementById('evaluasiArea');
+                evaluasiArea.innerHTML = `
+                    <div class="bg-green-50 rounded-lg p-6 text-center">
+                        <div class="text-6xl mb-4">✅</div>
+                        <h3 class="text-2xl font-bold text-green-800 mb-4">Proyek Refleksi Selesai!</h3>
+                        <p class="text-gray-700 mb-6">Refleksimu telah tersimpan. Ingatlah untuk selalu menjalankan rencana baikmu!</p>
+                        <div class="bg-white rounded-lg p-4 max-w-md mx-auto">
+                            <h4 class="font-semibold mb-2">Refleksimu:</h4>
+                            <p class="text-sm text-gray-600 text-left">"${refleksiText.substring(0, 100)}${refleksiText.length > 100 ? '...' : ''}"</p>
+                        </div>
+                    </div>
+                `;
+            }, 2000);
+        }
+
+        // Certificate functions
+        function showCertificate() {
+            const sertifikatContent = document.getElementById('sertifikatContent');
+            const today = new Date().toLocaleDateString('id-ID', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            sertifikatContent.innerHTML = `
+                <div class="max-w-2xl mx-auto">
+                    <div id="certificate" class="bg-gradient-to-br from-yellow-50 to-orange-50 border-8 border-yellow-400 rounded-xl p-8 text-center relative overflow-hidden">
+                        <!-- Decorative elements -->
+                        <div class="absolute top-4 left-4 text-yellow-400 text-2xl">🌟</div>
+                        <div class="absolute top-4 right-4 text-yellow-400 text-2xl">🌟</div>
+                        <div class="absolute bottom-4 left-4 text-yellow-400 text-2xl">🌟</div>
+                        <div class="absolute bottom-4 right-4 text-yellow-400 text-2xl">🌟</div>
+                        
+                        <!-- Header -->
+                        <div class="text-6xl mb-4">🏆</div>
+                        <h2 class="text-3xl font-bold text-yellow-800 mb-2">SERTIFIKAT PENGHARGAAN</h2>
+                        <div class="w-32 h-1 bg-yellow-600 mx-auto mb-6"></div>
+                        
+                        <!-- Content -->
+                        <p class="text-lg text-gray-700 mb-4">Diberikan kepada:</p>
+                        <div class="bg-white rounded-lg p-4 mb-6 border-2 border-yellow-300">
+                            <input type="text" id="studentName" placeholder="Masukkan nama siswa..." 
+                                   class="text-2xl font-bold text-center w-full border-none outline-none text-yellow-800">
+                        </div>
+                        
+                        <p class="text-gray-700 mb-2">Telah berhasil menyelesaikan pembelajaran</p>
+                        <h3 class="text-xl font-bold text-yellow-800 mb-4">"TANDA-TANDA BALIGH"</h3>
+                        <p class="text-gray-700 mb-6">Mata Pelajaran Fikih Kelas 4 Madrasah Ibtidaiyah</p>
+                        
+                        <!-- Stats -->
+                        <div class="grid grid-cols-3 gap-4 mb-6">
+                            <div class="bg-white rounded-lg p-3 border border-yellow-300">
+                                <div class="text-2xl font-bold text-yellow-600">${totalStars}</div>
+                                <div class="text-sm text-gray-600">Bintang</div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 border border-yellow-300">
+                                <div class="text-2xl font-bold text-green-600">100%</div>
+                                <div class="text-sm text-gray-600">Selesai</div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 border border-yellow-300">
+                                <div class="text-2xl font-bold text-blue-600">A+</div>
+                                <div class="text-sm text-gray-600">Nilai</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Footer -->
+                        <p class="text-sm text-gray-600 mb-4">${today}</p>
+                        <div class="flex justify-between items-end">
+                            <div class="text-left">
+                                <div class="text-sm text-gray-600">Guru Fikih</div>
+                                <div class="w-32 border-b-2 border-gray-400 mt-8 mb-2"></div>
+                                <div class="text-sm font-semibold">MAHFUD SIDIK, S.Pd.I</div>
+                            </div>
+                            <div class="text-4xl">🕌</div>
+                            <div class="text-right">
+                                <div class="text-sm text-gray-600">Kepala Madrasah</div>
+                                <div class="w-32 border-b-2 border-gray-400 mt-8 mb-2"></div>
+                                <div class="text-sm font-semibold">MUSLIMAH, S.Pd.I</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-6">
+                        <button onclick="downloadCertificate()" class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold mr-4">
+                            📥 Download Sertifikat
+                        </button>
+                        <button onclick="printCertificate()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold">
+                            🖨️ Cetak Sertifikat
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function downloadCertificate() {
+            const studentName = document.getElementById('studentName').value.trim();
+            if (!studentName) {
+                showSuccessModal("Masukkan nama siswa terlebih dahulu! 📝");
+                return;
+            }
+            
+            // Create a canvas to convert the certificate to image
+            const certificate = document.getElementById('certificate');
+            
+            // Use html2canvas alternative - create a data URL
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 800;
+            canvas.height = 600;
+            
+            // Fill background
+            ctx.fillStyle = '#fef3c7';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Add border
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 16;
+            ctx.strokeRect(8, 8, canvas.width - 16, canvas.height - 16);
+            
+            // Add text
+            ctx.fillStyle = '#92400e';
+            ctx.font = 'bold 36px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('SERTIFIKAT PENGHARGAAN', canvas.width / 2, 80);
+            
+            ctx.font = '24px Arial';
+            ctx.fillText('Diberikan kepada:', canvas.width / 2, 140);
+            
+            ctx.font = 'bold 32px Arial';
+            ctx.fillText(studentName, canvas.width / 2, 200);
+            
+            ctx.font = '20px Arial';
+            ctx.fillText('Telah berhasil menyelesaikan pembelajaran', canvas.width / 2, 260);
+            
+            ctx.font = 'bold 28px Arial';
+            ctx.fillText('"TANDA-TANDA BALIGH"', canvas.width / 2, 300);
+            
+            ctx.font = '18px Arial';
+            ctx.fillText('Mata Pelajaran Fikih Kelas 4 Madrasah Ibtidaiyah', canvas.width / 2, 340);
+            
+            ctx.fillText(`Bintang: ${totalStars} | Nilai: A+ | Selesai: 100%`, canvas.width / 2, 400);
+            
+            ctx.fillText(new Date().toLocaleDateString('id-ID'), canvas.width / 2, 480);
+            
+            // Convert to blob and download
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Sertifikat_${studentName.replace(/\s+/g, '_')}_Tanda_Baligh.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showSuccessModal("Sertifikat berhasil didownload! 🎉");
+            }, 'image/png');
+        }
+
+        function printCertificate() {
+            const studentName = document.getElementById('studentName').value.trim();
+            if (!studentName) {
+                showSuccessModal("Masukkan nama siswa terlebih dahulu! 📝");
+                return;
+            }
+            
+            showSuccessModal("Gunakan menu Print browser (Ctrl+P) untuk mencetak sertifikat! 🖨️");
+        }
+
+        // Initialize the app
+        init();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96d6f21132e7ef72',t:'MTc1NDkwNzA1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
