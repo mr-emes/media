@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OPEN THE BOX - Team Quiz Battle!</title>
+    <title>📦 OPEN THE BOX - Team Quiz Battle! 📦</title>
     <style>
         * {
             margin: 0;
@@ -281,35 +281,34 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
-.boxes-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 8px; /* samakan dengan scoreboard */
-    width: 100%; /* supaya penuh */
-    margin: 0 auto;
-    flex: 1;
-    align-content: center;
-}
+        .boxes-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            max-width: 500px;
+            margin: 0 auto;
+            flex: 1;
+            align-content: center;
+        }
 
-.mystery-box {
-    width: 100%;
-    aspect-ratio: 5 / 3; /* proporsi mirip scoreboard */
-    min-height: 70px;
-    background: linear-gradient(45deg, #8B4513, #A0522D);
-    border: 3px solid #654321;
-    border-radius: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    color: #ffd700;
-    transition: all 0.4s ease;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
-
+        .mystery-box {
+            width: 120px;
+            height: 70px;
+            background: linear-gradient(45deg, #8B4513, #A0522D);
+            border: 3px solid #654321;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #ffd700;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            margin: 0 auto;
+        }
 
         .mystery-box::before {
             content: '';
@@ -422,6 +421,13 @@
             margin-bottom: 30px;
             border-left: 6px solid #667eea;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            font-size: 2.5rem;
+            line-height: 1.8;
+            direction: rtl;
         }
 
         .options-grid {
@@ -651,8 +657,13 @@
             .options-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .arabic-text {
+                font-size: 2rem;
+            }
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="floating-elements">
@@ -763,7 +774,6 @@
         const SUBJECT_TITLE = "Al-Quran Hadits Kelas 4 - Hukum Bacaan Izhar dan Ikhfa";
         
         const questions = [
-            // CONTOH SOAL - GANTI DENGAN MATERI ANDA
             {
                 question: "Apa pengertian hukum bacaan Izhar?",
                 options: ["Membaca jelas dan terang", "Membaca samar-samar", "Membaca dengan dengung", "Membaca dengan panjang"],
@@ -784,7 +794,12 @@
             },
             {
                 question: "Contoh bacaan Izhar yang benar adalah...",
-                options: ["مِنْ هَادٍ", "مِنْ بَعْدِ", "مِنْ تَحْتِ", "مِنْ قَبْلِ"],
+                options: [
+                    `<span class="arabic-text">مِنْ هَادٍ</span>`, 
+                    `<span class="arabic-text">مِنْ بَعْدِ</span>`, 
+                    `<span class="arabic-text">مِنْ تَحْتِ</span>`, 
+                    `<span class="arabic-text">مِنْ قَبْلِ</span>`
+                ],
                 correct: 0,
                 points: 25
             },
@@ -808,7 +823,12 @@
             },
             {
                 question: "Contoh bacaan Ikhfa yang benar adalah...",
-                options: ["مِنْ عِلْمٍ", "مِنْ تَحْتِ", "مِنْ هَادٍ", "مِنْ رَبِّ"],
+                options: [
+                    `<span class="arabic-text">مِنْ عِلْمٍ</span>`, 
+                    `<span class="arabic-text">مِنْ تَحْتِ</span>`, 
+                    `<span class="arabic-text">مِنْ هَادٍ</span>`, 
+                    `<span class="arabic-text">مِنْ رَبِّ</span>`
+                ],
                 correct: 1,
                 points: 20
             },
@@ -880,7 +900,7 @@
             },
             {
                 question: "Bacaan عَنْ قَرِيبٍ hukumnya adalah...",
-                options: ["Izhar", "Ikhfa", "Idgham", "Iqlab"],
+                options: ["Ikhfa", "Izhar", "Idgham", "Iqlab"],
                 correct: 1,
                 points: 15
             },
@@ -914,9 +934,6 @@
                 correct: 0,
                 points: 30
             }
-            
-            // TAMBAHKAN SOAL LAIN DI SINI JIKA DIPERLUKAN
-            // Format yang sama: question, options (array 4 pilihan), correct (0-3), points
         ];
 
         let gameState = {
@@ -943,20 +960,19 @@
             document.getElementById('subject-title-display').textContent = SUBJECT_TITLE;
         }
 
-function generateBoxes() {
-    const boxesGrid = document.getElementById('boxes-grid');
-    boxesGrid.innerHTML = '';
-    
-    for (let i = 1; i <= gameState.totalBoxes; i++) {
-        const box = document.createElement('div');
-        box.className = 'mystery-box';
-        box.innerHTML = `<div style="font-size:0.8rem; position:absolute; top:4px; left:6px; color:white; text-shadow:1px 1px 2px black;">${i}</div>🏴‍☠️`;
-        box.onclick = () => openBox(i);
-        box.id = `box-${i}`;
-        boxesGrid.appendChild(box);
-    }
-}
-
+        function generateBoxes() {
+            const boxesGrid = document.getElementById('boxes-grid');
+            boxesGrid.innerHTML = '';
+            
+            for (let i = 1; i <= gameState.totalBoxes; i++) {
+                const box = document.createElement('div');
+                box.className = 'mystery-box';
+                box.innerHTML = '🏴‍☠️';
+                box.onclick = () => openBox(i);
+                box.id = `box-${i}`;
+                boxesGrid.appendChild(box);
+            }
+        }
 
         function openBox(boxNumber) {
             if (gameState.openedBoxes.includes(boxNumber)) {
@@ -1004,7 +1020,7 @@ function generateBoxes() {
             question.options.forEach((option, index) => {
                 const optionBtn = document.createElement('button');
                 optionBtn.className = 'option-btn';
-                optionBtn.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
+                optionBtn.innerHTML = `${String.fromCharCode(65 + index)}. ${option}`;
                 optionBtn.onclick = () => selectOption(index, optionBtn);
                 optionsGrid.appendChild(optionBtn);
             });
@@ -1166,5 +1182,5 @@ function generateBoxes() {
             initializeGame();
         };
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96d831ec74099fb9',t:'MTc1NDkyMDE1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
