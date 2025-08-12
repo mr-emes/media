@@ -90,8 +90,8 @@
                     <div class="flex-1">
                         <h1 class="text-sm font-medium text-gray-600">Media Pembelajaran</h1>
                         <p class="text-lg font-bold text-blue-700">Al-Qur'an Hadits</p>
-                        <p class="text-xs font-bold text-gray-600">Surah Al-Ashr • Kelas 4</p>
-                        <p class="text-xs font-bold text-gray-400 mt-1">MAHFUD SIDIK, S.Pd.I</p>
+                        <p class="text-xs text-gray-600">Surah Al-Ashr • Kelas 4</p>
+                        <p class="text-xs text-gray-500 mt-1">MAHFUD SIDIK, S.Pd.I</p>
                     </div>
                 </div>
                 
@@ -721,8 +721,49 @@
                         <!-- Tracing Exercise -->
                         <div id="tracingExercise" class="mb-8">
                             <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl p-8 border-2 border-blue-200 mb-6">
-                                <h3 class="text-2xl font-bold text-blue-800 mb-4 text-center">Latihan Menebalkan Tulisan Arab</h3>
-                                <p class="text-blue-700 text-center mb-6">Tebalkan tulisan Arab di bawah ini dengan mengikuti garis putus-putus</p>
+                                <h3 class="text-2xl font-bold text-blue-800 mb-6 text-center">Latihan Menebalkan Tulisan Arab</h3>
+                                
+                                <!-- Instruksi yang diperlebar -->
+                                <div class="bg-white rounded-2xl p-6 mb-6 shadow-lg">
+                                    <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                        <span class="text-2xl mr-3">📋</span>
+                                        Petunjuk Penggunaan
+                                    </h4>
+                                    <div class="grid md:grid-cols-2 gap-6">
+                                        <div class="space-y-4">
+                                            <div class="flex items-start space-x-3">
+                                                <span class="text-xl">1️⃣</span>
+                                                <div>
+                                                    <p class="font-semibold text-gray-800">Pilih Ayat</p>
+                                                    <p class="text-gray-600 text-sm">Klik tombol ayat yang ingin dipraktikkan</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-start space-x-3">
+                                                <span class="text-xl">2️⃣</span>
+                                                <div>
+                                                    <p class="font-semibold text-gray-800">Tebalkan Tulisan</p>
+                                                    <p class="text-gray-600 text-sm">Ikuti garis putus-putus dengan mouse atau jari</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="space-y-4">
+                                            <div class="flex items-start space-x-3">
+                                                <span class="text-xl">3️⃣</span>
+                                                <div>
+                                                    <p class="font-semibold text-gray-800">Atur Warna & Ketebalan</p>
+                                                    <p class="text-gray-600 text-sm">Gunakan tombol di bawah untuk mengubah warna dan ketebalan garis</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-start space-x-3">
+                                                <span class="text-xl">4️⃣</span>
+                                                <div>
+                                                    <p class="font-semibold text-gray-800">Selesaikan Semua Ayat</p>
+                                                    <p class="text-gray-600 text-sm">Praktikkan ketiga ayat untuk menyelesaikan latihan</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 
                                 <div class="flex justify-center mb-6">
                                     <div class="bg-white rounded-xl p-4 flex gap-4">
@@ -743,10 +784,10 @@
                             </div>
 
                             <div class="canvas-container p-6 relative">
-                                <canvas id="backgroundCanvas" width="1200" height="400" 
-                                        class="absolute top-6 left-6 w-full h-80 rounded-2xl pointer-events-none"></canvas>
-                                <canvas id="drawingCanvas" width="1200" height="400" 
-                                        class="relative w-full h-80 cursor-crosshair rounded-2xl bg-transparent"></canvas>
+                                <canvas id="backgroundCanvas" width="1400" height="600" 
+                                        class="absolute top-6 left-6 w-full h-96 md:h-[500px] rounded-2xl pointer-events-none"></canvas>
+                                <canvas id="drawingCanvas" width="1400" height="600" 
+                                        class="relative w-full h-96 md:h-[500px] cursor-crosshair rounded-2xl bg-transparent"></canvas>
                             </div>
                         </div>
 
@@ -758,8 +799,8 @@
                             </div>
                             
                             <div class="canvas-container p-6">
-                                <canvas id="freeCanvas" width="1200" height="500" 
-                                        class="w-full h-96 cursor-crosshair rounded-2xl bg-white shadow-inner"></canvas>
+                                <canvas id="freeCanvas" width="1400" height="600" 
+                                        class="w-full h-96 md:h-[500px] cursor-crosshair rounded-2xl bg-white shadow-inner"></canvas>
                             </div>
                         </div>
 
@@ -1300,25 +1341,91 @@
             };
             
             const text = ayatTexts[ayatNumber];
-            const fontSize = ayatNumber === 3 ? 40 : 60;
+            
+            // Adjust font size based on canvas size and ayat length
+            let fontSize;
+            if (ayatNumber === 1) {
+                fontSize = 120;
+            } else if (ayatNumber === 2) {
+                fontSize = 80;
+            } else {
+                fontSize = 50;
+            }
             
             backgroundCtx.font = `${fontSize}px Amiri, serif`;
-            backgroundCtx.fillStyle = 'rgba(59, 130, 246, 0.2)';
             backgroundCtx.textAlign = 'center';
             backgroundCtx.direction = 'rtl';
             
-            const centerX = backgroundCanvas.width / 4;
-            const centerY = backgroundCanvas.height / 4;
+            const centerX = backgroundCanvas.width / 2;
+            let centerY = backgroundCanvas.height / 2;
             
-            // Draw dashed outline
-            backgroundCtx.setLineDash([10, 10]);
-            backgroundCtx.strokeStyle = 'rgba(59, 130, 246, 0.5)';
-            backgroundCtx.lineWidth = 3;
-            backgroundCtx.strokeText(text, centerX, centerY);
+            // For ayat 3, split into multiple lines if needed
+            if (ayatNumber === 3) {
+                const words = text.split(' ');
+                const lines = [];
+                let currentLine = '';
+                
+                // Split long ayat into lines
+                for (let i = 0; i < words.length; i++) {
+                    const testLine = currentLine + words[i] + ' ';
+                    const metrics = backgroundCtx.measureText(testLine);
+                    
+                    if (metrics.width > backgroundCanvas.width * 0.8 && currentLine !== '') {
+                        lines.push(currentLine.trim());
+                        currentLine = words[i] + ' ';
+                    } else {
+                        currentLine = testLine;
+                    }
+                }
+                lines.push(currentLine.trim());
+                
+                // Draw each line
+                const lineHeight = fontSize * 1.2;
+                const startY = centerY - ((lines.length - 1) * lineHeight) / 2;
+                
+                lines.forEach((line, index) => {
+                    const y = startY + (index * lineHeight);
+                    
+                    // Draw dashed outline for tracing
+                    backgroundCtx.setLineDash([8, 8]);
+                    backgroundCtx.strokeStyle = 'rgba(59, 130, 246, 0.6)';
+                    backgroundCtx.lineWidth = 4;
+                    backgroundCtx.strokeText(line, centerX, y);
+                    
+                    // Fill with very light color
+                    backgroundCtx.setLineDash([]);
+                    backgroundCtx.fillStyle = 'rgba(59, 130, 246, 0.15)';
+                    backgroundCtx.fillText(line, centerX, y);
+                });
+            } else {
+                // Single line ayat
+                // Draw dashed outline for tracing
+                backgroundCtx.setLineDash([10, 10]);
+                backgroundCtx.strokeStyle = 'rgba(59, 130, 246, 0.6)';
+                backgroundCtx.lineWidth = 5;
+                backgroundCtx.strokeText(text, centerX, centerY);
+                
+                // Fill with very light color
+                backgroundCtx.setLineDash([]);
+                backgroundCtx.fillStyle = 'rgba(59, 130, 246, 0.15)';
+                backgroundCtx.fillText(text, centerX, centerY);
+            }
             
-            // Fill with light color
+            // Add guidelines
+            backgroundCtx.setLineDash([5, 15]);
+            backgroundCtx.strokeStyle = 'rgba(156, 163, 175, 0.3)';
+            backgroundCtx.lineWidth = 1;
+            
+            // Horizontal guidelines
+            for (let i = 1; i <= 4; i++) {
+                const y = (backgroundCanvas.height / 5) * i;
+                backgroundCtx.beginPath();
+                backgroundCtx.moveTo(50, y);
+                backgroundCtx.lineTo(backgroundCanvas.width - 50, y);
+                backgroundCtx.stroke();
+            }
+            
             backgroundCtx.setLineDash([]);
-            backgroundCtx.fillText(text, centerX, centerY);
         }
 
         function startDrawing(e) {
@@ -1630,6 +1737,10 @@
             certificateCanvas.width = 1200;
             certificateCanvas.height = 800;
             
+            // Fill with white background first (important for JPG)
+            certificateCtx.fillStyle = '#ffffff';
+            certificateCtx.fillRect(0, 0, 1200, 800);
+            
             // Draw certificate background
             const gradient = certificateCtx.createLinearGradient(0, 0, 1200, 800);
             gradient.addColorStop(0, '#1e3a8a');
@@ -1648,48 +1759,127 @@
             certificateCtx.lineWidth = 8;
             certificateCtx.strokeRect(40, 40, 1120, 720);
             
+            // Add decorative corners
+            certificateCtx.fillStyle = '#fbbf24';
+            // Top left corner
+            certificateCtx.beginPath();
+            certificateCtx.arc(80, 80, 30, 0, 2 * Math.PI);
+            certificateCtx.fill();
+            // Top right corner
+            certificateCtx.beginPath();
+            certificateCtx.arc(1120, 80, 30, 0, 2 * Math.PI);
+            certificateCtx.fill();
+            // Bottom left corner
+            certificateCtx.beginPath();
+            certificateCtx.arc(80, 720, 30, 0, 2 * Math.PI);
+            certificateCtx.fill();
+            // Bottom right corner
+            certificateCtx.beginPath();
+            certificateCtx.arc(1120, 720, 30, 0, 2 * Math.PI);
+            certificateCtx.fill();
+            
+            // Add trophy icon (simplified)
+            certificateCtx.fillStyle = '#fbbf24';
+            certificateCtx.font = '80px Arial';
+            certificateCtx.textAlign = 'center';
+            certificateCtx.fillText('🏆', 600, 100);
+            
             // Add text
             certificateCtx.fillStyle = '#fef3c7';
             certificateCtx.font = 'bold 48px Arial';
             certificateCtx.textAlign = 'center';
-            certificateCtx.fillText('SERTIFIKAT', 600, 120);
+            certificateCtx.fillText('SERTIFIKAT', 600, 150);
             
             certificateCtx.font = '28px Arial';
-            certificateCtx.fillText('Media Pembelajaran Al-Quran Hadits', 600, 160);
+            certificateCtx.fillText('Media Pembelajaran Al-Quran Hadits', 600, 190);
+            
+            // Decorative line
+            certificateCtx.strokeStyle = '#fbbf24';
+            certificateCtx.lineWidth = 4;
+            certificateCtx.beginPath();
+            certificateCtx.moveTo(450, 210);
+            certificateCtx.lineTo(750, 210);
+            certificateCtx.stroke();
             
             certificateCtx.font = '24px Arial';
-            certificateCtx.fillText('Dengan bangga diberikan kepada:', 600, 220);
+            certificateCtx.fillText('Dengan bangga diberikan kepada:', 600, 250);
+            
+            // Student name box
+            certificateCtx.fillStyle = 'rgba(251, 191, 36, 0.2)';
+            certificateCtx.fillRect(300, 270, 600, 80);
+            certificateCtx.strokeStyle = '#fbbf24';
+            certificateCtx.lineWidth = 3;
+            certificateCtx.strokeRect(300, 270, 600, 80);
             
             certificateCtx.fillStyle = '#fbbf24';
             certificateCtx.font = 'bold 42px Arial';
-            certificateCtx.fillText(currentStudent.name, 600, 300);
+            certificateCtx.fillText(currentStudent.name, 600, 320);
             
             certificateCtx.fillStyle = '#fef3c7';
             certificateCtx.font = '24px Arial';
-            certificateCtx.fillText(`Kelas: ${currentStudent.class}`, 600, 340);
+            certificateCtx.fillText(`Kelas: ${currentStudent.class}`, 600, 380);
             
-            certificateCtx.fillText('Telah berhasil menyelesaikan pembelajaran', 600, 420);
+            certificateCtx.fillText('Telah berhasil menyelesaikan pembelajaran', 600, 430);
             
+            // Subject box
             certificateCtx.fillStyle = '#fbbf24';
+            certificateCtx.fillRect(350, 450, 500, 60);
+            certificateCtx.fillStyle = '#1e3a8a';
             certificateCtx.font = 'bold 36px Arial';
-            certificateCtx.fillText('SURAH AL-ASHR', 600, 480);
+            certificateCtx.fillText('SURAH AL-ASHR', 600, 490);
             
             certificateCtx.fillStyle = '#fef3c7';
-            certificateCtx.font = '20px Arial';
-            certificateCtx.fillText('dengan prestasi yang membanggakan', 600, 520);
+            certificateCtx.font = '28px Amiri, serif';
+            certificateCtx.fillText('سُورَةُ الْعَصْرِ', 600, 530);
             
-            certificateCtx.fillText(`Tanggal: ${new Date().toLocaleDateString('id-ID')}`, 600, 620);
+            certificateCtx.font = '20px Arial';
+            certificateCtx.fillText('dengan prestasi yang membanggakan', 600, 570);
+            
+            // Achievement icons
+            const achievements = ['📚', '🎥', '🎮', '✍️'];
+            const achievementLabels = ['Materi', 'Video', 'Game', 'Latihan'];
+            
+            for (let i = 0; i < achievements.length; i++) {
+                const x = 300 + (i * 150);
+                certificateCtx.font = '40px Arial';
+                certificateCtx.fillText(achievements[i], x, 620);
+                certificateCtx.font = '16px Arial';
+                certificateCtx.fillText(achievementLabels[i], x, 640);
+            }
+            
+            certificateCtx.font = '20px Arial';
+            certificateCtx.fillText(`Tanggal: ${new Date().toLocaleDateString('id-ID')}`, 600, 680);
+            
+            // Signature lines
+            certificateCtx.strokeStyle = '#fef3c7';
+            certificateCtx.lineWidth = 2;
+            certificateCtx.beginPath();
+            certificateCtx.moveTo(250, 740);
+            certificateCtx.lineTo(450, 740);
+            certificateCtx.stroke();
+            
+            certificateCtx.beginPath();
+            certificateCtx.moveTo(750, 740);
+            certificateCtx.lineTo(950, 740);
+            certificateCtx.stroke();
             
             certificateCtx.font = 'bold 18px Arial';
-            certificateCtx.fillText('Guru Al-Quran Hadits', 400, 720);
-            certificateCtx.fillText('Kepala Madrasah', 800, 720);
+            certificateCtx.fillText('Guru Al-Quran Hadits', 350, 760);
+            certificateCtx.fillText('Kepala Madrasah', 850, 760);
             
-            // Download
+            certificateCtx.font = '14px Arial';
+            certificateCtx.fillText('MAHFUD SIDIK, S.Pd.I', 350, 780);
+            certificateCtx.fillText('MI Kelas 4', 850, 780);
+            
+            // Download as JPG
             const link = document.createElement('a');
-            link.download = `Sertifikat_${currentStudent.name.replace(/\s+/g, '_')}_Surah_Al-Ashr.png`;
-            link.href = certificateCanvas.toDataURL('image/png', 1.0);
+            link.download = `Sertifikat_${currentStudent.name.replace(/\s+/g, '_')}_Surah_Al-Ashr.jpg`;
+            link.href = certificateCanvas.toDataURL('image/jpeg', 0.95);
             link.click();
+            
+            // Show success message
+            alert('✅ Sertifikat berhasil diunduh!\n\nFile tersimpan sebagai JPG di folder Download Anda.');
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96dd5b4c71647549',t:'MTc1NDk3NDI3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96dd685fc51cfe18',t:'MTc1NDk3NDgxMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
