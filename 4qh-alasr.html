@@ -10,10 +10,17 @@
         
         .arabic-text {
             font-family: 'Amiri', serif;
-            font-size: 2.5rem;
-            line-height: 2;
+            font-size: 1.5rem;
+            line-height: 1.8;
             text-align: right;
             direction: rtl;
+        }
+        
+        @media (min-width: 768px) {
+            .arabic-text {
+                font-size: 2.5rem;
+                line-height: 2;
+            }
         }
         
         .canvas-container {
@@ -72,22 +79,87 @@
 <body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen font-['Inter']">
     <!-- Header dengan Info Siswa -->
     <header class="bg-white shadow-xl border-b-4 border-blue-600">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
+        <div class="container mx-auto px-3 py-3">
+            <!-- Mobile Layout -->
+            <div class="block md:hidden">
+                <!-- Top Row: Logo + App Info -->
+                <div class="flex items-center space-x-3 mb-3">
+                    <div class="w-12 h-12 rounded-full overflow-hidden shadow-lg border-2 border-blue-200">
+                        <img src="https://i.imgur.com/0Laf7Zu.png" alt="Logo Media Pembelajaran" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-1">
+                        <h1 class="text-lg font-bold text-gray-800">Media Pembelajaran</h1>
+                        <p class="text-sm font-semibold text-blue-700">Al-Qur'an Hadits</p>
+                        <p class="text-xs text-gray-600">Surah Al-Ashr • Kelas 4</p>
+                    </div>
+                </div>
+                
+                <!-- Student Info Row -->
+                <div id="studentInfoMobile" class="hidden bg-gradient-to-r from-green-50 to-emerald-50 px-4 py-3 rounded-xl border-2 border-green-200 mb-3">
+                    <div class="flex justify-between items-center mb-2">
+                        <div>
+                            <p class="text-sm font-bold text-gray-800" id="studentNameMobile"></p>
+                            <p class="text-xs text-green-600 font-medium" id="studentClassMobile"></p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-gray-600">Progress</p>
+                            <p class="text-lg font-bold text-green-700"><span id="progressPercentageMobile">0</span>%</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-200 rounded-full h-2 mb-2">
+                        <div id="overallProgressMobile" class="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <div class="grid grid-cols-4 gap-1">
+                        <div class="text-center">
+                            <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center mx-auto">
+                                <span class="text-xs" id="materiProgressMobile">📚</span>
+                            </div>
+                            <p class="text-xs text-gray-600 mt-1">Materi</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center mx-auto">
+                                <span class="text-xs" id="videoProgressMobile">🎥</span>
+                            </div>
+                            <p class="text-xs text-gray-600 mt-1">Video</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center mx-auto">
+                                <span class="text-xs" id="gameProgressMobile">🎮</span>
+                            </div>
+                            <p class="text-xs text-gray-600 mt-1">Game</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center mx-auto">
+                                <span class="text-xs" id="latihanProgressMobile">✍️</span>
+                            </div>
+                            <p class="text-xs text-gray-600 mt-1">Latihan</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Teacher Info Row -->
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-2 rounded-xl border-2 border-blue-200 text-center">
+                    <p class="text-xs text-gray-600">Guru Pengampu</p>
+                    <p class="text-sm font-bold text-blue-800">MAHFUD SIDIK, S.Pd.I</p>
+                </div>
+            </div>
+            
+            <!-- Desktop Layout -->
+            <div class="hidden md:flex items-center justify-between">
                 <!-- Logo dan Info Aplikasi -->
                 <div class="flex items-center space-x-6">
                     <div class="w-20 h-20 rounded-full overflow-hidden shadow-lg border-4 border-blue-200">
                         <img src="https://i.imgur.com/0Laf7Zu.png" alt="Logo Media Pembelajaran" class="w-full h-full object-cover">
                     </div>
                     <div>
-                        <p class="text-lg font-semibold text-blue-700">Media Pembelajaran</p>
-                        <h1 class="text-2xl font-bold text-gray-800">Al-Qur'an Hadits</h1>                        
+                        <h1 class="text-2xl font-bold text-gray-800">Media Pembelajaran</h1>
+                        <p class="text-lg font-semibold text-blue-700">Al-Qur'an Hadits</p>
                         <p class="text-sm text-gray-600">Surah Al-Ashr • Kelas 4</p>
                     </div>
                 </div>
 
                 <!-- Info Guru -->
-                <div class="text-center hidden md:block">
+                <div class="text-center">
                     <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-3 rounded-xl border-2 border-blue-200">
                         <p class="text-sm text-gray-600 mb-1">Guru Pengampu</p>
                         <p class="text-lg font-bold text-blue-800">MAHFUD SIDIK, S.Pd.I</p>
@@ -147,28 +219,28 @@
     </header>
 
     <!-- Form Input Nama Siswa -->
-    <div id="loginForm" class="container mx-auto px-6 py-12">
-        <div class="max-w-lg mx-auto bg-white rounded-3xl shadow-2xl p-10">
-            <div class="text-center mb-10">
-                <div class="w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <span class="text-5xl">👨‍🎓</span>
+    <div id="loginForm" class="container mx-auto px-4 py-6 md:py-12">
+        <div class="max-w-lg mx-auto bg-white rounded-3xl shadow-2xl p-6 md:p-10">
+            <div class="text-center mb-8 md:mb-10">
+                <div class="w-16 h-16 md:w-24 md:h-24 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
+                    <span class="text-3xl md:text-5xl">👨‍🎓</span>
                 </div>
-                <h2 class="text-3xl font-bold text-gray-800 mb-3">Selamat Datang!</h2>
-                <p class="text-gray-600 text-lg">Masukkan data diri untuk memulai pembelajaran</p>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2 md:mb-3">Selamat Datang!</h2>
+                <p class="text-gray-600 text-base md:text-lg">Masukkan data diri untuk memulai pembelajaran</p>
             </div>
             
-            <form id="studentForm" class="space-y-8">
+            <form id="studentForm" class="space-y-6 md:space-y-8">
                 <div>
-                    <label class="block text-lg font-semibold text-gray-800 mb-3">Nama Lengkap</label>
+                    <label class="block text-base md:text-lg font-semibold text-gray-800 mb-2 md:mb-3">Nama Lengkap</label>
                     <input type="text" id="nameInput" required 
-                           class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 text-lg"
+                           class="w-full px-4 py-3 md:px-6 md:py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 text-base md:text-lg"
                            placeholder="Masukkan nama lengkap">
                 </div>
                 
                 <div>
-                    <label class="block text-lg font-semibold text-gray-800 mb-3">Kelas</label>
+                    <label class="block text-base md:text-lg font-semibold text-gray-800 mb-2 md:mb-3">Kelas</label>
                     <select id="classInput" required 
-                            class="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 text-lg">
+                            class="w-full px-4 py-3 md:px-6 md:py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-200 focus:border-blue-500 text-base md:text-lg">
                         <option value="">Pilih Kelas</option>
                         <option value="4A">4A</option>
                         <option value="4B">4B</option>
@@ -177,7 +249,7 @@
                 </div>
                 
                 <button type="submit" 
-                        class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 px-8 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-indigo-700 transition duration-300 shadow-lg">
+                        class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 md:py-4 px-6 md:px-8 rounded-xl font-bold text-base md:text-lg hover:from-blue-700 hover:to-indigo-700 transition duration-300 shadow-lg">
                     🚀 Mulai Belajar
                 </button>
             </form>
@@ -186,65 +258,96 @@
 
     <!-- Konten Pembelajaran -->
     <div id="learningContent" class="hidden">
-        <div class="container mx-auto px-6 py-8">
+        <div class="container mx-auto px-3 md:px-6 py-4 md:py-8">
             <!-- Tab Navigation -->
-            <div class="flex flex-wrap justify-center mb-10 bg-white rounded-3xl p-3 shadow-xl">
-                <button onclick="showTab('materi')" id="tab-materi" 
-                        class="tab-btn px-6 py-4 mx-1 mb-2 rounded-2xl font-bold text-lg transition duration-300 bg-blue-600 text-white shadow-lg hover:bg-blue-700">
-                    📚 Materi
-                </button>
-                <button onclick="showTab('video')" id="tab-video" 
-                        class="tab-btn px-6 py-4 mx-1 mb-2 rounded-2xl font-bold text-lg transition duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-600">
-                    🎥 Video
-                </button>
-                <button onclick="showTab('game')" id="tab-game" 
-                        class="tab-btn px-6 py-4 mx-1 mb-2 rounded-2xl font-bold text-lg transition duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-600">
-                    🎮 Game
-                </button>
-                <button onclick="showTab('latihan')" id="tab-latihan" 
-                        class="tab-btn px-6 py-4 mx-1 mb-2 rounded-2xl font-bold text-lg transition duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-600">
-                    ✍️ Latihan
-                </button>
-                <button onclick="showTab('sertifikat')" id="tab-sertifikat" 
-                        class="tab-btn px-6 py-4 mx-1 mb-2 rounded-2xl font-bold text-lg transition duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-600">
-                    🏆 Sertifikat
-                </button>
+            <div class="bg-white rounded-2xl md:rounded-3xl p-2 md:p-3 shadow-xl mb-6 md:mb-10">
+                <!-- Mobile: Grid Layout -->
+                <div class="grid grid-cols-2 gap-2 md:hidden">
+                    <button onclick="showTab('materi')" id="tab-materi" 
+                            class="tab-btn px-3 py-3 rounded-xl font-bold text-sm transition duration-300 bg-blue-600 text-white shadow-lg hover:bg-blue-700">
+                        📚 Materi
+                    </button>
+                    <button onclick="showTab('video')" id="tab-video" 
+                            class="tab-btn px-3 py-3 rounded-xl font-bold text-sm transition duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-600">
+                        🎥 Video
+                    </button>
+                    <button onclick="showTab('game')" id="tab-game" 
+                            class="tab-btn px-3 py-3 rounded-xl font-bold text-sm transition duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-600">
+                        🎮 Game
+                    </button>
+                    <button onclick="showTab('latihan')" id="tab-latihan" 
+                            class="tab-btn px-3 py-3 rounded-xl font-bold text-sm transition duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-600">
+                        ✍️ Latihan
+                    </button>
+                </div>
+                
+                <!-- Mobile: Second Row -->
+                <div class="mt-2 md:hidden">
+                    <button onclick="showTab('sertifikat')" id="tab-sertifikat" 
+                            class="tab-btn w-full px-3 py-3 rounded-xl font-bold text-sm transition duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-600">
+                        🏆 Sertifikat
+                    </button>
+                </div>
+                
+                <!-- Desktop: Flex Layout -->
+                <div class="hidden md:flex flex-wrap justify-center">
+                    <button onclick="showTab('materi')" id="tab-materi-desktop" 
+                            class="tab-btn px-6 py-4 mx-1 mb-2 rounded-2xl font-bold text-lg transition duration-300 bg-blue-600 text-white shadow-lg hover:bg-blue-700">
+                        📚 Materi
+                    </button>
+                    <button onclick="showTab('video')" id="tab-video-desktop" 
+                            class="tab-btn px-6 py-4 mx-1 mb-2 rounded-2xl font-bold text-lg transition duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-600">
+                        🎥 Video
+                    </button>
+                    <button onclick="showTab('game')" id="tab-game-desktop" 
+                            class="tab-btn px-6 py-4 mx-1 mb-2 rounded-2xl font-bold text-lg transition duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-600">
+                        🎮 Game
+                    </button>
+                    <button onclick="showTab('latihan')" id="tab-latihan-desktop" 
+                            class="tab-btn px-6 py-4 mx-1 mb-2 rounded-2xl font-bold text-lg transition duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-600">
+                        ✍️ Latihan
+                    </button>
+                    <button onclick="showTab('sertifikat')" id="tab-sertifikat-desktop" 
+                            class="tab-btn px-6 py-4 mx-1 mb-2 rounded-2xl font-bold text-lg transition duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-600">
+                        🏆 Sertifikat
+                    </button>
+                </div>
             </div>
 
             <!-- Tab Materi -->
             <div id="content-materi" class="tab-content">
-                <div class="bg-white rounded-3xl shadow-2xl p-10 mb-8">
-                    <h2 class="text-4xl font-bold text-center text-gray-800 mb-10">سُورَةُ الْعَصْرِ</h2>
+                <div class="bg-white rounded-2xl md:rounded-3xl shadow-2xl p-4 md:p-10 mb-6 md:mb-8">
+                    <h2 class="text-2xl md:text-4xl font-bold text-center text-gray-800 mb-6 md:mb-10">سُورَةُ الْعَصْرِ</h2>
                     
                     <!-- Bismillah -->
-                    <div class="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-3xl p-8 mb-10 border-2 border-emerald-200">
-                        <div class="arabic-text text-center text-4xl text-emerald-800 mb-4">
+                    <div class="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl md:rounded-3xl p-4 md:p-8 mb-6 md:mb-10 border-2 border-emerald-200">
+                        <div class="arabic-text text-center text-2xl md:text-4xl text-emerald-800 mb-3 md:mb-4">
                             بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
                         </div>
-                        <p class="text-center text-emerald-700 font-semibold text-lg">Bismillahir rahmanir rahiim</p>
-                        <p class="text-center text-emerald-600 mt-2">Dengan menyebut nama Allah Yang Maha Pemurah lagi Maha Penyayang</p>
+                        <p class="text-center text-emerald-700 font-semibold text-base md:text-lg">Bismillahir rahmanir rahiim</p>
+                        <p class="text-center text-emerald-600 mt-2 text-sm md:text-base">Dengan menyebut nama Allah Yang Maha Pemurah lagi Maha Penyayang</p>
                     </div>
 
                     <!-- Ayat-ayat -->
-                    <div class="space-y-8">
+                    <div class="space-y-4 md:space-y-8">
                         <!-- Ayat 1 -->
-                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl p-8 border-2 border-blue-200">
-                            <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl md:rounded-3xl p-4 md:p-8 border-2 border-blue-200">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center">
                                 <div class="text-center">
-                                    <div class="arabic-text text-5xl text-blue-800 mb-4">وَالْعَصْرِ ﴿١﴾</div>
-                                    <p class="text-blue-700 font-bold text-xl mb-2">Wal 'ashr</p>
-                                    <p class="text-blue-600 text-lg">Demi masa</p>
+                                    <div class="arabic-text text-3xl md:text-5xl text-blue-800 mb-3 md:mb-4">وَالْعَصْرِ ﴿١﴾</div>
+                                    <p class="text-blue-700 font-bold text-lg md:text-xl mb-2">Wal 'ashr</p>
+                                    <p class="text-blue-600 text-base md:text-lg">Demi masa</p>
                                 </div>
-                                <div class="bg-white rounded-2xl p-6 shadow-lg">
-                                    <h4 class="font-bold text-gray-800 mb-4 text-xl">Arti Per Kata:</h4>
-                                    <div class="space-y-3">
-                                        <div class="flex justify-between items-center p-3 bg-blue-50 rounded-xl">
-                                            <span class="arabic-text text-2xl text-blue-800">وَ</span>
-                                            <span class="text-blue-700 font-semibold">wa = dan/demi</span>
+                                <div class="bg-white rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg">
+                                    <h4 class="font-bold text-gray-800 mb-3 md:mb-4 text-lg md:text-xl">Arti Per Kata:</h4>
+                                    <div class="space-y-2 md:space-y-3">
+                                        <div class="flex justify-between items-center p-2 md:p-3 bg-blue-50 rounded-lg md:rounded-xl">
+                                            <span class="arabic-text text-lg md:text-2xl text-blue-800">وَ</span>
+                                            <span class="text-blue-700 font-semibold text-sm md:text-base">wa = dan/demi</span>
                                         </div>
-                                        <div class="flex justify-between items-center p-3 bg-blue-50 rounded-xl">
-                                            <span class="arabic-text text-2xl text-blue-800">الْعَصْرِ</span>
-                                            <span class="text-blue-700 font-semibold">al-'ashr = masa/waktu</span>
+                                        <div class="flex justify-between items-center p-2 md:p-3 bg-blue-50 rounded-lg md:rounded-xl">
+                                            <span class="arabic-text text-lg md:text-2xl text-blue-800">الْعَصْرِ</span>
+                                            <span class="text-blue-700 font-semibold text-sm md:text-base">al-'ashr = masa/waktu</span>
                                         </div>
                                     </div>
                                 </div>
@@ -877,10 +980,15 @@
             currentStudent.name = name;
             currentStudent.class = studentClass;
             
-            // Update header
+            // Update header (both desktop and mobile)
             document.getElementById('studentName').textContent = name;
             document.getElementById('studentClass').textContent = `Kelas ${studentClass}`;
             document.getElementById('studentInfo').classList.remove('hidden');
+            
+            // Update mobile header
+            document.getElementById('studentNameMobile').textContent = name;
+            document.getElementById('studentClassMobile').textContent = `Kelas ${studentClass}`;
+            document.getElementById('studentInfoMobile').classList.remove('hidden');
             
             // Update certificate
             document.getElementById('certificateName').textContent = name;
@@ -925,15 +1033,27 @@
             };
             
             Object.keys(progressIcons).forEach(key => {
+                // Update desktop progress
                 const element = document.getElementById(`${key}Progress`);
                 if (element) {
                     element.textContent = progressIcons[key];
-                    // Update background color for completed sections
                     const parent = element.parentElement;
                     if (learningProgress[key]) {
                         parent.className = 'w-8 h-8 rounded-full bg-green-200 flex items-center justify-center mx-auto mb-1';
                     } else {
                         parent.className = 'w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mx-auto mb-1';
+                    }
+                }
+                
+                // Update mobile progress
+                const mobileElement = document.getElementById(`${key}ProgressMobile`);
+                if (mobileElement) {
+                    mobileElement.textContent = progressIcons[key];
+                    const mobileParent = mobileElement.parentElement;
+                    if (learningProgress[key]) {
+                        mobileParent.className = 'w-6 h-6 rounded-full bg-green-200 flex items-center justify-center mx-auto';
+                    } else {
+                        mobileParent.className = 'w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center mx-auto';
                     }
                 }
             });
@@ -943,7 +1063,7 @@
             const totalSections = Object.keys(learningProgress).length;
             const percentage = Math.round((completedSections / totalSections) * 100);
             
-            // Update progress bar
+            // Update desktop progress bar
             const progressBar = document.getElementById('overallProgress');
             const progressText = document.getElementById('progressPercentage');
             
@@ -952,6 +1072,17 @@
             }
             if (progressText) {
                 progressText.textContent = percentage;
+            }
+            
+            // Update mobile progress bar
+            const mobileProgressBar = document.getElementById('overallProgressMobile');
+            const mobileProgressText = document.getElementById('progressPercentageMobile');
+            
+            if (mobileProgressBar) {
+                mobileProgressBar.style.width = `${percentage}%`;
+            }
+            if (mobileProgressText) {
+                mobileProgressText.textContent = percentage;
             }
         }
 
@@ -964,9 +1095,15 @@
                 content.classList.add('hidden');
             });
             
-            // Remove active class from all tabs
+            // Remove active class from all tabs (mobile)
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.className = 'tab-btn px-6 py-4 mx-1 mb-2 rounded-2xl font-bold text-lg transition duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-600';
+                if (btn.id.includes('desktop')) {
+                    btn.className = 'tab-btn px-6 py-4 mx-1 mb-2 rounded-2xl font-bold text-lg transition duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-600';
+                } else if (btn.id === 'tab-sertifikat') {
+                    btn.className = 'tab-btn w-full px-3 py-3 rounded-xl font-bold text-sm transition duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-600';
+                } else {
+                    btn.className = 'tab-btn px-3 py-3 rounded-xl font-bold text-sm transition duration-300 text-gray-700 hover:bg-blue-50 hover:text-blue-600';
+                }
             });
             
             // Show selected content
@@ -977,12 +1114,20 @@
                 console.error('Content element not found:', `content-${tabName}`);
             }
             
-            // Add active class to selected tab
+            // Add active class to selected tab (mobile)
             const activeTab = document.getElementById(`tab-${tabName}`);
+            const activeTabDesktop = document.getElementById(`tab-${tabName}-desktop`);
+            
             if (activeTab) {
-                activeTab.className = 'tab-btn px-6 py-4 mx-1 mb-2 rounded-2xl font-bold text-lg transition duration-300 bg-blue-600 text-white shadow-lg hover:bg-blue-700';
-            } else {
-                console.error('Tab element not found:', `tab-${tabName}`);
+                if (tabName === 'sertifikat') {
+                    activeTab.className = 'tab-btn w-full px-3 py-3 rounded-xl font-bold text-sm transition duration-300 bg-blue-600 text-white shadow-lg hover:bg-blue-700';
+                } else {
+                    activeTab.className = 'tab-btn px-3 py-3 rounded-xl font-bold text-sm transition duration-300 bg-blue-600 text-white shadow-lg hover:bg-blue-700';
+                }
+            }
+            
+            if (activeTabDesktop) {
+                activeTabDesktop.className = 'tab-btn px-6 py-4 mx-1 mb-2 rounded-2xl font-bold text-lg transition duration-300 bg-blue-600 text-white shadow-lg hover:bg-blue-700';
             }
             
             // Mark section as visited and update progress
@@ -1554,5 +1699,5 @@
             link.click();
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96dd483d943287ea',t:'MTc1NDk3MzQ5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96dd5569a2f07549',t:'MTc1NDk3NDAzNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
