@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Team Quiz Battle!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -20,6 +21,12 @@
             overflow: hidden;
             margin: 0;
             padding: 0;
+        }
+
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            font-size: 1.8rem;
+            line-height: 1.8;
         }
 
         @keyframes gradientShift {
@@ -281,34 +288,34 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
-.boxes-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 8px; /* samakan dengan scoreboard */
-    width: 100%; /* supaya penuh */
-    margin: 0 auto;
-    flex: 1;
-    align-content: center;
-}
+        .boxes-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            width: 100%;
+            margin: 0 auto;
+            flex: 1;
+            min-height: 300px;
+            align-content: start;
+        }
 
-.mystery-box {
-    width: 100%;
-    min-height: 70px; /* sama dengan team-card */
-    background: linear-gradient(45deg, #8B4513, #A0522D);
-    border: 3px solid #654321;
-    border-radius: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    color: #ffd700;
-    transition: all 0.4s ease;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    margin: 0;
-}
+        .mystery-box {
+            aspect-ratio: 1/1;
+            background: linear-gradient(45deg, #8B4513, #A0522D);
+            border: 3px solid #654321;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #ffd700;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
         .mystery-box::before {
             content: '';
             position: absolute;
@@ -649,6 +656,10 @@
             .options-grid {
                 grid-template-columns: 1fr;
             }
+
+            .arabic-text {
+                font-size: 1.4rem;
+            }
         }
     </style>
 </head>
@@ -720,7 +731,7 @@
         <div class="question-content">
             <div class="question-header">
                 <div class="current-team-display" id="modal-team-display">TIM MERAH</div>
-                <div class="question-text" id="modal-question-text">Loading...</div>
+                <div class="question-text arabic-text" id="modal-question-text">Loading...</div>
             </div>
             
             <div class="options-grid" id="modal-options-grid">
@@ -748,235 +759,227 @@
     </div>
 
     <script>
-        // ========================================
-        // 📚 TEMPLATE SOAL - GANTI SESUAI MATERI
-        // ========================================
-        
-        // PETUNJUK PENGGUNAAN:
-        // 1. Ganti judul materi di bawah ini
-        // 2. Ganti semua soal dengan materi yang diinginkan
-        // 3. Pastikan ada minimal 25 soal untuk grid 5x5
-        // 4. Format: question (soal), options (4 pilihan), correct (index jawaban benar 0-3), points (poin)
-        
         const SUBJECT_TITLE = "Al-Quran Hadits Kelas 5 - Hukum Bacaan Mim Mati";
 
-const questions = [
-    {
-        question: "Apa pengertian hukum bacaan Mim Mati?",
-        options: [
-            "Cara membaca huruf mim yang mati (sukun) ketika bertemu huruf tertentu",
-            "Cara membaca huruf mim yang berharakat",
-            "Cara membaca huruf mim di awal ayat",
-            "Cara membaca huruf mim di akhir kata"
-        ],
-        correct: 0,
-        points: 10
-    },
-    {
-        question: "Berapa jumlah hukum bacaan Mim Mati?",
-        options: ["1", "2", "3", "4"],
-        correct: 2,
-        points: 15
-    },
-    {
-        question: "Sebutkan hukum bacaan Mim Mati yang benar!",
-        options: [
-            "Ikhfa Syafawi, Idgham Mimi, Izhar Syafawi",
-            "Idgham Bighunnah, Ikhfa Haqiqi, Iqlab",
-            "Qalqalah, Mad, Ghunnah",
-            "Tafkhim, Tarqiq, Izhar Halqi"
-        ],
-        correct: 0,
-        points: 20
-    },
-    {
-        question: "Contoh bacaan Ikhfa Syafawi yang benar adalah...",
-        options: [
-            "تَرْمِيهِمْ بِحِجَارَةٍ",
-            "وَهُمْ بِالْآخِرَةِ",
-            "أَلَمْ تَرَ",
-            "كَلَّا لَئِنْ لَمْ يَنْتَهِ"
-        ],
-        correct: 0,
-        points: 25
-    },
-    {
-        question: "Huruf apa saja yang menyebabkan Ikhfa Syafawi?",
-        options: [
-            "Ba (ب)",
-            "Semua huruf hijaiyah kecuali mim dan ba",
-            "15 huruf tertentu",
-            "Ta (ت) dan Tha (ث)"
-        ],
-        correct: 0,
-        points: 10
-    },
-    {
-        question: "Berapa harakat panjang bacaan Ikhfa Syafawi?",
-        options: ["1 harakat", "2 harakat", "3 harakat", "Tidak ada ketentuan khusus"],
-        correct: 1,
-        points: 30
-    },
-    {
-        question: "Contoh bacaan Idgham Mimi yang benar adalah...",
-        options: [
-            "لَهُمْ مَا يَشَاءُونَ",
-            "أَمْ لَمْ يُنَبَّأْ",
-            "إِنَّهُمْ أَصْحَابُ",
-            "وَلَهُمْ عَذَابٌ"
-        ],
-        correct: 0,
-        points: 15
-    },
-    {
-        question: "Apa yang dimaksud dengan Idgham Mimi?",
-        options: [
-            "Mim mati bertemu mim hidup, dimasukkan ke mim berikutnya dengan ghunnah",
-            "Mim mati bertemu ba, dibaca samar",
-            "Mim mati bertemu huruf izhar, dibaca jelas",
-            "Mim mati diwaqafkan"
-        ],
-        correct: 0,
-        points: 20
-    },
-    {
-        question: "Berapa harakat panjang ghunnah pada Idgham Mimi?",
-        options: ["1 harakat", "2 harakat", "3 harakat", "4 harakat"],
-        correct: 1,
-        points: 25
-    },
-    {
-        question: "Contoh bacaan Izhar Syafawi yang benar adalah...",
-        options: [
-            "أَلَمْ نَجْعَلْ",
-            "وَهُمْ فِيهَا",
-            "عَلَيْهِمْ وَلَا الضَّالِّينَ",
-            "تَرْمِيهِمْ بِحِجَارَةٍ"
-        ],
-        correct: 2,
-        points: 5
-    },
-    {
-        question: "Huruf apa saja yang menyebabkan Izhar Syafawi?",
-        options: [
-            "Semua huruf hijaiyah kecuali mim dan ba",
-            "Ba (ب) saja",
-            "Mim (م) saja",
-            "Huruf halqi (ء ه ع ح غ خ)"
-        ],
-        correct: 0,
-        points: 20
-    },
-    {
-        question: "Bacaan 'عَلَيْهِمْ وَلَا الضَّالِّينَ' termasuk hukum...",
-        options: ["Ikhfa Syafawi", "Izhar Syafawi", "Idgham Mimi", "Iqlab"],
-        correct: 1,
-        points: 15
-    },
-    {
-        question: "Bacaan 'لَهُمْ مَا يَشَاءُونَ' termasuk hukum...",
-        options: ["Ikhfa Syafawi", "Izhar Syafawi", "Idgham Mimi", "Iqlab"],
-        correct: 2,
-        points: 10
-    },
-    {
-        question: "Perbedaan utama Ikhfa Syafawi dan Izhar Syafawi adalah...",
-        options: [
-            "Huruf setelah mim mati dan cara membacanya",
-            "Panjang bacaannya",
-            "Tempat keluarnya huruf",
-            "Tidak ada perbedaan"
-        ],
-        correct: 0,
-        points: 15
-    },
-    {
-        question: "Dalam bacaan Ikhfa Syafawi, bibir harus...",
-        options: [
-            "Ditutup sambil didengungkan",
-            "Dibuka lebar",
-            "Dikerutkan",
-            "Tidak ada aturan khusus"
-        ],
-        correct: 0,
-        points: 10
-    },
-    {
-        question: "Bacaan 'أَمْ لَمْ يُنَبَّأْ' termasuk hukum...",
-        options: ["Ikhfa Syafawi", "Izhar Syafawi", "Idgham Mimi", "Iqlab"],
-        correct: 2,
-        points: 5
-    },
-    {
-        question: "Bacaan 'تَرْمِيهِمْ بِحِجَارَةٍ' termasuk hukum...",
-        options: ["Ikhfa Syafawi", "Izhar Syafawi", "Idgham Mimi", "Iqlab"],
-        correct: 0,
-        points: 15
-    },
-    {
-        question: "Huruf ba (ب) menyebabkan mim mati dibaca dengan hukum...",
-        options: ["Ikhfa Syafawi", "Izhar Syafawi", "Idgham Mimi", "Iqlab"],
-        correct: 0,
-        points: 10
-    },
-    {
-        question: "Dalam bacaan Idgham Mimi, terjadi pertemuan antara...",
-        options: [
-            "Mim mati dengan mim hidup",
-            "Mim mati dengan ba",
-            "Mim mati dengan huruf izhar",
-            "Mim mati dengan nun mati"
-        ],
-        correct: 0,
-        points: 20
-    },
-    {
-        question: "Bacaan 'وَهُمْ بِالْآخِرَةِ' termasuk hukum...",
-        options: ["Ikhfa Syafawi", "Izhar Syafawi", "Idgham Mimi", "Iqlab"],
-        correct: 0,
-        points: 15
-    },
-    {
-        question: "Bacaan 'كَلَّا لَئِنْ لَمْ يَنْتَهِ' termasuk hukum...",
-        options: ["Ikhfa Syafawi", "Izhar Syafawi", "Idgham Mimi", "Iqlab"],
-        correct: 1,
-        points: 10
-    },
-    {
-        question: "Bunyi ghunnah terdapat pada hukum Mim Mati...",
-        options: [
-            "Idgham Mimi dan Ikhfa Syafawi",
-            "Izhar Syafawi saja",
-            "Semua hukum Mim Mati",
-            "Tidak ada yang menggunakan ghunnah"
-        ],
-        correct: 0,
-        points: 25
-    },
-    {
-        question: "Bacaan 'إِنَّهُمْ أَصْحَابُ' termasuk hukum...",
-        options: ["Ikhfa Syafawi", "Izhar Syafawi", "Idgham Mimi", "Iqlab"],
-        correct: 1,
-        points: 15
-    },
-    {
-        question: "Bacaan 'وَلَهُمْ عَذَابٌ' termasuk hukum...",
-        options: ["Ikhfa Syafawi", "Izhar Syafawi", "Idgham Mimi", "Iqlab"],
-        correct: 1,
-        points: 10
-    },
-    {
-        question: "Ciri khas bacaan Izhar Syafawi adalah...",
-        options: [
-            "Mim mati dibaca jelas tanpa ghunnah",
-            "Mim mati dibaca samar dengan ghunnah",
-            "Mim mati dilebur dengan mim berikutnya",
-            "Mim mati berubah menjadi ba"
-        ],
-        correct: 0,
-        points: 30
-    }
-];
+        const questions = [
+            {
+                question: "Apa pengertian hukum bacaan Mim Mati?",
+                options: [
+                    "Cara membaca huruf mim yang mati (sukun) ketika bertemu huruf tertentu",
+                    "Cara membaca huruf mim yang berharakat",
+                    "Cara membaca huruf mim di awal ayat",
+                    "Cara membaca huruf mim di akhir kata"
+                ],
+                correct: 0,
+                points: 10
+            },
+            {
+                question: "Berapa jumlah hukum bacaan Mim Mati?",
+                options: ["1", "2", "3", "4"],
+                correct: 2,
+                points: 15
+            },
+            {
+                question: "Sebutkan hukum bacaan Mim Mati yang benar!",
+                options: [
+                    "Ikhfa Syafawi, Idgham Mimi, Izhar Syafawi",
+                    "Idgham Bighunnah, Ikhfa Haqiqi, Iqlab",
+                    "Qalqalah, Mad, Ghunnah",
+                    "Tafkhim, Tarqiq, Izhar Halqi"
+                ],
+                correct: 0,
+                points: 20
+            },
+            {
+                question: "Contoh bacaan Ikhfa Syafawi yang benar adalah...",
+                options: [
+                    "<span class='arabic-text'>تَرْمِيهِمْ بِحِجَارَةٍ</span>",
+                    "<span class='arabic-text'>وَهُمْ بِالْآخِرَةِ</span>",
+                    "<span class='arabic-text'>أَلَمْ تَرَ</span>",
+                    "<span class='arabic-text'>كَلَّا لَئِنْ لَمْ يَنْتَهِ</span>"
+                ],
+                correct: 0,
+                points: 25
+            },
+            {
+                question: "Huruf apa saja yang menyebabkan Ikhfa Syafawi?",
+                options: [
+                    "Ba (ب)",
+                    "Semua huruf hijaiyah kecuali mim dan ba",
+                    "15 huruf tertentu",
+                    "Ta (ت) dan Tha (ث)"
+                ],
+                correct: 0,
+                points: 10
+            },
+            {
+                question: "Berapa harakat panjang bacaan Ikhfa Syafawi?",
+                options: ["1 harakat", "2 harakat", "3 harakat", "Tidak ada ketentuan khusus"],
+                correct: 1,
+                points: 30
+            },
+            {
+                question: "Contoh bacaan Idgham Mimi yang benar adalah...",
+                options: [
+                    "<span class='arabic-text'>لَهُمْ مَا يَشَاءُونَ</span>",
+                    "<span class='arabic-text'>أَمْ لَمْ يُنَبَّأْ</span>",
+                    "<span class='arabic-text'>إِنَّهُمْ أَصْحَابُ</span>",
+                    "<span class='arabic-text'>وَلَهُمْ عَذَابٌ</span>"
+                ],
+                correct: 0,
+                points: 15
+            },
+            {
+                question: "Apa yang dimaksud dengan Idgham Mimi?",
+                options: [
+                    "Mim mati bertemu mim hidup, dimasukkan ke mim berikutnya dengan ghunnah",
+                    "Mim mati bertemu ba, dibaca samar",
+                    "Mim mati bertemu huruf izhar, dibaca jelas",
+                    "Mim mati diwaqafkan"
+                ],
+                correct: 0,
+                points: 20
+            },
+            {
+                question: "Berapa harakat panjang ghunnah pada Idgham Mimi?",
+                options: ["1 harakat", "2 harakat", "3 harakat", "4 harakat"],
+                correct: 1,
+                points: 25
+            },
+            {
+                question: "Contoh bacaan Izhar Syafawi yang benar adalah...",
+                options: [
+                    "<span class='arabic-text'>أَلَمْ نَجْعَلْ</span>",
+                    "<span class='arabic-text'>وَهُمْ فِيهَا</span>",
+                    "<span class='arabic-text'>عَلَيْهِمْ وَلَا الضَّالِّينَ</span>",
+                    "<span class='arabic-text'>تَرْمِيهِمْ بِحِجَارَةٍ</span>"
+                ],
+                correct: 2,
+                points: 5
+            },
+            {
+                question: "Huruf apa saja yang menyebabkan Izhar Syafawi?",
+                options: [
+                    "Semua huruf hijaiyah kecuali mim dan ba",
+                    "Ba (ب) saja",
+                    "Mim (م) saja",
+                    "Huruf halqi (ء ه ع ح غ خ)"
+                ],
+                correct: 0,
+                points: 20
+            },
+            {
+                question: "Bacaan '<span class='arabic-text'>عَلَيْهِمْ وَلَا الضَّالِّينَ</span>' termasuk hukum...",
+                options: ["Ikhfa Syafawi", "Izhar Syafawi", "Idgham Mimi", "Iqlab"],
+                correct: 1,
+                points: 15
+            },
+            {
+                question: "Bacaan '<span class='arabic-text'>لَهُمْ مَا يَشَاءُونَ</span>' termasuk hukum...",
+                options: ["Ikhfa Syafawi", "Izhar Syafawi", "Idgham Mimi", "Iqlab"],
+                correct: 2,
+                points: 10
+            },
+            {
+                question: "Perbedaan utama Ikhfa Syafawi dan Izhar Syafawi adalah...",
+                options: [
+                    "Huruf setelah mim mati dan cara membacanya",
+                    "Panjang bacaannya",
+                    "Tempat keluarnya huruf",
+                    "Tidak ada perbedaan"
+                ],
+                correct: 0,
+                points: 15
+            },
+            {
+                question: "Dalam bacaan Ikhfa Syafawi, bibir harus...",
+                options: [
+                    "Ditutup sambil didengungkan",
+                    "Dibuka lebar",
+                    "Dikerutkan",
+                    "Tidak ada aturan khusus"
+                ],
+                correct: 0,
+                points: 10
+            },
+            {
+                question: "Bacaan '<span class='arabic-text'>أَمْ لَمْ يُنَبَّأْ</span>' termasuk hukum...",
+                options: ["Ikhfa Syafawi", "Izhar Syafawi", "Idgham Mimi", "Iqlab"],
+                correct: 2,
+                points: 5
+            },
+            {
+                question: "Bacaan '<span class='arabic-text'>تَرْمِيهِمْ بِحِجَارَةٍ</span>' termasuk hukum...",
+                options: ["Ikhfa Syafawi", "Izhar Syafawi", "Idgham Mimi", "Iqlab"],
+                correct: 0,
+                points: 15
+            },
+            {
+                question: "Huruf ba (ب) menyebabkan mim mati dibaca dengan hukum...",
+                options: ["Ikhfa Syafawi", "Izhar Syafawi", "Idgham Mimi", "Iqlab"],
+                correct: 0,
+                points: 10
+            },
+            {
+                question: "Dalam bacaan Idgham Mimi, terjadi pertemuan antara...",
+                options: [
+                    "Mim mati dengan mim hidup",
+                    "Mim mati dengan ba",
+                    "Mim mati dengan huruf izhar",
+                    "Mim mati dengan nun mati"
+                ],
+                correct: 0,
+                points: 20
+            },
+            {
+                question: "Bacaan '<span class='arabic-text'>وَهُمْ بِالْآخِرَةِ</span>' termasuk hukum...",
+                options: ["Ikhfa Syafawi", "Izhar Syafawi", "Idgham Mimi", "Iqlab"],
+                correct: 0,
+                points: 15
+            },
+            {
+                question: "Bacaan '<span class='arabic-text'>كَلَّا لَئِنْ لَمْ يَنْتَهِ</span>' termasuk hukum...",
+                options: ["Ikhfa Syafawi", "Izhar Syafawi", "Idgham Mimi", "Iqlab"],
+                correct: 1,
+                points: 10
+            },
+            {
+                question: "Bunyi ghunnah terdapat pada hukum Mim Mati...",
+                options: [
+                    "Idgham Mimi dan Ikhfa Syafawi",
+                    "Izhar Syafawi saja",
+                    "Semua hukum Mim Mati",
+                    "Tidak ada yang menggunakan ghunnah"
+                ],
+                correct: 0,
+                points: 25
+            },
+            {
+                question: "Bacaan '<span class='arabic-text'>
+				            {
+                question: "Bacaan '<span class='arabic-text'>إِنَّهُمْ أَصْحَابُ</span>' termasuk hukum...",
+                options: ["Ikhfa Syafawi", "Izhar Syafawi", "Idgham Mimi", "Iqlab"],
+                correct: 1,
+                points: 15
+            },
+            {
+                question: "Bacaan '<span class='arabic-text'>وَلَهُمْ عَذَابٌ</span>' termasuk hukum...",
+                options: ["Ikhfa Syafawi", "Izhar Syafawi", "Idgham Mimi", "Iqlab"],
+                correct: 1,
+                points: 10
+            },
+            {
+                question: "Ciri khas bacaan Izhar Syafawi adalah...",
+                options: [
+                    "Mim mati dibaca jelas tanpa ghunnah",
+                    "Mim mati dibaca samar dengan ghunnah",
+                    "Mim mati dilebur dengan mim berikutnya",
+                    "Mim mati berubah menjadi ba"
+                ],
+                correct: 0,
+                points: 30
+            }
+        ];
 
         let gameState = {
             currentTeam: 1,
@@ -992,30 +995,43 @@ const questions = [
         const teamClasses = ['team-red', 'team-blue', 'team-green', 'team-yellow', 'team-purple'];
 
         function initializeGame() {
-            generateBoxes();
-            updateCurrentTeamDisplay();
-            updateScoreboard();
-            updateSubjectTitle();
+            try {
+                generateBoxes();
+                updateCurrentTeamDisplay();
+                updateScoreboard();
+                updateSubjectTitle();
+                console.log("Game initialized successfully");
+            } catch (error) {
+                console.error("Error initializing game:", error);
+                alert("Terjadi error saat memulai game. Silakan refresh halaman.");
+            }
         }
 
         function updateSubjectTitle() {
-            document.getElementById('subject-title-display').textContent = SUBJECT_TITLE;
+            const titleElement = document.getElementById('subject-title-display');
+            if (titleElement) {
+                titleElement.textContent = SUBJECT_TITLE;
+            }
         }
 
- function generateBoxes() {
-    const boxesGrid = document.getElementById('boxes-grid');
-    boxesGrid.innerHTML = '';
-    
-    for (let i = 1; i <= gameState.totalBoxes; i++) {
-        const box = document.createElement('div');
-        box.className = 'mystery-box';
-        box.innerHTML = `<div style="font-size:0.8rem; position:absolute; top:4px; left:6px; color:white; text-shadow:1px 1px 2px black;">${i}</div>🏴‍☠️`;
-        box.onclick = () => openBox(i);
-        box.id = `box-${i}`;
-        boxesGrid.appendChild(box);
-    }
-}
-
+        function generateBoxes() {
+            const boxesGrid = document.getElementById('boxes-grid');
+            if (!boxesGrid) {
+                console.error("Boxes grid element not found");
+                return;
+            }
+            
+            boxesGrid.innerHTML = '';
+            
+            for (let i = 1; i <= gameState.totalBoxes; i++) {
+                const box = document.createElement('div');
+                box.className = 'mystery-box';
+                box.innerHTML = `<div style="font-size:0.8rem; position:absolute; top:4px; left:6px; color:white; text-shadow:1px 1px 2px black;">${i}</div>🏴‍☠️`;
+                box.onclick = () => openBox(i);
+                box.id = `box-${i}`;
+                boxesGrid.appendChild(box);
+            }
+        }
 
         function openBox(boxNumber) {
             if (gameState.openedBoxes.includes(boxNumber)) {
@@ -1056,14 +1072,14 @@ const questions = [
             teamDisplay.textContent = teamNames[gameState.currentTeam - 1];
             teamDisplay.className = `current-team-display ${teamClasses[gameState.currentTeam - 1]}`;
             
-            questionText.textContent = question.question;
+            questionText.innerHTML = question.question;
             
             // Generate options
             optionsGrid.innerHTML = '';
             question.options.forEach((option, index) => {
                 const optionBtn = document.createElement('button');
                 optionBtn.className = 'option-btn';
-                optionBtn.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
+                optionBtn.innerHTML = `${String.fromCharCode(65 + index)}. ${option}`;
                 optionBtn.onclick = () => selectOption(index, optionBtn);
                 optionsGrid.appendChild(optionBtn);
             });
@@ -1221,10 +1237,9 @@ const questions = [
         }
 
         // Initialize game when page loads
-        window.onload = function() {
+        document.addEventListener('DOMContentLoaded', function() {
             initializeGame();
-        };
+        });
     </script>
-
-    </body>
+</body>
 </html>
