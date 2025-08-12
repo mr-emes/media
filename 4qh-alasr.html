@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Pembelajaran Surah Al-Ashr</title>
+    <title>Media Pembelajaran Al-Quran Hadits</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700&display=swap');
@@ -12,7 +12,7 @@
             font-family: 'Amiri', serif;
             font-size: 1.5rem;
             line-height: 1.8;
-            text-align: right;
+            text-align: center;
             direction: rtl;
         }
         
@@ -56,23 +56,96 @@
         }
         
         .game-card {
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+        
+        .game-card:hover::before {
+            left: 100%;
         }
         
         .game-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
         
         .correct {
             background: linear-gradient(135deg, #10b981, #059669) !important;
             color: white !important;
+            animation: correctPulse 0.6s ease-in-out;
         }
         
         .incorrect {
             background: linear-gradient(135deg, #ef4444, #dc2626) !important;
             color: white !important;
+            animation: incorrectShake 0.6s ease-in-out;
+        }
+        
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); box-shadow: 0 0 30px rgba(16, 185, 129, 0.6); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes incorrectShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .animate-spin-slow {
+            animation: spin-slow 3s linear infinite;
+        }
+        
+        .game-option {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+        
+        .game-option::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            padding: 3px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+            border-radius: inherit;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .game-option:hover::before {
+            opacity: 1;
+        }
+        
+        .floating-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
     </style>
 </head>
@@ -309,11 +382,11 @@
             <!-- Tab Materi -->
             <div id="content-materi" class="tab-content">
                 <div class="bg-white rounded-2xl md:rounded-3xl shadow-2xl p-4 md:p-10 mb-6 md:mb-8">
-                    <h2 class="text-2xl md:text-4xl font-bold text-center text-gray-800 mb-6 md:mb-10">سُورَةُ الْعَصْرِ</h2>
+                    <h2 class="text-xl md:text-3xl font-bold text-center text-gray-800 mb-6 md:mb-10">سُورَةُ الْعَصْرِ</h2>
                     
                     <!-- Bismillah -->
                     <div class="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl md:rounded-3xl p-4 md:p-8 mb-6 md:mb-10 border-2 border-emerald-200">
-                        <div class="arabic-text text-center text-2xl md:text-4xl text-emerald-800 mb-3 md:mb-4">
+                        <div class="arabic-text text-center text-xl md:text-3xl text-emerald-800 mb-3 md:mb-4">
                             بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
                         </div>
                         <p class="text-center text-emerald-700 font-semibold text-base md:text-lg">Bismillahir rahmanir rahiim</p>
@@ -326,9 +399,9 @@
                         <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl md:rounded-3xl p-4 md:p-8 border-2 border-blue-200">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-center">
                                 <div class="text-center">
-                                    <div class="arabic-text text-3xl md:text-5xl text-blue-800 mb-3 md:mb-4">وَالْعَصْرِ ﴿١﴾</div>
-                                    <p class="text-blue-700 font-bold text-lg md:text-xl mb-2">Wal 'ashr</p>
-                                    <p class="text-blue-600 text-base md:text-lg">Demi masa</p>
+                                    <div class="arabic-text text-2xl md:text-4xl text-blue-800 mb-3 md:mb-4">وَالْعَصْرِ ﴿١﴾</div>
+                                    <p class="text-blue-700 font-bold text-base md:text-lg mb-2">Wal 'ashr</p>
+                                    <p class="text-blue-600 text-sm md:text-base">Demi masa</p>
                                 </div>
                                 <div class="bg-white rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg">
                                     <h4 class="font-bold text-gray-800 mb-3 md:mb-4 text-lg md:text-xl">Arti Per Kata:</h4>
@@ -350,9 +423,9 @@
                         <div class="bg-gradient-to-r from-purple-50 to-violet-50 rounded-3xl p-8 border-2 border-purple-200">
                             <div class="grid md:grid-cols-2 gap-8 items-center">
                                 <div class="text-center">
-                                    <div class="arabic-text text-4xl text-purple-800 mb-4">إِنَّ الْإِنسَانَ لَفِي خُسْرٍ ﴿٢﴾</div>
-                                    <p class="text-purple-700 font-bold text-xl mb-2">Innal insaana lafii khusr</p>
-                                    <p class="text-purple-600 text-lg">Sesungguhnya manusia itu benar-benar dalam kerugian</p>
+                                    <div class="arabic-text text-2xl md:text-3xl text-purple-800 mb-4">إِنَّ الْإِنسَانَ لَفِي خُسْرٍ ﴿٢﴾</div>
+                                    <p class="text-purple-700 font-bold text-base md:text-lg mb-2">Innal insaana lafii khusr</p>
+                                    <p class="text-purple-600 text-sm md:text-base">Sesungguhnya manusia itu benar-benar dalam kerugian</p>
                                 </div>
                                 <div class="bg-white rounded-2xl p-6 shadow-lg">
                                     <h4 class="font-bold text-gray-800 mb-4 text-xl">Arti Per Kata:</h4>
@@ -381,9 +454,9 @@
                         <!-- Ayat 3 -->
                         <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-3xl p-8 border-2 border-green-200">
                             <div class="text-center mb-6">
-                                <div class="arabic-text text-3xl text-green-800 mb-4">إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِالصَّبْرِ ﴿٣﴾</div>
-                                <p class="text-green-700 font-bold text-xl mb-2">Illalladziina aamanuu wa 'amilus shaalihaati wa tawaashau bil haqqi wa tawaashau bish shabr</p>
-                                <p class="text-green-600 text-lg">Kecuali orang-orang yang beriman dan mengerjakan amal saleh dan nasehat menasehati supaya mentaati kebenaran dan nasehat menasehati supaya menetapi kesabaran</p>
+                                <div class="arabic-text text-xl md:text-2xl text-green-800 mb-4">إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِالصَّبْرِ ﴿٣﴾</div>
+                                <p class="text-green-700 font-bold text-base md:text-lg mb-2">Illalladziina aamanuu wa 'amilus shaalihaati wa tawaashau bil haqqi wa tawaashau bish shabr</p>
+                                <p class="text-green-600 text-sm md:text-base">Kecuali orang-orang yang beriman dan mengerjakan amal saleh dan nasehat menasehati supaya mentaati kebenaran dan nasehat menasehati supaya menetapi kesabaran</p>
                             </div>
                             <div class="bg-white rounded-2xl p-6 shadow-lg">
                                 <h4 class="font-bold text-gray-800 mb-4 text-xl">Arti Per Kata:</h4>
@@ -664,57 +737,141 @@
 
             <!-- Tab Game -->
             <div id="content-game" class="tab-content hidden">
-                <div class="bg-white rounded-3xl shadow-2xl p-10">
-                    <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">🎮 Game Tebak Arti Kata</h2>
+                <div class="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 rounded-3xl shadow-2xl p-4 md:p-10 relative overflow-hidden">
+                    <!-- Animated background elements -->
+                    <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+                        <div class="absolute top-10 left-10 w-20 h-20 bg-yellow-400 rounded-full opacity-20 animate-bounce"></div>
+                        <div class="absolute top-20 right-20 w-16 h-16 bg-pink-400 rounded-full opacity-20 animate-pulse"></div>
+                        <div class="absolute bottom-20 left-20 w-24 h-24 bg-green-400 rounded-full opacity-20 animate-bounce" style="animation-delay: 1s;"></div>
+                        <div class="absolute bottom-10 right-10 w-18 h-18 bg-blue-400 rounded-full opacity-20 animate-pulse" style="animation-delay: 2s;"></div>
+                        
+                        <!-- Floating stars -->
+                        <div class="absolute top-1/4 left-1/4 text-yellow-300 text-2xl animate-pulse opacity-30">⭐</div>
+                        <div class="absolute top-1/3 right-1/3 text-yellow-300 text-3xl animate-bounce opacity-30" style="animation-delay: 0.5s;">✨</div>
+                        <div class="absolute bottom-1/4 left-1/3 text-yellow-300 text-2xl animate-pulse opacity-30" style="animation-delay: 1.5s;">🌟</div>
+                        <div class="absolute bottom-1/3 right-1/4 text-yellow-300 text-2xl animate-bounce opacity-30" style="animation-delay: 2.5s;">⭐</div>
+                    </div>
                     
-                    <div class="max-w-4xl mx-auto">
-                        <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-3xl p-8 border-2 border-indigo-200 mb-8">
-                            <div class="text-center mb-8">
-                                <div class="flex justify-center items-center space-x-8 mb-6">
-                                    <div class="bg-white rounded-2xl p-4 shadow-lg">
-                                        <span class="text-2xl font-bold text-indigo-600">Skor: </span>
-                                        <span id="gameScore" class="text-3xl font-bold text-indigo-800">0</span>
+                    <div class="relative z-10">
+                        <!-- Game Header -->
+                        <div class="text-center mb-8 md:mb-12">
+                            <div class="inline-block bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full p-4 mb-6 shadow-2xl animate-pulse">
+                                <span class="text-4xl md:text-6xl">🎮</span>
+                            </div>
+                            <h2 class="text-2xl md:text-4xl font-bold text-white mb-4 drop-shadow-lg">
+                                <span class="bg-gradient-to-r from-yellow-400 to-pink-400 bg-clip-text text-transparent">
+                                    GAME TEBAK ARTI KATA
+                                </span>
+                            </h2>
+                            <p class="text-lg md:text-xl text-blue-200 font-semibold">Uji pemahamanmu tentang Surah Al-Ashr!</p>
+                        </div>
+                        
+                        <div class="max-w-5xl mx-auto">
+                            <!-- Game Stats -->
+                            <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 mb-8 md:mb-12">
+                                <!-- Score Card -->
+                                <div class="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl p-4 md:p-6 shadow-2xl transform hover:scale-105 transition-all duration-300 min-w-[200px]">
+                                    <div class="text-center">
+                                        <div class="text-3xl md:text-4xl mb-2">🏆</div>
+                                        <div class="text-white font-bold text-lg md:text-xl mb-1">SKOR</div>
+                                        <div id="gameScore" class="text-3xl md:text-5xl font-black text-white drop-shadow-lg">0</div>
                                     </div>
-                                    <div class="bg-white rounded-2xl p-4 shadow-lg">
-                                        <span class="text-2xl font-bold text-purple-600">Soal: </span>
-                                        <span id="currentQuestion" class="text-3xl font-bold text-purple-800">1</span>
-                                        <span class="text-2xl font-bold text-purple-600">/20</span>
+                                </div>
+                                
+                                <!-- Progress Card -->
+                                <div class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl p-4 md:p-6 shadow-2xl transform hover:scale-105 transition-all duration-300 min-w-[200px]">
+                                    <div class="text-center">
+                                        <div class="text-3xl md:text-4xl mb-2">📊</div>
+                                        <div class="text-white font-bold text-lg md:text-xl mb-1">PROGRESS</div>
+                                        <div class="text-white">
+                                            <span id="currentQuestion" class="text-3xl md:text-5xl font-black drop-shadow-lg">1</span>
+                                            <span class="text-2xl md:text-3xl font-bold opacity-80">/20</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Level Card -->
+                                <div class="bg-gradient-to-r from-green-500 to-teal-500 rounded-2xl p-4 md:p-6 shadow-2xl transform hover:scale-105 transition-all duration-300 min-w-[200px]">
+                                    <div class="text-center">
+                                        <div class="text-3xl md:text-4xl mb-2">⚡</div>
+                                        <div class="text-white font-bold text-lg md:text-xl mb-1">LEVEL</div>
+                                        <div id="gameLevel" class="text-2xl md:text-3xl font-black text-white drop-shadow-lg">PEMULA</div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div id="gameArea">
-                                <div class="text-center mb-8">
-                                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Apa arti dari kata ini?</h3>
-                                    <div class="bg-white rounded-2xl p-8 shadow-lg mb-8">
-                                        <div id="arabicWord" class="arabic-text text-6xl text-indigo-800"></div>
+                            <!-- Game Area -->
+                            <div id="gameArea" class="bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-10 border border-white/20 shadow-2xl">
+                                <!-- Question Section -->
+                                <div class="text-center mb-8 md:mb-12">
+                                    <div class="inline-block bg-gradient-to-r from-blue-400 to-purple-500 rounded-2xl px-6 py-3 mb-6 shadow-xl">
+                                        <h3 class="text-xl md:text-2xl font-bold text-white drop-shadow-lg">
+                                            ✨ Apa arti dari kata ini? ✨
+                                        </h3>
+                                    </div>
+                                    
+                                    <!-- Arabic Word Display -->
+                                    <div class="relative">
+                                        <div class="bg-gradient-to-br from-white to-blue-50 rounded-3xl p-8 md:p-12 shadow-2xl mb-8 border-4 border-yellow-300 relative overflow-hidden">
+                                            <!-- Decorative elements -->
+                                            <div class="absolute top-4 left-4 text-yellow-400 text-2xl animate-spin-slow">⭐</div>
+                                            <div class="absolute top-4 right-4 text-yellow-400 text-2xl animate-spin-slow" style="animation-delay: 1s;">✨</div>
+                                            <div class="absolute bottom-4 left-4 text-yellow-400 text-2xl animate-spin-slow" style="animation-delay: 2s;">🌟</div>
+                                            <div class="absolute bottom-4 right-4 text-yellow-400 text-2xl animate-spin-slow" style="animation-delay: 3s;">⭐</div>
+                                            
+                                            <div id="arabicWord" class="arabic-text text-6xl md:text-8xl lg:text-9xl text-indigo-800 font-bold drop-shadow-lg relative z-10 animate-pulse min-h-[120px] flex items-center justify-center text-center"></div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div id="gameOptions" class="grid md:grid-cols-2 gap-6">
+                                <!-- Options Grid -->
+                                <div id="gameOptions" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8">
                                     <!-- Options will be generated by JavaScript -->
                                 </div>
 
+                                <!-- Result Section -->
                                 <div id="gameResult" class="hidden text-center mt-8">
-                                    <div class="bg-white rounded-2xl p-8 shadow-lg">
-                                        <h3 class="text-3xl font-bold mb-4" id="resultTitle"></h3>
-                                        <p class="text-xl mb-6" id="resultMessage"></p>
+                                    <div class="bg-white/20 backdrop-blur-lg rounded-3xl p-6 md:p-10 shadow-2xl border border-white/30">
+                                        <div id="resultIcon" class="text-6xl md:text-8xl mb-4"></div>
+                                        <h3 class="text-2xl md:text-4xl font-bold mb-4 text-white drop-shadow-lg" id="resultTitle"></h3>
+                                        <p class="text-lg md:text-xl mb-8 text-blue-100" id="resultMessage"></p>
                                         <button onclick="nextQuestion()" 
-                                                class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-indigo-700 transition duration-300">
-                                            Soal Berikutnya
+                                                class="bg-gradient-to-r from-green-500 to-teal-500 text-white px-8 py-4 rounded-2xl font-bold text-lg md:text-xl hover:from-green-600 hover:to-teal-600 transition-all duration-300 transform hover:scale-105 shadow-2xl">
+                                            🚀 Soal Berikutnya
                                         </button>
                                     </div>
                                 </div>
 
+                                <!-- Game Complete Section -->
                                 <div id="gameComplete" class="hidden text-center">
-                                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-8 border-2 border-green-200">
-                                        <span class="text-6xl mb-4 block">🎉</span>
-                                        <h3 class="text-3xl font-bold text-green-800 mb-4">Selamat!</h3>
-                                        <p class="text-xl text-green-700 mb-6">Kamu telah menyelesaikan evaluasi dengan skor <span id="finalScore" class="font-bold"></span>/20</p>
-                                        <button onclick="restartGame()" 
-                                                class="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-green-700 hover:to-emerald-700 transition duration-300">
-                                            Main Lagi
-                                        </button>
+                                    <div class="bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-3xl p-8 md:p-12 shadow-2xl border-4 border-yellow-300 relative overflow-hidden">
+                                        <!-- Celebration animations -->
+                                        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                                            <div class="absolute top-0 left-1/4 text-6xl animate-bounce">🎉</div>
+                                            <div class="absolute top-0 right-1/4 text-6xl animate-bounce" style="animation-delay: 0.5s;">🎊</div>
+                                            <div class="absolute top-1/2 left-0 text-4xl animate-pulse">🏆</div>
+                                            <div class="absolute top-1/2 right-0 text-4xl animate-pulse" style="animation-delay: 1s;">⭐</div>
+                                        </div>
+                                        
+                                        <div class="relative z-10">
+                                            <div class="text-8xl md:text-9xl mb-6 animate-bounce">🎉</div>
+                                            <h3 class="text-3xl md:text-5xl font-black text-white mb-6 drop-shadow-2xl">SELAMAT!</h3>
+                                            <div class="bg-white/20 backdrop-blur-lg rounded-2xl p-6 mb-8 border border-white/30">
+                                                <p class="text-xl md:text-2xl text-white mb-4 font-bold">Game Selesai!</p>
+                                                <p class="text-lg md:text-xl text-blue-100 mb-4">Skor Akhir: <span id="finalScore" class="font-black text-yellow-200 text-2xl md:text-3xl"></span>/20</p>
+                                                <div id="finalAppreciation" class="text-lg md:text-xl font-bold text-white"></div>
+                                            </div>
+                                            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                                                <button onclick="restartGame()" 
+                                                        class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-bold text-lg md:text-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-2xl">
+                                                    🔄 Main Lagi
+                                                </button>
+                                                <button onclick="showTab('sertifikat')" id="certificateBtn" 
+                                                        class="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-8 py-4 rounded-2xl font-bold text-lg md:text-xl hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-105 shadow-2xl hidden">
+                                                    🏆 Lihat Sertifikat
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1111,6 +1268,14 @@
             allowedTypes: ['video/webm', 'video/mp4', 'video/mov']
         };
         
+        // CARA MENDAPATKAN KONFIGURASI:
+        // 1. Buka console.cloud.google.com
+        // 2. Buat project baru atau pilih project yang ada
+        // 3. Aktifkan Google Drive API di Library
+        // 4. Buat credentials (API Key dan OAuth 2.0 Client ID)
+        // 5. Buat folder di Google Drive dan salin ID folder dari URL
+        // 6. Ganti nilai di atas dengan konfigurasi Anda
+        
         // ========================================
         // VARIABEL APLIKASI
         // ========================================
@@ -1390,8 +1555,9 @@
                 }, 100);
             }
             
-            if (tabName === 'game' && gameScore === 0 && currentQuestionIndex === 0) {
+            if (tabName === 'game') {
                 setTimeout(() => {
+                    console.log('Game tab opened, initializing...'); // Debug log
                     initGame();
                 }, 100);
             }
@@ -1403,10 +1569,29 @@
 
         // Game functionality
         function initGame() {
+            console.log('Initializing game...'); // Debug log
             gameScore = 0;
             currentQuestionIndex = 0;
+            
+            // Make sure game area is visible
+            const gameArea = document.getElementById('gameArea');
+            const gameComplete = document.getElementById('gameComplete');
+            
+            if (gameArea) {
+                gameArea.style.display = 'block';
+                gameArea.classList.remove('hidden');
+            }
+            
+            if (gameComplete) {
+                gameComplete.classList.add('hidden');
+            }
+            
             updateGameDisplay();
-            showQuestion();
+            
+            // Add small delay to ensure DOM is ready
+            setTimeout(() => {
+                showQuestion();
+            }, 100);
         }
 
         function updateGameDisplay() {
@@ -1421,24 +1606,86 @@
             }
 
             const question = gameQuestions[currentQuestionIndex];
-            document.getElementById('arabicWord').textContent = question.arabic;
+            
+            // Make sure the Arabic word is visible and properly styled
+            const arabicWordElement = document.getElementById('arabicWord');
+            if (arabicWordElement) {
+                arabicWordElement.textContent = question.arabic;
+                arabicWordElement.style.display = 'block';
+                arabicWordElement.style.visibility = 'visible';
+                console.log('Showing question:', question.arabic); // Debug log
+            }
+            
+            // Update level based on progress
+            updateGameLevel();
             
             const optionsContainer = document.getElementById('gameOptions');
-            optionsContainer.innerHTML = '';
-            
-            question.options.forEach((option, index) => {
-                const optionDiv = document.createElement('div');
-                optionDiv.className = 'game-card bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-200';
-                optionDiv.innerHTML = `
-                    <div class="text-center">
-                        <span class="text-2xl font-bold text-gray-800">${option}</span>
-                    </div>
-                `;
-                optionDiv.onclick = () => selectAnswer(option, optionDiv);
-                optionsContainer.appendChild(optionDiv);
-            });
+            if (optionsContainer) {
+                optionsContainer.innerHTML = '';
+                
+                // Randomize the options order
+                const shuffledOptions = [...question.options].sort(() => Math.random() - 0.5);
+                
+                shuffledOptions.forEach((option, index) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'game-card game-option rounded-2xl p-6 shadow-2xl border-2 border-transparent transform transition-all duration-300 hover:scale-105 cursor-pointer';
+                    optionDiv.style.animationDelay = `${index * 0.1}s`;
+                    optionDiv.innerHTML = `
+                        <div class="flex items-center justify-center relative z-10">
+                            <div class="text-2xl mr-4">${getOptionIcon(index)}</div>
+                            <span class="text-lg md:text-xl font-bold text-gray-800 text-center flex-1">${option}</span>
+                        </div>
+                    `;
+                    optionDiv.onclick = () => selectAnswer(option, optionDiv);
+                    
+                    // Add entrance animation
+                    optionDiv.style.opacity = '0';
+                    optionDiv.style.transform = 'translateY(20px)';
+                    
+                    setTimeout(() => {
+                        optionDiv.style.opacity = '1';
+                        optionDiv.style.transform = 'translateY(0)';
+                    }, index * 100);
+                    
+                    optionsContainer.appendChild(optionDiv);
+                });
+            }
 
-            document.getElementById('gameResult').classList.add('hidden');
+            // Make sure game result is hidden
+            const gameResult = document.getElementById('gameResult');
+            if (gameResult) {
+                gameResult.classList.add('hidden');
+            }
+            
+            // Show the game area if it's hidden
+            const gameArea = document.getElementById('gameArea');
+            if (gameArea) {
+                gameArea.style.display = 'block';
+            }
+        }
+        
+        function getOptionIcon(index) {
+            const icons = ['🅰️', '🅱️', '🅲️', '🅳️'];
+            return icons[index] || '⭐';
+        }
+        
+        function updateGameLevel() {
+            const levelElement = document.getElementById('gameLevel');
+            const progress = currentQuestionIndex + 1;
+            
+            if (progress <= 5) {
+                levelElement.textContent = 'PEMULA';
+                levelElement.parentElement.parentElement.className = 'bg-gradient-to-r from-green-500 to-teal-500 rounded-2xl p-4 md:p-6 shadow-2xl transform hover:scale-105 transition-all duration-300 min-w-[200px]';
+            } else if (progress <= 10) {
+                levelElement.textContent = 'MENENGAH';
+                levelElement.parentElement.parentElement.className = 'bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl p-4 md:p-6 shadow-2xl transform hover:scale-105 transition-all duration-300 min-w-[200px]';
+            } else if (progress <= 15) {
+                levelElement.textContent = 'MAHIR';
+                levelElement.parentElement.parentElement.className = 'bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl p-4 md:p-6 shadow-2xl transform hover:scale-105 transition-all duration-300 min-w-[200px]';
+            } else {
+                levelElement.textContent = 'EXPERT';
+                levelElement.parentElement.parentElement.className = 'bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl p-4 md:p-6 shadow-2xl transform hover:scale-105 transition-all duration-300 min-w-[200px]';
+            }
         }
 
         function selectAnswer(selectedAnswer, element) {
@@ -1449,29 +1696,98 @@
             document.querySelectorAll('.game-card').forEach(card => {
                 card.onclick = null;
                 card.style.cursor = 'default';
+                card.style.transform = 'scale(0.95)';
+                card.style.opacity = '0.7';
             });
             
-            // Show result
+            // Reset selected element
+            element.style.transform = 'scale(1)';
+            element.style.opacity = '1';
+            
+            // Show result with enhanced animations
             if (isCorrect) {
                 element.classList.add('correct');
                 gameScore++;
-                document.getElementById('resultTitle').textContent = '🎉 Benar!';
-                document.getElementById('resultMessage').textContent = `Jawaban yang tepat adalah "${selectedAnswer}"`;
+                
+                // Add celebration effects
+                createCelebrationEffect(element);
+                
+                document.getElementById('resultIcon').textContent = '🎉';
+                document.getElementById('resultTitle').textContent = 'BENAR!';
+                document.getElementById('resultMessage').textContent = `Hebat! Jawaban "${selectedAnswer}" adalah tepat!`;
+                
+                // Play success sound effect (visual feedback)
+                element.style.boxShadow = '0 0 30px rgba(16, 185, 129, 0.8)';
+                
             } else {
                 element.classList.add('incorrect');
-                document.getElementById('resultTitle').textContent = '❌ Salah!';
-                document.getElementById('resultMessage').textContent = `Jawaban yang benar adalah "${question.correct}"`;
+                document.getElementById('resultIcon').textContent = '❌';
+                document.getElementById('resultTitle').textContent = 'BELUM TEPAT!';
+                document.getElementById('resultMessage').textContent = `Jawaban yang benar adalah "${question.correct}". Jangan menyerah, terus belajar!`;
                 
-                // Highlight correct answer
+                // Highlight correct answer with special effect
                 document.querySelectorAll('.game-card').forEach(card => {
-                    if (card.textContent.trim() === question.correct) {
+                    const cardText = card.querySelector('span').textContent;
+                    if (cardText === question.correct) {
                         card.classList.add('correct');
+                        card.style.transform = 'scale(1.05)';
+                        card.style.opacity = '1';
+                        card.style.boxShadow = '0 0 25px rgba(16, 185, 129, 0.6)';
+                        
+                        // Add pulsing effect to correct answer
+                        setTimeout(() => {
+                            card.style.animation = 'correctPulse 1s ease-in-out';
+                        }, 300);
                     }
                 });
             }
             
             updateGameDisplay();
-            document.getElementById('gameResult').classList.remove('hidden');
+            
+            // Show result with slide-in animation
+            const resultElement = document.getElementById('gameResult');
+            resultElement.classList.remove('hidden');
+            resultElement.style.opacity = '0';
+            resultElement.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                resultElement.style.opacity = '1';
+                resultElement.style.transform = 'translateY(0)';
+            }, 100);
+        }
+        
+        function createCelebrationEffect(element) {
+            // Create floating particles effect
+            for (let i = 0; i < 6; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = '10px';
+                particle.style.height = '10px';
+                particle.style.background = '#fbbf24';
+                particle.style.borderRadius = '50%';
+                particle.style.pointerEvents = 'none';
+                particle.style.zIndex = '1000';
+                
+                const rect = element.getBoundingClientRect();
+                particle.style.left = (rect.left + rect.width / 2) + 'px';
+                particle.style.top = (rect.top + rect.height / 2) + 'px';
+                
+                document.body.appendChild(particle);
+                
+                // Animate particle
+                const angle = (i / 6) * Math.PI * 2;
+                const distance = 100;
+                const endX = Math.cos(angle) * distance;
+                const endY = Math.sin(angle) * distance;
+                
+                particle.animate([
+                    { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+                    { transform: `translate(${endX}px, ${endY}px) scale(0)`, opacity: 0 }
+                ], {
+                    duration: 800,
+                    easing: 'ease-out'
+                }).onfinish = () => particle.remove();
+            }
         }
 
         function nextQuestion() {
@@ -2393,5 +2709,5 @@
             }
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96def34801113e20',t:'MTc1NDk5MDk4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96df27e4e61c5ff3',t:'MTc1NDk5MzE0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
