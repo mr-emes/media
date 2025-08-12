@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Pembelajaran Al-Quran Hadits</title>
+    <title>Media Pembelajaran Interaktif</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700&display=swap');
@@ -1106,9 +1106,9 @@
         // PENTING: Ganti nilai-nilai di bawah ini dengan konfigurasi Anda
         
         const GOOGLE_DRIVE_CONFIG = {
-            apiKey: 'AIzaSyCGBqweMwkAGE9CWkqsDxFBfl7AtLvZe48',           // Ganti dengan API Key Anda
-            clientId: '443468776464-be7btp2adju2lt60gj2bp3jnh5mta6fr.apps.googleusercontent.com',             // Ganti dengan Client ID Anda  
-            folderId: '1C-qp2Jm48DmewY9n6xItlQXU_Azmuozz',       // Ganti dengan ID folder Google Drive Anda
+            apiKey: 'YOUR_GOOGLE_DRIVE_API_KEY_HERE',           // Ganti dengan API Key Anda
+            clientId: 'YOUR_GOOGLE_CLIENT_ID_HERE',             // Ganti dengan Client ID Anda  
+            folderId: 'YOUR_GOOGLE_DRIVE_FOLDER_ID_HERE',       // Ganti dengan ID folder Google Drive Anda
             discoveryDoc: 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
             scope: 'https://www.googleapis.com/auth/drive.file'
         };
@@ -2192,6 +2192,7 @@
             
             // Add score and status if game was completed
             if (score > 0) {
+                certificateCtx.fillStyle = '#1e3a8a';
                 certificateCtx.font = '18px Arial';
                 certificateCtx.fillText(`Skor Evaluasi: ${score}/20 (${percentage}%)`, 600, 595);
                 
@@ -2203,15 +2204,16 @@
                 }
                 certificateCtx.font = 'bold 16px Arial';
                 certificateCtx.fillText(`Status: ${statusText}`, 600, 615);
-                certificateCtx.fillStyle = '#fef3c7'; // Reset color
                 
                 // Add minimum passing grade info
+                certificateCtx.fillStyle = '#1e3a8a';
                 certificateCtx.font = '14px Arial';
                 certificateCtx.fillText('Batas Ketuntasan Minimal: 70%', 600, 635);
             }
             
             // Skip achievement icons section as requested
             
+            certificateCtx.fillStyle = '#1e3a8a';
             certificateCtx.font = '20px Arial';
             certificateCtx.fillText(`Tanggal: ${new Date().toLocaleDateString('id-ID')}`, 600, 680);
             
@@ -2308,5 +2310,5 @@
             }
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96de2cdaa7d991bd',t:'MTc1NDk4Mjg2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96de466586544076',t:'MTc1NDk4MzkwNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
