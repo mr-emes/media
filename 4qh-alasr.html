@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Pembelajaran Al-Quran Hadist</title>
+    <title>Media Pembelajaran Surah Al-Ashr</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700&display=swap');
@@ -542,58 +542,7 @@
                             </div>
                         </div>
 
-                        <!-- Setup Instructions for Teachers -->
-                        <div class="mt-10 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-3xl p-8 border-2 border-yellow-200">
-                            <h3 class="text-2xl font-bold text-yellow-800 mb-6 text-center">⚙️ Panduan Setup untuk Guru</h3>
-                            <div class="bg-white rounded-2xl p-6 shadow-lg">
-                                <h4 class="text-lg font-bold text-gray-800 mb-4">📋 Langkah Setup Google Drive API:</h4>
-                                <div class="space-y-4 text-gray-700">
-                                    <div class="flex items-start space-x-3">
-                                        <span class="text-xl">1️⃣</span>
-                                        <div>
-                                            <p class="font-semibold">Buat Project di Google Cloud Console</p>
-                                            <p class="text-sm">Kunjungi console.cloud.google.com dan buat project baru</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-start space-x-3">
-                                        <span class="text-xl">2️⃣</span>
-                                        <div>
-                                            <p class="font-semibold">Aktifkan Google Drive API</p>
-                                            <p class="text-sm">Di Library, cari dan aktifkan "Google Drive API"</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-start space-x-3">
-                                        <span class="text-xl">3️⃣</span>
-                                        <div>
-                                            <p class="font-semibold">Buat Credentials</p>
-                                            <p class="text-sm">Buat API Key dan OAuth 2.0 Client ID untuk aplikasi web</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-start space-x-3">
-                                        <span class="text-xl">4️⃣</span>
-                                        <div>
-                                            <p class="font-semibold">Buat Folder di Google Drive</p>
-                                            <p class="text-sm">Buat folder khusus untuk menerima video siswa dan salin ID folder</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-start space-x-3">
-                                        <span class="text-xl">5️⃣</span>
-                                        <div>
-                                            <p class="font-semibold">Update Konfigurasi</p>
-                                            <p class="text-sm">Ganti nilai di GOOGLE_DRIVE_CONFIG dengan API Key, Client ID, dan Folder ID Anda</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mt-6 p-4 bg-blue-50 rounded-xl border-l-4 border-blue-500">
-                                    <p class="text-blue-800 font-semibold">💡 Tips:</p>
-                                    <ul class="text-blue-700 text-sm mt-2 space-y-1">
-                                        <li>• Pastikan domain website ditambahkan ke Authorized JavaScript origins</li>
-                                        <li>• Berikan akses edit ke folder Google Drive untuk semua siswa</li>
-                                        <li>• Test upload dengan akun siswa sebelum digunakan di kelas</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+
 
                         <!-- Video Recording Section -->
                         <div class="mt-10 bg-gradient-to-r from-orange-50 to-red-50 rounded-3xl p-8 border-2 border-orange-200">
@@ -1022,9 +971,9 @@
         // PENTING: Ganti nilai-nilai di bawah ini dengan konfigurasi Anda
         
         const GOOGLE_DRIVE_CONFIG = {
-            apiKey: 'YOUR_GOOGLE_DRIVE_API_KEY_HERE',           // Ganti dengan API Key Anda
-            clientId: 'YOUR_GOOGLE_CLIENT_ID_HERE',             // Ganti dengan Client ID Anda  
-            folderId: 'YOUR_GOOGLE_DRIVE_FOLDER_ID_HERE',       // Ganti dengan ID folder Google Drive Anda
+            apiKey: 'AIzaSyCGBqweMwkAGE9CWkqsDxFBfl7AtLvZe48',           // Ganti dengan API Key Anda
+            clientId: '443468776464-be7btp2adju2lt60gj2bp3jnh5mta6fr.apps.googleusercontent.com',             // Ganti dengan Client ID Anda  
+            folderId: '1C-qp2Jm48DmewY9n6xItlQXU_Azmuozz',       // Ganti dengan ID folder Google Drive Anda
             discoveryDoc: 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
             scope: 'https://www.googleapis.com/auth/drive.file'
         };
@@ -1260,6 +1209,11 @@
             // Mark section as visited and update progress
             if (tabName === 'materi') {
                 updateProgress('materi');
+            } else if (tabName === 'video') {
+                // Mark video as viewed when tab is opened
+                setTimeout(() => {
+                    updateProgress('video');
+                }, 2000); // Give 2 seconds for video to load
             }
             
             // Initialize specific tab content if needed
@@ -1606,14 +1560,24 @@
         }
 
         function stopDrawing() {
-            if (isDrawing && currentWritingMode === 'trace') {
-                // Mark current ayat as practiced
-                ayatProgress[currentAyat] = true;
-                updateAyatProgressDisplay();
-                
-                // Check if all ayats are completed
-                const allCompleted = Object.values(ayatProgress).every(Boolean);
-                if (allCompleted) {
+            if (isDrawing) {
+                if (currentWritingMode === 'trace') {
+                    // Mark current ayat as practiced
+                    ayatProgress[currentAyat] = true;
+                    updateAyatProgressDisplay();
+                    
+                    // Check if all ayats are completed
+                    const allCompleted = Object.values(ayatProgress).every(Boolean);
+                    if (allCompleted) {
+                        updateProgress('latihan');
+                        
+                        // Show completion message
+                        setTimeout(() => {
+                            alert('🎉 Selamat! Anda telah menyelesaikan semua latihan menulis Surah Al-Ashr!\n\nSemua ayat telah berhasil dipraktikkan. Progress latihan Anda sudah lengkap.');
+                        }, 500);
+                    }
+                } else {
+                    // For free writing mode, mark as completed after some drawing
                     updateProgress('latihan');
                 }
             }
@@ -1796,7 +1760,7 @@
                     alert('✅ Video berhasil dikirim ke Google Drive!\n\nGuru akan menerima notifikasi dan memberikan feedback dalam 1-2 hari kerja.');
                 } else {
                     // Fallback: Local storage simulation
-                    alert('✅ Video berhasil disimpan!\n\nUntuk mengirim ke guru, pastikan konfigurasi Google Drive sudah diatur dengan benar.');
+                    alert('✅ Video berhasil disimpan!\n\nTugas video Anda telah selesai. Progress pembelajaran Anda bertambah!');
                 }
                 
                 // Store submission record
@@ -1812,7 +1776,7 @@
                 submissionHistory.push(submission);
                 updateSubmissionHistory();
                 
-                // Mark video section as completed
+                // Mark video section as completed - this is the main video progress
                 updateProgress('video');
                 
                 // Reset form
@@ -1822,6 +1786,10 @@
                 document.getElementById('recordedVideo').classList.add('hidden');
                 document.getElementById('recordIcon').textContent = '🎥';
                 document.getElementById('recordStatus').textContent = 'Siap untuk merekam';
+                
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
                 
             } catch (error) {
                 console.error('Upload error:', error);
@@ -1836,7 +1804,7 @@
         // Google Drive API Functions
         function initializeGoogleDrive() {
             // Only initialize if API key is configured
-            if (GOOGLE_DRIVE_CONFIG.apiKey === 'AIzaSyCGBqweMwkAGE9CWkqsDxFBfl7AtLvZe48') {
+            if (GOOGLE_DRIVE_CONFIG.apiKey === 'YOUR_GOOGLE_DRIVE_API_KEY_HERE') {
                 console.log('Google Drive API not configured. Using local storage fallback.');
                 return;
             }
@@ -2268,5 +2236,5 @@
             }
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96ddc40c413dce4e',t:'MTc1NDk3ODU2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96ddd3b161d89cee',t:'MTc1NDk3OTIwOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
