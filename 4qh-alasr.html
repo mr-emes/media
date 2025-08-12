@@ -822,28 +822,28 @@
                             <div id="gameArea" class="bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-10 border border-white/20 shadow-2xl">
                                 <!-- Instructions -->
                                 <div class="text-center mb-8">
-                                    <div class="inline-block bg-gradient-to-r from-blue-400 to-purple-500 rounded-2xl px-6 py-3 mb-6 shadow-xl">
-                                        <h3 class="text-xl md:text-2xl font-bold text-white drop-shadow-lg">
-                                            🎯 Seret lafaz Arab ke arti yang tepat! 🎯
+                                    <div class="inline-block bg-gradient-to-r from-blue-400 to-purple-500 rounded-2xl px-4 md:px-6 py-3 mb-6 shadow-xl">
+                                        <h3 class="game-instruction text-lg md:text-xl lg:text-2xl font-bold text-white drop-shadow-lg">
+                                            🎯 Tap lafaz Arab, lalu tap arti yang tepat! 🎯
                                         </h3>
                                     </div>
-                                    <p class="text-white/80 text-lg">Cocokkan semua lafaz dengan artinya untuk menyelesaikan game</p>
+                                    <p class="text-white/80 text-sm md:text-lg">Cocokkan semua lafaz dengan artinya untuk menyelesaikan game</p>
                                 </div>
 
                                 <!-- Game Board -->
-                                <div class="grid md:grid-cols-2 gap-8">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                                     <!-- Arabic Words Column -->
-                                    <div class="bg-gradient-to-br from-blue-500/20 to-indigo-600/20 rounded-3xl p-6 border-2 border-blue-300/30">
-                                        <h4 class="text-2xl font-bold text-white text-center mb-6 drop-shadow-lg">📜 Lafaz Arab</h4>
-                                        <div id="arabicColumn" class="space-y-4">
+                                    <div class="bg-gradient-to-br from-blue-500/20 to-indigo-600/20 rounded-2xl md:rounded-3xl p-4 md:p-6 border-2 border-blue-300/30">
+                                        <h4 class="text-lg md:text-2xl font-bold text-white text-center mb-4 md:mb-6 drop-shadow-lg">📜 Lafaz Arab</h4>
+                                        <div id="arabicColumn" class="space-y-2 md:space-y-4">
                                             <!-- Arabic words will be generated here -->
                                         </div>
                                     </div>
 
                                     <!-- Meanings Column -->
-                                    <div class="bg-gradient-to-br from-green-500/20 to-emerald-600/20 rounded-3xl p-6 border-2 border-green-300/30">
-                                        <h4 class="text-2xl font-bold text-white text-center mb-6 drop-shadow-lg">📖 Arti</h4>
-                                        <div id="meaningColumn" class="space-y-4">
+                                    <div class="bg-gradient-to-br from-green-500/20 to-emerald-600/20 rounded-2xl md:rounded-3xl p-4 md:p-6 border-2 border-green-300/30">
+                                        <h4 class="text-lg md:text-2xl font-bold text-white text-center mb-4 md:mb-6 drop-shadow-lg">📖 Arti</h4>
+                                        <div id="meaningColumn" class="space-y-2 md:space-y-4">
                                             <!-- Meanings will be generated here -->
                                         </div>
                                     </div>
@@ -1598,21 +1598,25 @@
             // Shuffle meanings for random order
             const shuffledMeanings = [...gameWords.map(word => word.meaning)].sort(() => Math.random() - 0.5);
             
-            // Create Arabic word elements (draggable)
+            // Create Arabic word elements (clickable for mobile)
             gameWords.forEach((word, index) => {
                 const arabicDiv = document.createElement('div');
-                arabicDiv.className = 'arabic-word bg-gradient-to-r from-blue-400 to-indigo-500 text-white rounded-2xl p-4 cursor-move shadow-lg transform transition-all duration-300 hover:scale-105 border-2 border-blue-300';
-                arabicDiv.draggable = true;
+                arabicDiv.className = 'arabic-word bg-gradient-to-r from-blue-400 to-indigo-500 text-white rounded-xl md:rounded-2xl p-3 md:p-4 cursor-pointer md:cursor-move shadow-lg transform transition-all duration-300 hover:scale-105 border-2 border-blue-300 select-none';
                 arabicDiv.dataset.arabic = word.arabic;
                 arabicDiv.dataset.meaning = word.meaning;
                 arabicDiv.innerHTML = `
                     <div class="text-center">
-                        <div class="arabic-text text-2xl md:text-3xl font-bold mb-2">${word.arabic}</div>
-                        <div class="text-sm opacity-80">Seret ke arti yang tepat</div>
+                        <div class="arabic-text text-lg md:text-2xl lg:text-3xl font-bold mb-1 md:mb-2">${word.arabic}</div>
+                        <div class="text-xs md:text-sm opacity-80">Tap untuk pilih</div>
                     </div>
                 `;
                 
-                // Add drag event listeners
+                // Add click/touch event listeners for mobile compatibility
+                arabicDiv.addEventListener('click', handleArabicClick);
+                arabicDiv.addEventListener('touchstart', handleArabicTouch, { passive: true });
+                
+                // Add drag event listeners for desktop
+                arabicDiv.draggable = true;
                 arabicDiv.addEventListener('dragstart', handleDragStart);
                 arabicDiv.addEventListener('dragend', handleDragEnd);
                 
@@ -1627,19 +1631,23 @@
                 arabicColumn.appendChild(arabicDiv);
             });
             
-            // Create meaning elements (drop zones)
+            // Create meaning elements (clickable zones)
             shuffledMeanings.forEach((meaning, index) => {
                 const meaningDiv = document.createElement('div');
-                meaningDiv.className = 'meaning-zone bg-gradient-to-r from-green-400 to-emerald-500 text-white rounded-2xl p-4 min-h-[80px] flex items-center justify-center shadow-lg border-2 border-green-300 transition-all duration-300';
+                meaningDiv.className = 'meaning-zone bg-gradient-to-r from-green-400 to-emerald-500 text-white rounded-xl md:rounded-2xl p-3 md:p-4 min-h-[70px] md:min-h-[80px] flex items-center justify-center shadow-lg border-2 border-green-300 transition-all duration-300 cursor-pointer select-none';
                 meaningDiv.dataset.meaning = meaning;
                 meaningDiv.innerHTML = `
                     <div class="text-center">
-                        <div class="text-lg md:text-xl font-bold">${meaning}</div>
-                        <div class="text-sm opacity-80 mt-1">Drop zone</div>
+                        <div class="text-sm md:text-lg lg:text-xl font-bold leading-tight">${meaning}</div>
+                        <div class="text-xs opacity-80 mt-1">Tap untuk jodohkan</div>
                     </div>
                 `;
                 
-                // Add drop event listeners
+                // Add click/touch event listeners
+                meaningDiv.addEventListener('click', handleMeaningClick);
+                meaningDiv.addEventListener('touchstart', handleMeaningTouch, { passive: true });
+                
+                // Add drop event listeners for desktop
                 meaningDiv.addEventListener('dragover', handleDragOver);
                 meaningDiv.addEventListener('drop', handleDrop);
                 meaningDiv.addEventListener('dragenter', handleDragEnter);
@@ -1657,6 +1665,82 @@
             });
         }
 
+        // Mobile-friendly click/touch handlers
+        let selectedArabicElement = null;
+
+        function handleArabicClick(e) {
+            e.preventDefault();
+            selectArabicWord(e.target.closest('.arabic-word'));
+        }
+
+        function handleArabicTouch(e) {
+            selectArabicWord(e.target.closest('.arabic-word'));
+        }
+
+        function selectArabicWord(element) {
+            // Clear previous selection
+            document.querySelectorAll('.arabic-word').forEach(word => {
+                word.classList.remove('ring-4', 'ring-yellow-400', 'ring-opacity-75');
+                word.style.transform = 'scale(1)';
+            });
+            
+            // Select current word
+            selectedArabicElement = element;
+            element.classList.add('ring-4', 'ring-yellow-400', 'ring-opacity-75');
+            element.style.transform = 'scale(1.05)';
+            
+            // Update instruction
+            updateGameInstruction('Sekarang tap arti yang tepat!');
+        }
+
+        function handleMeaningClick(e) {
+            e.preventDefault();
+            selectMeaning(e.target.closest('.meaning-zone'));
+        }
+
+        function handleMeaningTouch(e) {
+            selectMeaning(e.target.closest('.meaning-zone'));
+        }
+
+        function selectMeaning(meaningElement) {
+            if (!selectedArabicElement) {
+                // Flash instruction if no Arabic word selected
+                updateGameInstruction('Pilih lafaz Arab terlebih dahulu!');
+                meaningElement.style.animation = 'incorrectShake 0.6s ease-in-out';
+                setTimeout(() => {
+                    meaningElement.style.animation = '';
+                    updateGameInstruction('Tap lafaz Arab, lalu tap arti yang tepat!');
+                }, 600);
+                return;
+            }
+            
+            const selectedMeaning = meaningElement.dataset.meaning;
+            const arabicMeaning = selectedArabicElement.dataset.meaning;
+            
+            if (selectedMeaning === arabicMeaning) {
+                // Correct match!
+                handleCorrectMatch(selectedArabicElement, meaningElement);
+                selectedArabicElement = null;
+                updateGameInstruction('Bagus! Pilih lafaz berikutnya.');
+            } else {
+                // Wrong match
+                handleWrongMatch(selectedArabicElement, meaningElement);
+                updateGameInstruction('Coba lagi! Pilih arti yang tepat.');
+            }
+        }
+
+        function updateGameInstruction(text) {
+            const instructionElement = document.querySelector('.game-instruction');
+            if (instructionElement) {
+                instructionElement.textContent = text;
+                instructionElement.style.animation = 'pulse 0.5s ease-in-out';
+                setTimeout(() => {
+                    instructionElement.style.animation = '';
+                }, 500);
+            }
+        }
+
+        // Keep drag handlers for desktop compatibility
         function handleDragStart(e) {
             draggedElement = e.target;
             e.target.style.opacity = '0.5';
@@ -2587,5 +2671,5 @@
             }
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96e081e5a20d7a47',t:'MTc1NTAwNzMxNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96e09c2a33c635aa',t:'MTc1NTAwODM5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
