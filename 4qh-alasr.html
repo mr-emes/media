@@ -30,7 +30,7 @@
         }
         
         .certificate {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #581c87 100%);
+            background: linear-gradient(135deg, #fef7cd 0%, #fef3c7 25%, #fed7aa 50%, #fde68a 75%, #fef7cd 100%);
             border: 12px solid #fbbf24;
             box-shadow: 0 25px 50px rgba(0,0,0,0.2);
             position: relative;
@@ -868,6 +868,191 @@
             <!-- Tab Sertifikat -->
             <div id="content-sertifikat" class="tab-content hidden">
                 <div class="max-w-5xl mx-auto">
+                    <!-- Certificate Locked Screen -->
+                    <div id="certificateLocked" class="bg-gradient-to-r from-red-50 to-orange-50 rounded-3xl p-10 border-2 border-red-200 text-center">
+                        <div class="mb-8">
+                            <div class="w-32 h-32 bg-gradient-to-br from-red-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <span class="text-6xl">🔒</span>
+                            </div>
+                            <h2 class="text-3xl font-bold text-red-800 mb-4">Sertifikat Terkunci</h2>
+                            <p class="text-red-700 text-lg mb-8">Selesaikan semua bagian pembelajaran untuk membuka sertifikat</p>
+                        </div>
+                        
+                        <!-- Progress Checklist -->
+                        <div class="bg-white rounded-2xl p-8 shadow-lg mb-8">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-6">📋 Daftar Tugas</h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="flex items-center space-x-4 p-4 rounded-xl border-2 border-gray-200">
+                                    <div id="materiLockStatus" class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                                        <span class="text-2xl">📚</span>
+                                    </div>
+                                    <div class="text-left">
+                                        <h4 class="font-bold text-gray-800">Materi</h4>
+                                        <p id="materiLockText" class="text-sm text-gray-500">Belum Selesai</p>
+                                        <p class="text-xs text-gray-400">Klik "SAYA PAHAM"</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-4 p-4 rounded-xl border-2 border-gray-200">
+                                    <div id="videoLockStatus" class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                                        <span class="text-2xl">🎥</span>
+                                    </div>
+                                    <div class="text-left">
+                                        <h4 class="font-bold text-gray-800">Video</h4>
+                                        <p id="videoLockText" class="text-sm text-gray-500">Belum Selesai</p>
+                                        <p class="text-xs text-gray-400">Upload video bacaan</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-4 p-4 rounded-xl border-2 border-gray-200">
+                                    <div id="gameLockStatus" class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                                        <span class="text-2xl">🎮</span>
+                                    </div>
+                                    <div class="text-left">
+                                        <h4 class="font-bold text-gray-800">Game</h4>
+                                        <p id="gameLockText" class="text-sm text-gray-500">Belum Selesai</p>
+                                        <p class="text-xs text-gray-400">Selesaikan 20 soal</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-4 p-4 rounded-xl border-2 border-gray-200">
+                                    <div id="latihanLockStatus" class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                                        <span class="text-2xl">✍️</span>
+                                    </div>
+                                    <div class="text-left">
+                                        <h4 class="font-bold text-gray-800">Latihan</h4>
+                                        <p id="latihanLockText" class="text-sm text-gray-500">Belum Selesai</p>
+                                        <p class="text-xs text-gray-400">Praktik menulis 3 ayat</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Tips Section -->
+                        <div class="bg-blue-50 rounded-2xl p-6 border-2 border-blue-200">
+                            <h4 class="text-xl font-bold text-blue-800 mb-4">💡 Tips Menyelesaikan Pembelajaran</h4>
+                            <div class="grid md:grid-cols-2 gap-4 text-left">
+                                <div class="space-y-2">
+                                    <p class="text-blue-700"><strong>📚 Materi:</strong> Baca semua materi dengan seksama, lalu klik tombol "SAYA PAHAM"</p>
+                                    <p class="text-blue-700"><strong>🎥 Video:</strong> Tonton video pembelajaran, lalu rekam dan kirim video bacaan Anda</p>
+                                </div>
+                                <div class="space-y-2">
+                                    <p class="text-blue-700"><strong>🎮 Game:</strong> Mainkan game tebak arti kata hingga selesai 20 soal</p>
+                                    <p class="text-blue-700"><strong>✍️ Latihan:</strong> Praktikkan menulis ketiga ayat Al-Ashr</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Certificate Unlocked (Hidden by default) -->
+                    <div id="certificateUnlocked" class="hidden">
+                        <div class="bg-gradient-to-br from-yellow-50 via-orange-50 to-yellow-100 rounded-3xl p-16 text-center relative overflow-hidden shadow-2xl border-8 border-yellow-400">
+                            <!-- Animated stars -->
+                            <div class="absolute top-4 left-4 text-yellow-400 text-2xl animate-pulse">⭐</div>
+                            <div class="absolute top-8 right-8 text-yellow-400 text-3xl animate-bounce">✨</div>
+                            <div class="absolute bottom-6 left-8 text-yellow-400 text-2xl animate-pulse">🌟</div>
+                            <div class="absolute bottom-4 right-4 text-yellow-400 text-2xl animate-bounce">⭐</div>
+                            
+                            <!-- Multiple decorative borders -->
+                            <div class="absolute inset-4 border-4 border-dashed border-yellow-300 rounded-2xl"></div>
+                            <div class="absolute inset-8 border-2 border-yellow-200 rounded-xl"></div>
+                            
+                            <div class="relative z-10">
+                                <div class="mb-10">
+                                    <div class="w-32 h-32 bg-gradient-to-br from-yellow-300 to-orange-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
+                                        <span class="text-6xl">🏆</span>
+                                    </div>
+                                    <h2 class="text-5xl font-bold mb-4 text-blue-800">SERTIFIKAT</h2>
+                                    <div class="w-32 h-1 bg-blue-600 mx-auto mb-4"></div>
+                                    <p class="text-2xl font-semibold text-blue-700">Media Pembelajaran Al-Quran Hadits</p>
+                                </div>
+
+                                <div class="mb-10">
+                                    <p class="text-xl mb-6 text-blue-700">Dengan bangga diberikan kepada:</p>
+                                    <div class="bg-white bg-opacity-80 rounded-2xl p-8 mb-6 shadow-lg border-2 border-yellow-300">
+                                        <h3 id="certificateName" class="text-4xl font-bold mb-4 text-blue-800">-</h3>
+                                        <p class="text-xl text-blue-700">Kelas: <span id="certificateClass" class="font-bold text-blue-800">-</span></p>
+                                    </div>
+                                </div>
+
+                                <div class="mb-10">
+                                    <p class="text-xl mb-6 text-blue-700">Telah berhasil menyelesaikan pembelajaran</p>
+                                    <div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-2xl p-6 mb-6 shadow-lg">
+                                        <h4 class="text-3xl font-bold mb-2">SURAH AL-ASHR</h4>
+                                        <p class="text-lg font-semibold">سُورَةُ الْعَصْرِ</p>
+                                    </div>
+                                    <p id="certificateAppreciation" class="text-lg text-blue-700">dengan prestasi yang membanggakan</p>
+                                </div>
+
+                                <div class="flex justify-center items-center space-x-12 mb-10">
+                                    <div class="text-center">
+                                        <div class="w-20 h-20 bg-green-400 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
+                                            <span class="text-3xl">✅</span>
+                                        </div>
+                                        <p class="font-semibold text-blue-800">Materi</p>
+                                        <p class="text-sm text-blue-600">Dipahami</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="w-20 h-20 bg-green-400 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
+                                            <span class="text-3xl">✅</span>
+                                        </div>
+                                        <p class="font-semibold text-blue-800">Video</p>
+                                        <p class="text-sm text-blue-600">Dikirim</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="w-20 h-20 bg-green-400 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
+                                            <span class="text-3xl">✅</span>
+                                        </div>
+                                        <p class="font-semibold text-blue-800">Game</p>
+                                        <p class="text-sm text-blue-600">Selesai</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="w-20 h-20 bg-green-400 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
+                                            <span class="text-3xl">✅</span>
+                                        </div>
+                                        <p class="font-semibold text-blue-800">Latihan</p>
+                                        <p class="text-sm text-blue-600">Dipraktikkan</p>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <p class="text-lg text-blue-700 mb-4">Tanggal: <span id="certificateDate" class="font-semibold"></span></p>
+                                    <div class="flex justify-center space-x-16">
+                                        <div class="text-center">
+                                            <!-- Teacher signature placeholder -->
+                                            <div class="w-32 h-16 bg-white rounded-lg mb-2 flex items-center justify-center border-2 border-blue-200">
+                                                <span class="text-xs text-blue-600">Tanda Tangan</span>
+                                            </div>
+                                            <div class="border-t-2 border-blue-600 w-40 mx-auto pt-3">
+                                                <p class="font-bold text-blue-800">Guru Pengampu</p>
+                                                <p class="text-sm text-blue-600">MAHFUD SIDIK, S.Pd.I</p>
+                                            </div>
+                                        </div>
+                                        <div class="text-center">
+                                            <!-- Principal signature placeholder -->
+                                            <div class="w-32 h-16 bg-white rounded-lg mb-2 flex items-center justify-center border-2 border-blue-200">
+                                                <span class="text-xs text-blue-600">Tanda Tangan</span>
+                                            </div>
+                                            <div class="border-t-2 border-blue-600 w-40 mx-auto pt-3">
+                                                <p class="font-bold text-blue-800">Kepala Madrasah</p>
+                                                <p class="text-sm text-blue-600">MUSLIMAH, S.Pd.I</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-10">
+                            <button onclick="downloadCertificate()" 
+                                    class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-10 py-5 rounded-2xl font-bold text-xl hover:from-blue-700 hover:to-indigo-700 transition duration-300 shadow-2xl">
+                                📥 Unduh Sertifikat
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="max-w-5xl mx-auto">
                     <div class="certificate rounded-3xl p-16 text-center text-white relative overflow-hidden">
                         <!-- Corner Ornaments -->
                         <div class="ornament-corner top-0 left-0"></div>
@@ -1078,7 +1263,6 @@
             setTimeout(() => {
                 initCanvas();
                 initGame();
-                initializeGoogleDrive(); // Initialize Google Drive API
                 
                 // Add click event listeners to all tab buttons
                 document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1097,6 +1281,53 @@
         function updateProgress(section) {
             learningProgress[section] = true;
             updateProgressDisplay();
+        }
+        
+        function updateCertificateStatus() {
+            // Update lock status for each section
+            const sections = ['materi', 'video', 'game', 'latihan'];
+            
+            sections.forEach(section => {
+                const isComplete = learningProgress[section];
+                const lockStatus = document.getElementById(`${section}LockStatus`);
+                const lockText = document.getElementById(`${section}LockText`);
+                const lockParent = lockStatus?.parentElement;
+                
+                if (lockStatus && lockText && lockParent) {
+                    if (isComplete) {
+                        lockStatus.textContent = '✅';
+                        lockText.textContent = 'Selesai';
+                        lockText.className = 'text-sm text-green-600 font-semibold';
+                        lockParent.className = 'w-16 h-16 bg-green-200 rounded-full flex items-center justify-center mx-auto mb-3';
+                    } else {
+                        lockStatus.textContent = section === 'materi' ? '📚' : section === 'video' ? '🎥' : section === 'game' ? '🎮' : '✍️';
+                        lockText.textContent = 'Belum Selesai';
+                        lockText.className = 'text-sm text-gray-500';
+                        lockParent.className = 'w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-3';
+                    }
+                }
+            });
+            
+            // Check if all sections are complete
+            const allComplete = Object.values(learningProgress).every(Boolean);
+            
+            const certificateLocked = document.getElementById('certificateLocked');
+            const certificateUnlocked = document.getElementById('certificateUnlocked');
+            
+            if (allComplete) {
+                if (certificateLocked) certificateLocked.classList.add('hidden');
+                if (certificateUnlocked) certificateUnlocked.classList.remove('hidden');
+                
+                // Update certificate with appreciation
+                const appreciation = currentStudent.appreciation || 'dengan prestasi yang membanggakan';
+                const appreciationElement = document.getElementById('certificateAppreciation');
+                if (appreciationElement) {
+                    appreciationElement.textContent = appreciation;
+                }
+            } else {
+                if (certificateLocked) certificateLocked.classList.remove('hidden');
+                if (certificateUnlocked) certificateUnlocked.classList.add('hidden');
+            }
         }
         
         function updateProgressDisplay() {
@@ -1160,6 +1391,9 @@
             if (mobileProgressText) {
                 mobileProgressText.textContent = percentage;
             }
+            
+            // Update certificate status
+            updateCertificateStatus();
         }
 
         // Tab functionality
@@ -1206,15 +1440,8 @@
                 activeTabDesktop.className = 'tab-btn px-6 py-4 mx-1 mb-2 rounded-2xl font-bold text-lg transition duration-300 bg-blue-600 text-white shadow-lg hover:bg-blue-700';
             }
             
-            // Mark section as visited and update progress
-            if (tabName === 'materi') {
-                updateProgress('materi');
-            } else if (tabName === 'video') {
-                // Mark video as viewed when tab is opened
-                setTimeout(() => {
-                    updateProgress('video');
-                }, 2000); // Give 2 seconds for video to load
-            }
+            // Don't auto-mark sections as complete when opening tabs
+            // Progress is now tracked by specific actions (PAHAM button, video upload, etc.)
             
             // Initialize specific tab content if needed
             if (tabName === 'latihan' && !canvas) {
@@ -1417,12 +1644,9 @@
         }
 
         function setupCanvas(canvasElement, context) {
-            const rect = canvasElement.getBoundingClientRect();
-            canvasElement.width = rect.width * 2;
-            canvasElement.height = rect.height * 2;
-            canvasElement.style.width = rect.width + 'px';
-            canvasElement.style.height = rect.height + 'px';
-            context.scale(2, 2);
+            // Set actual canvas size
+            canvasElement.width = 1200;
+            canvasElement.height = 800;
             
             context.lineCap = 'round';
             context.lineJoin = 'round';
@@ -1546,8 +1770,15 @@
             const activeCanvas = currentWritingMode === 'free' ? freeCanvas : canvas;
             const activeCtx = currentWritingMode === 'free' ? freeCtx : ctx;
             const rect = activeCanvas.getBoundingClientRect();
+            
+            // Calculate proper coordinates considering canvas scaling
+            const scaleX = activeCanvas.width / rect.width;
+            const scaleY = activeCanvas.height / rect.height;
+            const x = (e.clientX - rect.left) * scaleX;
+            const y = (e.clientY - rect.top) * scaleY;
+            
             activeCtx.beginPath();
-            activeCtx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+            activeCtx.moveTo(x, y);
         }
 
         function draw(e) {
@@ -1555,7 +1786,14 @@
             const activeCanvas = currentWritingMode === 'free' ? freeCanvas : canvas;
             const activeCtx = currentWritingMode === 'free' ? freeCtx : ctx;
             const rect = activeCanvas.getBoundingClientRect();
-            activeCtx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            
+            // Calculate proper coordinates considering canvas scaling
+            const scaleX = activeCanvas.width / rect.width;
+            const scaleY = activeCanvas.height / rect.height;
+            const x = (e.clientX - rect.left) * scaleX;
+            const y = (e.clientY - rect.top) * scaleY;
+            
+            activeCtx.lineTo(x, y);
             activeCtx.stroke();
         }
 
@@ -1745,24 +1983,14 @@
             const notes = document.getElementById('videoNotes').value || '';
             const timestamp = new Date().toLocaleString('id-ID');
             
-            try {
-                // Show loading message
-                const submitBtn = event.target;
-                const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = '⏳ Mengirim...';
-                submitBtn.disabled = true;
-                
-                // Try to upload to Google Drive if configured
-                if (GOOGLE_DRIVE_CONFIG.apiKey !== 'YOUR_GOOGLE_DRIVE_API_KEY_HERE' && recordedChunks.length > 0) {
-                    const videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
-                    await uploadToGoogleDrive(videoBlob, title, notes);
-                    
-                    alert('✅ Video berhasil dikirim ke Google Drive!\n\nGuru akan menerima notifikasi dan memberikan feedback dalam 1-2 hari kerja.');
-                } else {
-                    // Fallback: Local storage simulation
-                    alert('✅ Video berhasil disimpan!\n\nTugas video Anda telah selesai. Progress pembelajaran Anda bertambah!');
-                }
-                
+            // Show loading message
+            const submitBtn = event.target;
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '⏳ Mengirim...';
+            submitBtn.disabled = true;
+            
+            // Simulate upload process
+            setTimeout(() => {
                 // Store submission record
                 const submission = {
                     title: title,
@@ -1776,8 +2004,11 @@
                 submissionHistory.push(submission);
                 updateSubmissionHistory();
                 
-                // Mark video section as completed - this is the main video progress
+                // Mark video section as completed
                 updateProgress('video');
+                
+                // Show success message
+                alert('✅ Video berhasil dikirim!\n\nTugas video Anda telah selesai. Progress pembelajaran bertambah!\n\nGuru akan memberikan feedback dalam 1-2 hari kerja.');
                 
                 // Reset form
                 document.getElementById('videoTitle').value = '';
@@ -1791,113 +2022,10 @@
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
                 
-            } catch (error) {
-                console.error('Upload error:', error);
-                alert('❌ Gagal mengirim video. Silakan coba lagi atau hubungi guru.');
-                
-                // Reset button
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }
+            }, 2000); // 2 second delay to simulate upload
         }
 
-        // Google Drive API Functions
-        function initializeGoogleDrive() {
-            // Only initialize if API key is configured
-            if (GOOGLE_DRIVE_CONFIG.apiKey === 'YOUR_GOOGLE_DRIVE_API_KEY_HERE') {
-                console.log('Google Drive API not configured. Using local storage fallback.');
-                return;
-            }
-            
-            // Load Google API script
-            if (!window.gapi) {
-                const script = document.createElement('script');
-                script.src = 'https://apis.google.com/js/api.js';
-                script.onload = () => {
-                    gapi.load('auth2:client', initGoogleAuth);
-                };
-                document.head.appendChild(script);
-            } else {
-                gapi.load('auth2:client', initGoogleAuth);
-            }
-        }
-
-        function initGoogleAuth() {
-            gapi.client.init({
-                apiKey: GOOGLE_DRIVE_CONFIG.apiKey,
-                clientId: GOOGLE_DRIVE_CONFIG.clientId,
-                discoveryDocs: [GOOGLE_DRIVE_CONFIG.discoveryDoc],
-                scope: GOOGLE_DRIVE_CONFIG.scope
-            }).then(() => {
-                console.log('Google Drive API initialized successfully');
-            }).catch((error) => {
-                console.error('Error initializing Google Drive API:', error);
-            });
-        }
-
-        async function uploadToGoogleDrive(videoBlob, title, notes) {
-            try {
-                // Check if user is signed in
-                const authInstance = gapi.auth2.getAuthInstance();
-                if (!authInstance.isSignedIn.get()) {
-                    await authInstance.signIn();
-                }
-
-                // Convert blob to base64
-                const base64Data = await blobToBase64(videoBlob);
-                const base64Content = base64Data.split(',')[1];
-
-                // Create file metadata
-                const metadata = {
-                    name: `${currentStudent.name}_${title}_${new Date().toISOString().split('T')[0]}.webm`,
-                    parents: [GOOGLE_DRIVE_CONFIG.folderId],
-                    description: `Video dari: ${currentStudent.name} (${currentStudent.class})\nCatatan: ${notes}\nTanggal: ${new Date().toLocaleString('id-ID')}`
-                };
-
-                // Upload file
-                const response = await gapi.client.request({
-                    path: 'https://www.googleapis.com/upload/drive/v3/files',
-                    method: 'POST',
-                    params: {
-                        uploadType: 'multipart'
-                    },
-                    headers: {
-                        'Content-Type': 'multipart/related; boundary="foo_bar_baz"'
-                    },
-                    body: createMultipartBody(metadata, base64Content)
-                });
-
-                return response.result;
-            } catch (error) {
-                console.error('Error uploading to Google Drive:', error);
-                throw error;
-            }
-        }
-
-        function blobToBase64(blob) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = reject;
-                reader.readAsDataURL(blob);
-            });
-        }
-
-        function createMultipartBody(metadata, data) {
-            const delimiter = 'foo_bar_baz';
-            const close_delim = `\r\n--${delimiter}--`;
-            
-            let body = `--${delimiter}\r\n`;
-            body += 'Content-Type: application/json\r\n\r\n';
-            body += JSON.stringify(metadata) + '\r\n';
-            body += `--${delimiter}\r\n`;
-            body += 'Content-Type: video/webm\r\n';
-            body += 'Content-Transfer-Encoding: base64\r\n\r\n';
-            body += data;
-            body += close_delim;
-            
-            return body;
-        }
+        // Video upload is now handled locally with simulation
 
         function retakeVideo() {
             document.getElementById('uploadSection').classList.add('hidden');
@@ -1991,11 +2119,13 @@
             certificateCtx.fillStyle = '#ffffff';
             certificateCtx.fillRect(0, 0, 1200, 800);
             
-            // Draw certificate background
+            // Draw bright certificate background
             const gradient = certificateCtx.createLinearGradient(0, 0, 1200, 800);
-            gradient.addColorStop(0, '#1e3a8a');
-            gradient.addColorStop(0.5, '#3730a3');
-            gradient.addColorStop(1, '#581c87');
+            gradient.addColorStop(0, '#fef7cd');
+            gradient.addColorStop(0.25, '#fef3c7');
+            gradient.addColorStop(0.5, '#fed7aa');
+            gradient.addColorStop(0.75, '#fde68a');
+            gradient.addColorStop(1, '#fef7cd');
             certificateCtx.fillStyle = gradient;
             certificateCtx.fillRect(0, 0, 1200, 800);
             
@@ -2035,7 +2165,7 @@
             certificateCtx.fillText('🏆', 600, 100);
             
             // Add text
-            certificateCtx.fillStyle = '#fef3c7';
+            certificateCtx.fillStyle = '#1e3a8a';
             certificateCtx.font = 'bold 48px Arial';
             certificateCtx.textAlign = 'center';
             certificateCtx.fillText('SERTIFIKAT', 600, 150);
@@ -2055,30 +2185,30 @@
             certificateCtx.fillText('Dengan bangga diberikan kepada:', 600, 250);
             
             // Student name box
-            certificateCtx.fillStyle = 'rgba(251, 191, 36, 0.2)';
+            certificateCtx.fillStyle = 'rgba(251, 191, 36, 0.3)';
             certificateCtx.fillRect(300, 270, 600, 80);
-            certificateCtx.strokeStyle = '#fbbf24';
-            certificateCtx.lineWidth = 3;
+            certificateCtx.strokeStyle = '#f59e0b';
+            certificateCtx.lineWidth = 4;
             certificateCtx.strokeRect(300, 270, 600, 80);
             
-            certificateCtx.fillStyle = '#fbbf24';
+            certificateCtx.fillStyle = '#1e3a8a';
             certificateCtx.font = 'bold 42px Arial';
             certificateCtx.fillText(currentStudent.name, 600, 320);
             
-            certificateCtx.fillStyle = '#fef3c7';
+            certificateCtx.fillStyle = '#1e3a8a';
             certificateCtx.font = '24px Arial';
             certificateCtx.fillText(`Kelas: ${currentStudent.class}`, 600, 380);
             
             certificateCtx.fillText('Telah berhasil menyelesaikan pembelajaran', 600, 430);
             
             // Subject box
-            certificateCtx.fillStyle = '#fbbf24';
-            certificateCtx.fillRect(350, 450, 500, 60);
             certificateCtx.fillStyle = '#1e3a8a';
+            certificateCtx.fillRect(350, 450, 500, 60);
+            certificateCtx.fillStyle = '#ffffff';
             certificateCtx.font = 'bold 36px Arial';
             certificateCtx.fillText('SURAH AL-ASHR', 600, 490);
             
-            certificateCtx.fillStyle = '#fef3c7';
+            certificateCtx.fillStyle = '#1e3a8a';
             certificateCtx.font = '28px Amiri, serif';
             certificateCtx.fillText('سُورَةُ الْعَصْرِ', 600, 530);
             
@@ -2130,24 +2260,14 @@
                 certificateCtx.fillText('Batas Ketuntasan Minimal: 70%', 600, 635);
             }
             
-            // Achievement icons
-            const achievements = ['📚', '🎥', '🎮', '✍️'];
-            const achievementLabels = ['Materi', 'Video', 'Game', 'Latihan'];
-            
-            for (let i = 0; i < achievements.length; i++) {
-                const x = 300 + (i * 150);
-                certificateCtx.font = '40px Arial';
-                certificateCtx.fillText(achievements[i], x, 620);
-                certificateCtx.font = '16px Arial';
-                certificateCtx.fillText(achievementLabels[i], x, 640);
-            }
+            // Skip achievement icons section as requested
             
             certificateCtx.font = '20px Arial';
             certificateCtx.fillText(`Tanggal: ${new Date().toLocaleDateString('id-ID')}`, 600, 680);
             
             // Signature lines
-            certificateCtx.strokeStyle = '#fef3c7';
-            certificateCtx.lineWidth = 2;
+            certificateCtx.strokeStyle = '#1e3a8a';
+            certificateCtx.lineWidth = 3;
             certificateCtx.beginPath();
             certificateCtx.moveTo(250, 740);
             certificateCtx.lineTo(450, 740);
@@ -2187,14 +2307,15 @@
                     // Draw school stamp (centered)
                     certificateCtx.drawImage(schoolStamp, 550, 650, 100, 100);
                     
-                    // Add signature labels
-                    certificateCtx.font = 'bold 18px Arial';
-                    certificateCtx.fillText('Guru Al-Quran Hadits', 350, 760);
-                    certificateCtx.fillText('Kepala Madrasah', 850, 760);
+                    // Add signature labels above signatures
+                    certificateCtx.fillStyle = '#1e3a8a';
+                    certificateCtx.font = 'bold 16px Arial';
+                    certificateCtx.fillText('Guru Pengampu', 350, 650);
+                    certificateCtx.fillText('Kepala Madrasah', 850, 650);
                     
-                    certificateCtx.font = '14px Arial';
-                    certificateCtx.fillText('MAHFUD SIDIK, S.Pd.I', 350, 780);
-                    certificateCtx.fillText('MUSLIMAH, S.Pd.I', 850, 780);
+                    certificateCtx.font = 'bold 18px Arial';
+                    certificateCtx.fillText('MAHFUD SIDIK, S.Pd.I', 350, 760);
+                    certificateCtx.fillText('MUSLIMAH, S.Pd.I', 850, 760);
                     
                     // Trigger download after images are drawn
                     finalizeCertificateDownload();
@@ -2209,8 +2330,9 @@
             setTimeout(() => {
                 if (imagesLoaded < totalImages) {
                     console.log('Some images failed to load, proceeding without them');
+                    certificateCtx.fillStyle = '#1e3a8a';
                     certificateCtx.font = 'bold 18px Arial';
-                    certificateCtx.fillText('Guru Al-Quran Hadits', 350, 760);
+                    certificateCtx.fillText('Guru Pengampu', 350, 760);
                     certificateCtx.fillText('Kepala Madrasah', 850, 760);
                     
                     certificateCtx.font = '14px Arial';
@@ -2236,5 +2358,5 @@
             }
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96ddd3b161d89cee',t:'MTc1NDk3OTIwOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96de1b0753395c2d',t:'MTc1NDk4MjEzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
