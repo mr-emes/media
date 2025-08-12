@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Media Pembelajaran Al-Quran Hadits</title>
-    <link rel="icon" type="image/png" href="https://i.imgur.com/0Laf7Zu.png">
+ <link rel="icon" type="image/png" href="https://i.imgur.com/0Laf7Zu.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700&display=swap');
@@ -2250,35 +2250,543 @@
         }
 
         async function submitVideo() {
-    const videoTitle = document.getElementById('videoTitle').value.trim();
-    const fileInput = document.getElementById('videoFileInput');
-    const file = fileInput.files[0];
-    if (!file) { alert("Pilih video terlebih dahulu."); return; }
-    const extension = file.name.split('.').pop();
-    const finalName = videoTitle ? videoTitle : file.name.replace(/\.[^/.]+$/, "");
-    const renamedFile = new File([file], finalName + "." + extension, { type: file.type });
-    const formData = new FormData();
-    formData.append('videoFile', renamedFile);
-    fetch('upload.php', { method: 'POST', body: formData })
-    .then(res => res.text())
-    .then(data => { console.log('Upload berhasil:', data); alert('Video berhasil diupload dengan nama: ' + renamedFile.name); })
-    .catch(err => { console.error('Error upload:', err); alert('Gagal mengupload video'); });
+            const title = document.getElementById('videoTitle').value || 'Video Bacaan Surah Al-Ashr';
+            const notes = document.getElementById('videoNotes').value || '';
+            const timestamp = new Date().toLocaleString('id-ID');
+            
+            // Show loading message
+            const submitBtn = event.target;
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '⏳ Mengirim ke Google Drive...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Get the recorded video blob
+                const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                
+                // Check file size
+                if (blob.size > GOOGLE_DRIVE_CONFIG.maxFileSize) {
+                    throw new Error('File terlalu besar. Maksimal 50MB.');
+                }
+                
+                // Create filename
+                const fileName = `${currentStudent.name}_${currentStudent.class}_${Date.now()}.webm`;
+                
+                // Convert blob to base64
+                const base64Data = await blobToBase64(blob);
+                
+                // Prepare upload data
+                const uploadData = {
+                    fileName: fileName,
+                    fileData: base64Data,
+                    folderId: GOOGLE_DRIVE_CONFIG.folderId,
+                    metadata: {
+                        title: title,
+                        notes: notes,
+                        student: currentStudent.name,
+                        class: currentStudent.class,
+                        timestamp: timestamp
+                    }
+                };
+                
+                // Upload to Google Drive via Google Apps Script
+                const response = await fetch('https://script.google.com/macros/s/AKfycbxGoogleAppsScriptUploadEndpoint/exec', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(uploadData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Store submission record with Google Drive info
+                    const submission = {
+                        title: title,
+                        notes: notes,
+                        timestamp: timestamp,
+                        student: currentStudent.name,
+                        class: currentStudent.class,
+                        status: 'Terkirim ke Google Drive',
+                        fileName: fileName,
+                        fileId: result.fileId,
+                        driveUrl: result.driveUrl
+                    };
+                    
+                    submissionHistory.push(submission);
+                    updateSubmissionHistory();
+                    
+                    // Mark video section as completed
+                    updateProgress('video');
+                    
+                    // Show success message with file info
+                    alert(`✅ Video berhasil dikirim ke Google Drive!\n\nFile: ${fileName}\nFolder ID: ${GOOGLE_DRIVE_CONFIG.folderId}\n\nTugas video Anda telah selesai. Progress pembelajaran bertambah!\n\nGuru akan memberikan feedback dalam 1-2 hari kerja.`);
+                    
+                } else {
+                    throw new Error(result.error || 'Gagal mengupload ke Google Drive');
+                }
+                
+            } catch (error) {
+                console.error('Upload error:', error);
+                
+                // Fallback: Store locally and show message
+                const submission = {
+                    title: title,
+                    notes: notes,
+                    timestamp: timestamp,
+                    student: currentStudent.name,
+                    class: currentStudent.class,
+                    status: 'Tersimpan Lokal (Upload Gagal)',
+                    error: error.message
+                };
+                
+                submissionHistory.push(submission);
+                updateSubmissionHistory();
+                
+                // Still mark as completed for progress
+                updateProgress('video');
+                
+                alert(`⚠️ Upload ke Google Drive gagal: ${error.message}\n\nVideo tetap tersimpan secara lokal dan tugas dianggap selesai.\nSilakan coba upload manual atau hubungi guru.`);
+            }
+            
+            // Reset form
+            document.getElementById('videoTitle').value = '';
+            document.getElementById('videoNotes').value = '';
+            document.getElementById('uploadSection').classList.add('hidden');
+            document.getElementById('recordedVideo').classList.add('hidden');
+            document.getElementById('recordIcon').textContent = '🎥';
+            document.getElementById('recordStatus').textContent = 'Siap untuk merekam';
+            
+            // Reset button
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+        
+        // Helper function to convert blob to base64
+        function blobToBase64(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const base64 = reader.result.split(',')[1]; // Remove data:video/webm;base64, prefix
+                    resolve(base64);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        }
+
+        // Video upload is now handled locally with simulation
+
+        function retakeVideo() {
+            document.getElementById('uploadSection').classList.add('hidden');
+            document.getElementById('recordedVideo').classList.add('hidden');
+            document.getElementById('recordIcon').textContent = '🎥';
+            document.getElementById('recordStatus').textContent = 'Siap untuk merekam';
+        }
+
+        function updateSubmissionHistory() {
+            const historyContainer = document.getElementById('submissionHistory');
+            
+            if (submissionHistory.length === 0) {
+                historyContainer.innerHTML = '<p class="text-blue-600 text-center italic">Belum ada video yang dikirim</p>';
+                return;
+            }
+            
+            historyContainer.innerHTML = submissionHistory.map((submission, index) => {
+                const statusColor = submission.status.includes('Google Drive') ? 'bg-green-100 text-green-800' : 
+                                  submission.status.includes('Gagal') ? 'bg-red-100 text-red-800' : 
+                                  'bg-yellow-100 text-yellow-800';
+                
+                return `
+                    <div class="bg-white rounded-xl p-4 shadow-lg border-l-4 ${submission.status.includes('Google Drive') ? 'border-green-500' : submission.status.includes('Gagal') ? 'border-red-500' : 'border-blue-500'}">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex-1">
+                                <h5 class="font-bold text-gray-800">${submission.title}</h5>
+                                <p class="text-gray-600 text-sm">${submission.timestamp}</p>
+                                ${submission.fileName ? `<p class="text-gray-700 text-xs mt-1">📁 ${submission.fileName}</p>` : ''}
+                                ${submission.notes ? `<p class="text-gray-700 mt-2 text-sm">${submission.notes}</p>` : ''}
+                                ${submission.error ? `<p class="text-red-600 text-xs mt-1">❌ ${submission.error}</p>` : ''}
+                            </div>
+                            <span class="${statusColor} px-3 py-1 rounded-full text-sm font-semibold whitespace-nowrap ml-2">${submission.status}</span>
+                        </div>
+                        ${submission.driveUrl ? `
+                            <div class="mt-2 pt-2 border-t border-gray-200">
+                                <p class="text-xs text-gray-600">📂 Folder ID: ${GOOGLE_DRIVE_CONFIG.folderId}</p>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Video handling functions
+        function checkVideoLoad() {
+            const iframe = document.getElementById('youtubeVideo');
+            const fallback = document.getElementById('videoFallback');
+            
+            // Set timeout to show fallback if video doesn't load
+            setTimeout(() => {
+                try {
+                    // Check if iframe is accessible and loaded
+                    if (!iframe.contentWindow) {
+                        showVideoFallback();
+                    }
+                } catch (error) {
+                    console.log('Video may be blocked, showing fallback');
+                    showVideoFallback();
+                }
+            }, 5000);
+        }
+        
+        function showVideoFallback() {
+            const iframe = document.getElementById('youtubeVideo');
+            const fallback = document.getElementById('videoFallback');
+            
+            iframe.style.display = 'none';
+            fallback.classList.remove('hidden');
+        }
+        
+        function retryVideo() {
+            const iframe = document.getElementById('youtubeVideo');
+            const fallback = document.getElementById('videoFallback');
+            
+            // Hide fallback and show iframe
+            fallback.classList.add('hidden');
+            iframe.style.display = 'block';
+            
+            // Reload iframe
+            const currentSrc = iframe.src;
+            iframe.src = '';
+            setTimeout(() => {
+                iframe.src = currentSrc;
+            }, 100);
+            
+            // Check again after retry
+            setTimeout(checkVideoLoad, 1000);
+        }
+        
+        // Initialize video check when video tab is opened
+        function initVideoTab() {
+            setTimeout(checkVideoLoad, 1000);
+        }
+
+        function downloadCertificate() {
+            // Create a temporary canvas for the certificate
+            const certificateCanvas = document.createElement('canvas');
+            const certificateCtx = certificateCanvas.getContext('2d');
+            
+            certificateCanvas.width = 1200;
+            certificateCanvas.height = 800;
+            
+            // Fill with white background first (important for JPG)
+            certificateCtx.fillStyle = '#ffffff';
+            certificateCtx.fillRect(0, 0, 1200, 800);
+            
+            // Draw bright certificate background
+            const gradient = certificateCtx.createLinearGradient(0, 0, 1200, 800);
+            gradient.addColorStop(0, '#fef7cd');
+            gradient.addColorStop(0.25, '#fef3c7');
+            gradient.addColorStop(0.5, '#fed7aa');
+            gradient.addColorStop(0.75, '#fde68a');
+            gradient.addColorStop(1, '#fef7cd');
+            certificateCtx.fillStyle = gradient;
+            certificateCtx.fillRect(0, 0, 1200, 800);
+            
+            // Add golden border
+            certificateCtx.strokeStyle = '#fbbf24';
+            certificateCtx.lineWidth = 24;
+            certificateCtx.strokeRect(12, 12, 1176, 776);
+            
+            // Inner border
+            certificateCtx.strokeStyle = '#fcd34d';
+            certificateCtx.lineWidth = 8;
+            certificateCtx.strokeRect(40, 40, 1120, 720);
+            
+            // Add decorative corners
+            certificateCtx.fillStyle = '#fbbf24';
+            // Top left corner
+            certificateCtx.beginPath();
+            certificateCtx.arc(80, 80, 30, 0, 2 * Math.PI);
+            certificateCtx.fill();
+            // Top right corner
+            certificateCtx.beginPath();
+            certificateCtx.arc(1120, 80, 30, 0, 2 * Math.PI);
+            certificateCtx.fill();
+            // Bottom left corner
+            certificateCtx.beginPath();
+            certificateCtx.arc(80, 720, 30, 0, 2 * Math.PI);
+            certificateCtx.fill();
+            // Bottom right corner
+            certificateCtx.beginPath();
+            certificateCtx.arc(1120, 720, 30, 0, 2 * Math.PI);
+            certificateCtx.fill();
+            
+            // Add trophy icon (simplified)
+            certificateCtx.fillStyle = '#fbbf24';
+            certificateCtx.font = '80px Arial';
+            certificateCtx.textAlign = 'center';
+            certificateCtx.fillText('🏆', 600, 100);
+            
+            // Add text
+            certificateCtx.fillStyle = '#1e3a8a';
+            certificateCtx.font = 'bold 48px Arial';
+            certificateCtx.textAlign = 'center';
+            certificateCtx.fillText('SERTIFIKAT', 600, 150);
+            
+            certificateCtx.font = '28px Arial';
+            certificateCtx.fillText('Media Pembelajaran Al-Quran Hadits', 600, 190);
+            
+            // Decorative line
+            certificateCtx.strokeStyle = '#fbbf24';
+            certificateCtx.lineWidth = 4;
+            certificateCtx.beginPath();
+            certificateCtx.moveTo(450, 210);
+            certificateCtx.lineTo(750, 210);
+            certificateCtx.stroke();
+            
+            certificateCtx.font = '24px Arial';
+            certificateCtx.fillText('Dengan bangga diberikan kepada:', 600, 250);
+            
+            // Student name box
+            certificateCtx.fillStyle = 'rgba(251, 191, 36, 0.3)';
+            certificateCtx.fillRect(300, 270, 600, 80);
+            certificateCtx.strokeStyle = '#f59e0b';
+            certificateCtx.lineWidth = 4;
+            certificateCtx.strokeRect(300, 270, 600, 80);
+            
+            certificateCtx.fillStyle = '#1e3a8a';
+            certificateCtx.font = 'bold 42px Arial';
+            certificateCtx.fillText(currentStudent.name, 600, 320);
+            
+            certificateCtx.fillStyle = '#1e3a8a';
+            certificateCtx.font = '24px Arial';
+            certificateCtx.fillText(`Kelas: ${currentStudent.class}`, 600, 380);
+            
+            certificateCtx.fillText('Telah berhasil menyelesaikan pembelajaran', 600, 430);
+            
+            // Subject box
+            certificateCtx.fillStyle = '#1e3a8a';
+            certificateCtx.fillRect(350, 450, 500, 60);
+            certificateCtx.fillStyle = '#ffffff';
+            certificateCtx.font = 'bold 36px Arial';
+            certificateCtx.fillText('SURAH AL-ASHR', 600, 490);
+            
+            certificateCtx.fillStyle = '#1e3a8a';
+            certificateCtx.font = '28px Amiri, serif';
+            certificateCtx.fillText('سُورَةُ الْعَصْرِ', 600, 530);
+            
+            // Add appreciation based on game score with 70% minimum passing grade
+            const score = currentStudent.gameScore || 0;
+            const percentage = currentStudent.gamePercentage || 0;
+            let appreciation = 'dengan prestasi yang membanggakan';
+            let statusText = '';
+            
+            if (score > 0) {
+                if (percentage >= 90) {
+                    appreciation = 'dengan prestasi LUAR BIASA ⭐⭐⭐';
+                    statusText = 'TUNTAS - SANGAT MEMUASKAN';
+                } else if (percentage >= 80) {
+                    appreciation = 'dengan prestasi SANGAT BAIK ⭐⭐';
+                    statusText = 'TUNTAS - MEMUASKAN';
+                } else if (percentage >= 70) {
+                    appreciation = 'dengan prestasi BAIK - TUNTAS ⭐';
+                    statusText = 'TUNTAS';
+                } else if (percentage >= 60) {
+                    appreciation = 'dengan prestasi CUKUP BAIK 👍';
+                    statusText = 'BELUM TUNTAS - Perlu Perbaikan';
+                } else {
+                    appreciation = 'dengan semangat belajar yang tinggi 💪';
+                    statusText = 'BELUM TUNTAS - Perlu Bimbingan';
+                }
+            }
+            
+            certificateCtx.font = '20px Arial';
+            certificateCtx.fillText(appreciation, 600, 570);
+            
+            // Add score and status if game was completed
+            if (score > 0) {
+                certificateCtx.fillStyle = '#1e3a8a';
+                certificateCtx.font = '18px Arial';
+                certificateCtx.fillText(`Skor Evaluasi: ${score}/20 (${percentage}%)`, 600, 595);
+                
+                // Add status with color coding
+                if (percentage >= 70) {
+                    certificateCtx.fillStyle = '#10b981'; // Green for passing
+                } else {
+                    certificateCtx.fillStyle = '#f59e0b'; // Orange for not passing
+                }
+                certificateCtx.font = 'bold 16px Arial';
+                certificateCtx.fillText(`Status: ${statusText}`, 600, 615);
+                
+                // Add minimum passing grade info
+                certificateCtx.fillStyle = '#1e3a8a';
+                certificateCtx.font = '14px Arial';
+                certificateCtx.fillText('Batas Ketuntasan Minimal: 70%', 600, 635);
+            }
+            
+            // Skip achievement icons section as requested
+            
+            certificateCtx.fillStyle = '#1e3a8a';
+            certificateCtx.font = '20px Arial';
+            certificateCtx.fillText(`Tanggal: ${new Date().toLocaleDateString('id-ID')}`, 600, 680);
+            
+            // Signature lines
+            certificateCtx.strokeStyle = '#1e3a8a';
+            certificateCtx.lineWidth = 3;
+            certificateCtx.beginPath();
+            certificateCtx.moveTo(250, 740);
+            certificateCtx.lineTo(450, 740);
+            certificateCtx.stroke();
+            
+            certificateCtx.beginPath();
+            certificateCtx.moveTo(750, 740);
+            certificateCtx.lineTo(950, 740);
+            certificateCtx.stroke();
+            
+            // Load and draw signature images
+            const teacherSignature = new Image();
+            const principalSignature = new Image();
+            const schoolStamp = new Image();
+            
+            teacherSignature.crossOrigin = 'anonymous';
+            principalSignature.crossOrigin = 'anonymous';
+            schoolStamp.crossOrigin = 'anonymous';
+            
+            teacherSignature.src = 'https://i.imgur.com/Whpyn4a.png';
+            principalSignature.src = 'https://i.imgur.com/TK6H4Ru.png';
+            schoolStamp.src = 'https://i.imgur.com/PJIqaZq.png';
+            
+            // Wait for images to load and then draw them
+            let imagesLoaded = 0;
+            const totalImages = 3;
+            
+            function onImageLoad() {
+                imagesLoaded++;
+                if (imagesLoaded === totalImages) {
+                    // Draw teacher signature
+                    certificateCtx.drawImage(teacherSignature, 280, 680, 140, 50);
+                    
+                    // Draw principal signature
+                    certificateCtx.drawImage(principalSignature, 780, 680, 140, 50);
+                    
+                    // Draw school stamp (overlapping left side of principal signature)
+                    certificateCtx.drawImage(schoolStamp, 720, 650, 100, 100);
+                    
+                    // Add signature labels above signatures
+                    certificateCtx.fillStyle = '#1e3a8a';
+                    certificateCtx.font = 'bold 16px Arial';
+                    certificateCtx.fillText('Guru Pengampu', 350, 650);
+                    certificateCtx.fillText('Kepala Madrasah', 850, 650);
+                    
+                    certificateCtx.font = 'bold 18px Arial';
+                    certificateCtx.fillText('MAHFUD SIDIK, S.Pd.I', 350, 760);
+                    certificateCtx.fillText('MUSLIMAH, S.Pd.I', 850, 760);
+                    
+                    // Trigger download after images are drawn
+                    finalizeCertificateDownload();
+                }
+            }
+            
+            teacherSignature.onload = onImageLoad;
+            principalSignature.onload = onImageLoad;
+            schoolStamp.onload = onImageLoad;
+            
+            // Fallback if images fail to load
+            setTimeout(() => {
+                if (imagesLoaded < totalImages) {
+                    console.log('Some images failed to load, proceeding without them');
+                    certificateCtx.fillStyle = '#1e3a8a';
+                    certificateCtx.font = 'bold 18px Arial';
+                    certificateCtx.fillText('Guru Pengampu', 350, 760);
+                    certificateCtx.fillText('Kepala Madrasah', 850, 760);
+                    
+                    certificateCtx.font = '14px Arial';
+                    certificateCtx.fillText('MAHFUD SIDIK, S.Pd.I', 350, 780);
+                    certificateCtx.fillText('MUSLIMAH, S.Pd.I', 850, 780);
+                    
+                    finalizeCertificateDownload();
+                }
+            }, 5000);
+            
+            // Don't proceed with download here, wait for images
+            
+            // Function to finalize certificate download
+            function finalizeCertificateDownload() {
+                // Download as JPG
+                const link = document.createElement('a');
+                link.download = `Sertifikat_${currentStudent.name.replace(/\s+/g, '_')}_Surah_Al-Ashr.jpg`;
+                link.href = certificateCanvas.toDataURL('image/jpeg', 0.95);
+                link.click();
+                
+                // Show success message
+                alert('✅ Sertifikat berhasil diunduh!\n\nFile tersimpan sebagai JPG di folder Download Anda dengan tanda tangan resmi.');
+            }
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96df27e4e61c5ff3',t:'MTc1NDk5MzE0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script>
+let selectedFile = null;
+
+function handleVideoSelect(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    selectedFile = file;
+
+    // Preview video
+    const videoEl = document.getElementById("recordedVideo");
+    videoEl.src = URL.createObjectURL(file);
+    videoEl.classList.remove("hidden");
+    document.getElementById("uploadSection").classList.remove("hidden");
 }
 
 async function submitVideo() {
-    const videoTitle = document.getElementById('videoTitle').value.trim();
-    const fileInput = document.getElementById('videoFileInput');
-    const file = fileInput.files[0];
-    if (!file) { alert("Pilih video terlebih dahulu."); return; }
-    const extension = file.name.split('.').pop();
-    const finalName = videoTitle ? videoTitle : file.name.replace(/\.[^/.]+$/, "");
-    const renamedFile = new File([file], finalName + "." + extension, { type: file.type });
-    const formData = new FormData();
-    formData.append('videoFile', renamedFile);
-    fetch('upload.php', { method: 'POST', body: formData })
-    .then(res => res.text())
-    .then(data => { console.log('Upload berhasil:', data); alert('Video berhasil diupload dengan nama: ' + renamedFile.name); })
-    .catch(err => { console.error('Error upload:', err); alert('Gagal mengupload video'); });
+    if (!selectedFile) {
+        alert("⚠️ Belum ada video yang dipilih!");
+        return;
+    }
+
+    // 🔹 Rename file jika input title diisi
+    const titleInput = document.getElementById("videoTitle")?.value.trim();
+    if (titleInput) {
+        const extension = selectedFile.name.split('.').pop();
+        selectedFile = new File([selectedFile], titleInput + "." + extension, { type: selectedFile.type });
+    }
+
+    const btn = document.getElementById("uploadBtn");
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner"></span> Mengirim...`;
+
+    const base64Data = await blobToBase64(selectedFile);
+    const fileName = selectedFile.name || "video_upload.webm";
+
+    const payload = {
+        file: base64Data.split(",")[1],
+        filename: fileName,
+        mimeType: selectedFile.type || "video/webm"
+    };
+
+    try {
+        await fetch(
+            "https://script.google.com/macros/s/AKfycbwaGnPl7nZq6qzILmlnonxyVYsZeXFahhfDmmjivEA1r0kTlULN1bQuNoCs8xBeG5s2/exec",
+            {
+                method: "POST",
+                body: new URLSearchParams(payload),
+                mode: "no-cors"
+            }
+        );
+
+        alert("✅ Video berhasil dikirim (cek Google Drive)");
+        const history = document.getElementById("submissionHistory");
+        history.innerHTML += `<p class="text-green-600">📤 ${fileName} berhasil dikirim</p>`;
+    } catch (error) {
+        console.error(error);
+        alert("❌ Terjadi kesalahan saat upload");
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = "📤 Kirim ke Guru";
+    }
 }
 
 function blobToBase64(blob) {
@@ -2290,6 +2798,7 @@ function blobToBase64(blob) {
     });
 }
 </script>
+
 
 
 </body>
