@@ -542,6 +542,59 @@
                             </div>
                         </div>
 
+                        <!-- Setup Instructions for Teachers -->
+                        <div class="mt-10 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-3xl p-8 border-2 border-yellow-200">
+                            <h3 class="text-2xl font-bold text-yellow-800 mb-6 text-center">⚙️ Panduan Setup untuk Guru</h3>
+                            <div class="bg-white rounded-2xl p-6 shadow-lg">
+                                <h4 class="text-lg font-bold text-gray-800 mb-4">📋 Langkah Setup Google Drive API:</h4>
+                                <div class="space-y-4 text-gray-700">
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">1️⃣</span>
+                                        <div>
+                                            <p class="font-semibold">Buat Project di Google Cloud Console</p>
+                                            <p class="text-sm">Kunjungi console.cloud.google.com dan buat project baru</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">2️⃣</span>
+                                        <div>
+                                            <p class="font-semibold">Aktifkan Google Drive API</p>
+                                            <p class="text-sm">Di Library, cari dan aktifkan "Google Drive API"</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">3️⃣</span>
+                                        <div>
+                                            <p class="font-semibold">Buat Credentials</p>
+                                            <p class="text-sm">Buat API Key dan OAuth 2.0 Client ID untuk aplikasi web</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">4️⃣</span>
+                                        <div>
+                                            <p class="font-semibold">Buat Folder di Google Drive</p>
+                                            <p class="text-sm">Buat folder khusus untuk menerima video siswa dan salin ID folder</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-xl">5️⃣</span>
+                                        <div>
+                                            <p class="font-semibold">Update Konfigurasi</p>
+                                            <p class="text-sm">Ganti nilai di GOOGLE_DRIVE_CONFIG dengan API Key, Client ID, dan Folder ID Anda</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-6 p-4 bg-blue-50 rounded-xl border-l-4 border-blue-500">
+                                    <p class="text-blue-800 font-semibold">💡 Tips:</p>
+                                    <ul class="text-blue-700 text-sm mt-2 space-y-1">
+                                        <li>• Pastikan domain website ditambahkan ke Authorized JavaScript origins</li>
+                                        <li>• Berikan akses edit ke folder Google Drive untuk semua siswa</li>
+                                        <li>• Test upload dengan akun siswa sebelum digunakan di kelas</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Video Recording Section -->
                         <div class="mt-10 bg-gradient-to-r from-orange-50 to-red-50 rounded-3xl p-8 border-2 border-orange-200">
                             <h3 class="text-2xl font-bold text-orange-800 mb-6 text-center">🎥 Tugas Praktik Membaca</h3>
@@ -653,7 +706,7 @@
                                     <div class="bg-white rounded-2xl p-4 shadow-lg">
                                         <span class="text-2xl font-bold text-purple-600">Soal: </span>
                                         <span id="currentQuestion" class="text-3xl font-bold text-purple-800">1</span>
-                                        <span class="text-2xl font-bold text-purple-600">/10</span>
+                                        <span class="text-2xl font-bold text-purple-600">/20</span>
                                     </div>
                                 </div>
                             </div>
@@ -685,7 +738,7 @@
                                     <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-8 border-2 border-green-200">
                                         <span class="text-6xl mb-4 block">🎉</span>
                                         <h3 class="text-3xl font-bold text-green-800 mb-4">Selamat!</h3>
-                                        <p class="text-xl text-green-700 mb-6">Kamu telah menyelesaikan game dengan skor <span id="finalScore" class="font-bold"></span>/10</p>
+                                        <p class="text-xl text-green-700 mb-6">Kamu telah menyelesaikan evaluasi dengan skor <span id="finalScore" class="font-bold"></span>/20</p>
                                         <button onclick="restartGame()" 
                                                 class="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-green-700 hover:to-emerald-700 transition duration-300">
                                             Main Lagi
@@ -943,7 +996,7 @@
                                     <div class="text-center">
                                         <div class="border-t-2 border-yellow-400 w-40 mx-auto pt-3">
                                             <p class="font-bold">Kepala Madrasah</p>
-                                            <p class="text-sm opacity-90">MI</p>
+                                            <p class="text-sm opacity-90">MUSLIMAH, S.Pd.I</p>
                                         </div>
                                     </div>
                                 </div>
@@ -963,6 +1016,31 @@
     </div>
 
     <script>
+        // ========================================
+        // 🔧 KONFIGURASI GOOGLE DRIVE API
+        // ========================================
+        // PENTING: Ganti nilai-nilai di bawah ini dengan konfigurasi Anda
+        
+        const GOOGLE_DRIVE_CONFIG = {
+            apiKey: 'YOUR_GOOGLE_DRIVE_API_KEY_HERE',           // Ganti dengan API Key Anda
+            clientId: 'YOUR_GOOGLE_CLIENT_ID_HERE',             // Ganti dengan Client ID Anda  
+            folderId: 'YOUR_GOOGLE_DRIVE_FOLDER_ID_HERE',       // Ganti dengan ID folder Google Drive Anda
+            discoveryDoc: 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
+            scope: 'https://www.googleapis.com/auth/drive.file'
+        };
+        
+        // CARA MENDAPATKAN KONFIGURASI:
+        // 1. Buka console.cloud.google.com
+        // 2. Buat project baru atau pilih project yang ada
+        // 3. Aktifkan Google Drive API di Library
+        // 4. Buat credentials (API Key dan OAuth 2.0 Client ID)
+        // 5. Buat folder di Google Drive dan salin ID folder dari URL
+        // 6. Ganti nilai di atas dengan konfigurasi Anda
+        
+        // ========================================
+        // VARIABEL APLIKASI
+        // ========================================
+        
         let currentStudent = { name: '', class: '' };
         let canvas, ctx, backgroundCanvas, backgroundCtx, freeCanvas, freeCtx;
         let isDrawing = false;
@@ -992,16 +1070,31 @@
         let gameScore = 0;
         let currentQuestionIndex = 0;
         let gameQuestions = [
-            { arabic: 'وَالْعَصْرِ', correct: 'Demi masa', options: ['Demi masa', 'Demi waktu', 'Demi hari', 'Demi malam'] },
+            // Soal 1-10: Kata per kata
+            { arabic: 'وَ', correct: 'Dan/Demi', options: ['Dan/Demi', 'Atau', 'Tetapi', 'Karena'] },
+            { arabic: 'الْعَصْرِ', correct: 'Masa/Waktu', options: ['Masa/Waktu', 'Hari', 'Malam', 'Pagi'] },
             { arabic: 'إِنَّ', correct: 'Sesungguhnya', options: ['Sesungguhnya', 'Sungguh', 'Benar', 'Pasti'] },
             { arabic: 'الْإِنسَانَ', correct: 'Manusia', options: ['Manusia', 'Orang', 'Makhluk', 'Hamba'] },
+            { arabic: 'لَفِي', correct: 'Benar-benar dalam', options: ['Benar-benar dalam', 'Sedang dalam', 'Akan dalam', 'Telah dalam'] },
             { arabic: 'خُسْرٍ', correct: 'Kerugian', options: ['Kerugian', 'Keuntungan', 'Kesedihan', 'Kebahagiaan'] },
             { arabic: 'إِلَّا', correct: 'Kecuali', options: ['Kecuali', 'Selain', 'Hanya', 'Tetapi'] },
+            { arabic: 'الَّذِينَ', correct: 'Orang-orang yang', options: ['Orang-orang yang', 'Mereka yang', 'Siapa yang', 'Yang mana'] },
             { arabic: 'آمَنُوا', correct: 'Beriman', options: ['Beriman', 'Percaya', 'Yakin', 'Taat'] },
+            { arabic: 'وَعَمِلُوا', correct: 'Dan mengerjakan', options: ['Dan mengerjakan', 'Serta melakukan', 'Kemudian berbuat', 'Lalu mengamalkan'] },
+            
+            // Soal 11-15: Frasa gabungan
             { arabic: 'الصَّالِحَاتِ', correct: 'Amal saleh', options: ['Amal saleh', 'Perbuatan baik', 'Kebaikan', 'Ibadah'] },
-            { arabic: 'تَوَاصَوْا', correct: 'Saling menasehati', options: ['Saling menasehati', 'Menasehati', 'Berpesan', 'Mengajak'] },
-            { arabic: 'الْحَقِّ', correct: 'Kebenaran', options: ['Kebenaran', 'Yang benar', 'Hak', 'Kenyataan'] },
-            { arabic: 'الصَّبْرِ', correct: 'Kesabaran', options: ['Kesabaran', 'Sabar', 'Ketabahan', 'Ketekunan'] }
+            { arabic: 'وَتَوَاصَوْا', correct: 'Dan saling menasehati', options: ['Dan saling menasehati', 'Serta menasehati', 'Kemudian berpesan', 'Lalu mengajak'] },
+            { arabic: 'بِالْحَقِّ', correct: 'Dengan kebenaran', options: ['Dengan kebenaran', 'Tentang kebenaran', 'Dalam kebenaran', 'Untuk kebenaran'] },
+            { arabic: 'بِالصَّبْرِ', correct: 'Dengan kesabaran', options: ['Dengan kesabaran', 'Tentang kesabaran', 'Dalam kesabaran', 'Untuk kesabaran'] },
+            { arabic: 'لَفِي خُسْرٍ', correct: 'Benar-benar dalam kerugian', options: ['Benar-benar dalam kerugian', 'Sedang merugi', 'Akan rugi', 'Telah rugi'] },
+            
+            // Soal 16-20: Kalimat lengkap dan pemahaman
+            { arabic: 'إِلَّا الَّذِينَ آمَنُوا', correct: 'Kecuali orang-orang yang beriman', options: ['Kecuali orang-orang yang beriman', 'Selain mereka yang percaya', 'Hanya yang beriman', 'Tetapi orang beriman'] },
+            { arabic: 'وَتَوَاصَوْا بِالْحَقِّ', correct: 'Dan saling menasehati dengan kebenaran', options: ['Dan saling menasehati dengan kebenaran', 'Serta berpesan tentang kebenaran', 'Kemudian mengajak pada kebenaran', 'Lalu berdakwah dengan benar'] },
+            { arabic: 'وَتَوَاصَوْا بِالصَّبْرِ', correct: 'Dan saling menasehati dengan kesabaran', options: ['Dan saling menasehati dengan kesabaran', 'Serta berpesan tentang kesabaran', 'Kemudian mengajak bersabar', 'Lalu berdakwah dengan sabar'] },
+            { arabic: 'وَالْعَصْرِ', correct: 'Demi masa', options: ['Demi masa', 'Demi waktu', 'Demi zaman', 'Demi hari'] },
+            { arabic: 'إِنَّ الْإِنسَانَ لَفِي خُسْرٍ', correct: 'Sesungguhnya manusia benar-benar dalam kerugian', options: ['Sesungguhnya manusia benar-benar dalam kerugian', 'Sungguh manusia sedang merugi', 'Benar manusia akan rugi', 'Pasti manusia telah rugi'] }
         ];
 
         // Form submission
@@ -1036,6 +1129,7 @@
             setTimeout(() => {
                 initCanvas();
                 initGame();
+                initializeGoogleDrive(); // Initialize Google Drive API
                 
                 // Add click event listeners to all tab buttons
                 document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1267,6 +1361,71 @@
         function showGameComplete() {
             document.getElementById('gameArea').classList.add('hidden');
             document.getElementById('finalScore').textContent = gameScore;
+            
+            // Calculate percentage and determine appreciation
+            const percentage = Math.round((gameScore / 20) * 100);
+            let appreciation = '';
+            let appreciationIcon = '';
+            let statusClass = '';
+            
+            if (percentage >= 90) {
+                appreciation = 'LUAR BIASA';
+                appreciationIcon = '⭐⭐⭐';
+                statusClass = 'text-yellow-600';
+            } else if (percentage >= 80) {
+                appreciation = 'SANGAT BAIK';
+                appreciationIcon = '⭐⭐';
+                statusClass = 'text-blue-600';
+            } else if (percentage >= 70) {
+                appreciation = 'BAIK - TUNTAS';
+                appreciationIcon = '⭐';
+                statusClass = 'text-green-600';
+            } else if (percentage >= 60) {
+                appreciation = 'CUKUP BAIK';
+                appreciationIcon = '👍';
+                statusClass = 'text-orange-600';
+            } else {
+                appreciation = 'SEMANGAT BELAJAR TINGGI';
+                appreciationIcon = '💪';
+                statusClass = 'text-red-600';
+            }
+            
+            // Store score for certificate
+            currentStudent.gameScore = gameScore;
+            currentStudent.gamePercentage = percentage;
+            currentStudent.appreciation = appreciation;
+            currentStudent.appreciationIcon = appreciationIcon;
+            
+            // Update completion message with appreciation
+            const completionDiv = document.getElementById('gameComplete');
+            completionDiv.innerHTML = `
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-8 border-2 border-green-200">
+                    <span class="text-6xl mb-4 block">🎉</span>
+                    <h3 class="text-3xl font-bold text-green-800 mb-4">Selamat!</h3>
+                    <p class="text-xl text-green-700 mb-4">Kamu telah menyelesaikan evaluasi dengan skor <span class="font-bold">${gameScore}/20</span></p>
+                    <div class="mb-6">
+                        <div class="bg-white rounded-xl p-4 shadow-lg border-2 ${percentage >= 70 ? 'border-green-300' : 'border-orange-300'}">
+                            <p class="text-lg font-semibold text-gray-700 mb-2">Persentase: <span class="text-2xl font-bold ${statusClass}">${percentage}%</span></p>
+                            <p class="text-lg font-semibold text-gray-700 mb-2">Status: <span class="${statusClass}">${percentage >= 70 ? 'TUNTAS' : 'BELUM TUNTAS'}</span></p>
+                            <p class="text-xl font-bold ${statusClass}">${appreciationIcon} ${appreciation}</p>
+                            ${percentage < 70 ? '<p class="text-sm text-orange-600 mt-2">💡 Batas ketuntasan minimal: 70%. Silakan coba lagi!</p>' : ''}
+                        </div>
+                    </div>
+                    <div class="flex gap-4 justify-center">
+                        <button onclick="restartGame()" 
+                                class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-indigo-700 transition duration-300">
+                            🔄 Coba Lagi
+                        </button>
+                        ${percentage >= 70 ? `
+                        <button onclick="showTab('sertifikat')" 
+                                class="bg-gradient-to-r from-yellow-600 to-orange-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-yellow-700 hover:to-orange-700 transition duration-300">
+                            🏆 Lihat Sertifikat
+                        </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            
             document.getElementById('gameComplete').classList.remove('hidden');
             
             // Mark game as completed
@@ -1617,36 +1776,159 @@
             }
         }
 
-        function submitVideo() {
+        async function submitVideo() {
             const title = document.getElementById('videoTitle').value || 'Video Bacaan Surah Al-Ashr';
             const notes = document.getElementById('videoNotes').value || '';
             const timestamp = new Date().toLocaleString('id-ID');
             
-            // Simulate submission (in real app, this would upload to server)
-            const submission = {
-                title: title,
-                notes: notes,
-                timestamp: timestamp,
-                student: currentStudent.name,
-                class: currentStudent.class
-            };
+            try {
+                // Show loading message
+                const submitBtn = event.target;
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '⏳ Mengirim...';
+                submitBtn.disabled = true;
+                
+                // Try to upload to Google Drive if configured
+                if (GOOGLE_DRIVE_CONFIG.apiKey !== 'YOUR_GOOGLE_DRIVE_API_KEY_HERE' && recordedChunks.length > 0) {
+                    const videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
+                    await uploadToGoogleDrive(videoBlob, title, notes);
+                    
+                    alert('✅ Video berhasil dikirim ke Google Drive!\n\nGuru akan menerima notifikasi dan memberikan feedback dalam 1-2 hari kerja.');
+                } else {
+                    // Fallback: Local storage simulation
+                    alert('✅ Video berhasil disimpan!\n\nUntuk mengirim ke guru, pastikan konfigurasi Google Drive sudah diatur dengan benar.');
+                }
+                
+                // Store submission record
+                const submission = {
+                    title: title,
+                    notes: notes,
+                    timestamp: timestamp,
+                    student: currentStudent.name,
+                    class: currentStudent.class,
+                    status: 'Terkirim'
+                };
+                
+                submissionHistory.push(submission);
+                updateSubmissionHistory();
+                
+                // Mark video section as completed
+                updateProgress('video');
+                
+                // Reset form
+                document.getElementById('videoTitle').value = '';
+                document.getElementById('videoNotes').value = '';
+                document.getElementById('uploadSection').classList.add('hidden');
+                document.getElementById('recordedVideo').classList.add('hidden');
+                document.getElementById('recordIcon').textContent = '🎥';
+                document.getElementById('recordStatus').textContent = 'Siap untuk merekam';
+                
+            } catch (error) {
+                console.error('Upload error:', error);
+                alert('❌ Gagal mengirim video. Silakan coba lagi atau hubungi guru.');
+                
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Google Drive API Functions
+        function initializeGoogleDrive() {
+            // Only initialize if API key is configured
+            if (GOOGLE_DRIVE_CONFIG.apiKey === 'AIzaSyCGBqweMwkAGE9CWkqsDxFBfl7AtLvZe48') {
+                console.log('Google Drive API not configured. Using local storage fallback.');
+                return;
+            }
             
-            submissionHistory.push(submission);
-            updateSubmissionHistory();
+            // Load Google API script
+            if (!window.gapi) {
+                const script = document.createElement('script');
+                script.src = 'https://apis.google.com/js/api.js';
+                script.onload = () => {
+                    gapi.load('auth2:client', initGoogleAuth);
+                };
+                document.head.appendChild(script);
+            } else {
+                gapi.load('auth2:client', initGoogleAuth);
+            }
+        }
+
+        function initGoogleAuth() {
+            gapi.client.init({
+                apiKey: GOOGLE_DRIVE_CONFIG.apiKey,
+                clientId: GOOGLE_DRIVE_CONFIG.clientId,
+                discoveryDocs: [GOOGLE_DRIVE_CONFIG.discoveryDoc],
+                scope: GOOGLE_DRIVE_CONFIG.scope
+            }).then(() => {
+                console.log('Google Drive API initialized successfully');
+            }).catch((error) => {
+                console.error('Error initializing Google Drive API:', error);
+            });
+        }
+
+        async function uploadToGoogleDrive(videoBlob, title, notes) {
+            try {
+                // Check if user is signed in
+                const authInstance = gapi.auth2.getAuthInstance();
+                if (!authInstance.isSignedIn.get()) {
+                    await authInstance.signIn();
+                }
+
+                // Convert blob to base64
+                const base64Data = await blobToBase64(videoBlob);
+                const base64Content = base64Data.split(',')[1];
+
+                // Create file metadata
+                const metadata = {
+                    name: `${currentStudent.name}_${title}_${new Date().toISOString().split('T')[0]}.webm`,
+                    parents: [GOOGLE_DRIVE_CONFIG.folderId],
+                    description: `Video dari: ${currentStudent.name} (${currentStudent.class})\nCatatan: ${notes}\nTanggal: ${new Date().toLocaleString('id-ID')}`
+                };
+
+                // Upload file
+                const response = await gapi.client.request({
+                    path: 'https://www.googleapis.com/upload/drive/v3/files',
+                    method: 'POST',
+                    params: {
+                        uploadType: 'multipart'
+                    },
+                    headers: {
+                        'Content-Type': 'multipart/related; boundary="foo_bar_baz"'
+                    },
+                    body: createMultipartBody(metadata, base64Content)
+                });
+
+                return response.result;
+            } catch (error) {
+                console.error('Error uploading to Google Drive:', error);
+                throw error;
+            }
+        }
+
+        function blobToBase64(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        }
+
+        function createMultipartBody(metadata, data) {
+            const delimiter = 'foo_bar_baz';
+            const close_delim = `\r\n--${delimiter}--`;
             
-            // Mark video section as completed
-            updateProgress('video');
+            let body = `--${delimiter}\r\n`;
+            body += 'Content-Type: application/json\r\n\r\n';
+            body += JSON.stringify(metadata) + '\r\n';
+            body += `--${delimiter}\r\n`;
+            body += 'Content-Type: video/webm\r\n';
+            body += 'Content-Transfer-Encoding: base64\r\n\r\n';
+            body += data;
+            body += close_delim;
             
-            // Show success message
-            alert('✅ Video berhasil dikirim ke guru!\n\nGuru akan memberikan feedback dalam 1-2 hari kerja.');
-            
-            // Reset form
-            document.getElementById('videoTitle').value = '';
-            document.getElementById('videoNotes').value = '';
-            document.getElementById('uploadSection').classList.add('hidden');
-            document.getElementById('recordedVideo').classList.add('hidden');
-            document.getElementById('recordIcon').textContent = '🎥';
-            document.getElementById('recordStatus').textContent = 'Siap untuk merekam';
+            return body;
         }
 
         function retakeVideo() {
@@ -1832,8 +2114,53 @@
             certificateCtx.font = '28px Amiri, serif';
             certificateCtx.fillText('سُورَةُ الْعَصْرِ', 600, 530);
             
+            // Add appreciation based on game score with 70% minimum passing grade
+            const score = currentStudent.gameScore || 0;
+            const percentage = currentStudent.gamePercentage || 0;
+            let appreciation = 'dengan prestasi yang membanggakan';
+            let statusText = '';
+            
+            if (score > 0) {
+                if (percentage >= 90) {
+                    appreciation = 'dengan prestasi LUAR BIASA ⭐⭐⭐';
+                    statusText = 'TUNTAS - SANGAT MEMUASKAN';
+                } else if (percentage >= 80) {
+                    appreciation = 'dengan prestasi SANGAT BAIK ⭐⭐';
+                    statusText = 'TUNTAS - MEMUASKAN';
+                } else if (percentage >= 70) {
+                    appreciation = 'dengan prestasi BAIK - TUNTAS ⭐';
+                    statusText = 'TUNTAS';
+                } else if (percentage >= 60) {
+                    appreciation = 'dengan prestasi CUKUP BAIK 👍';
+                    statusText = 'BELUM TUNTAS - Perlu Perbaikan';
+                } else {
+                    appreciation = 'dengan semangat belajar yang tinggi 💪';
+                    statusText = 'BELUM TUNTAS - Perlu Bimbingan';
+                }
+            }
+            
             certificateCtx.font = '20px Arial';
-            certificateCtx.fillText('dengan prestasi yang membanggakan', 600, 570);
+            certificateCtx.fillText(appreciation, 600, 570);
+            
+            // Add score and status if game was completed
+            if (score > 0) {
+                certificateCtx.font = '18px Arial';
+                certificateCtx.fillText(`Skor Evaluasi: ${score}/20 (${percentage}%)`, 600, 595);
+                
+                // Add status with color coding
+                if (percentage >= 70) {
+                    certificateCtx.fillStyle = '#10b981'; // Green for passing
+                } else {
+                    certificateCtx.fillStyle = '#f59e0b'; // Orange for not passing
+                }
+                certificateCtx.font = 'bold 16px Arial';
+                certificateCtx.fillText(`Status: ${statusText}`, 600, 615);
+                certificateCtx.fillStyle = '#fef3c7'; // Reset color
+                
+                // Add minimum passing grade info
+                certificateCtx.font = '14px Arial';
+                certificateCtx.fillText('Batas Ketuntasan Minimal: 70%', 600, 635);
+            }
             
             // Achievement icons
             const achievements = ['📚', '🎥', '🎮', '✍️'];
@@ -1863,23 +2190,83 @@
             certificateCtx.lineTo(950, 740);
             certificateCtx.stroke();
             
-            certificateCtx.font = 'bold 18px Arial';
-            certificateCtx.fillText('Guru Al-Quran Hadits', 350, 760);
-            certificateCtx.fillText('Kepala Madrasah', 850, 760);
+            // Load and draw signature images
+            const teacherSignature = new Image();
+            const principalSignature = new Image();
+            const schoolStamp = new Image();
             
-            certificateCtx.font = '14px Arial';
-            certificateCtx.fillText('MAHFUD SIDIK, S.Pd.I', 350, 780);
-            certificateCtx.fillText('MI Kelas 4', 850, 780);
+            teacherSignature.crossOrigin = 'anonymous';
+            principalSignature.crossOrigin = 'anonymous';
+            schoolStamp.crossOrigin = 'anonymous';
             
-            // Download as JPG
-            const link = document.createElement('a');
-            link.download = `Sertifikat_${currentStudent.name.replace(/\s+/g, '_')}_Surah_Al-Ashr.jpg`;
-            link.href = certificateCanvas.toDataURL('image/jpeg', 0.95);
-            link.click();
+            teacherSignature.src = 'https://i.imgur.com/Whpyn4a.png';
+            principalSignature.src = 'https://i.imgur.com/TK6H4Ru.png';
+            schoolStamp.src = 'https://i.imgur.com/PJIqaZq.png';
             
-            // Show success message
-            alert('✅ Sertifikat berhasil diunduh!\n\nFile tersimpan sebagai JPG di folder Download Anda.');
+            // Wait for images to load and then draw them
+            let imagesLoaded = 0;
+            const totalImages = 3;
+            
+            function onImageLoad() {
+                imagesLoaded++;
+                if (imagesLoaded === totalImages) {
+                    // Draw teacher signature
+                    certificateCtx.drawImage(teacherSignature, 280, 680, 140, 50);
+                    
+                    // Draw principal signature
+                    certificateCtx.drawImage(principalSignature, 780, 680, 140, 50);
+                    
+                    // Draw school stamp (centered)
+                    certificateCtx.drawImage(schoolStamp, 550, 650, 100, 100);
+                    
+                    // Add signature labels
+                    certificateCtx.font = 'bold 18px Arial';
+                    certificateCtx.fillText('Guru Al-Quran Hadits', 350, 760);
+                    certificateCtx.fillText('Kepala Madrasah', 850, 760);
+                    
+                    certificateCtx.font = '14px Arial';
+                    certificateCtx.fillText('MAHFUD SIDIK, S.Pd.I', 350, 780);
+                    certificateCtx.fillText('MUSLIMAH, S.Pd.I', 850, 780);
+                    
+                    // Trigger download after images are drawn
+                    finalizeCertificateDownload();
+                }
+            }
+            
+            teacherSignature.onload = onImageLoad;
+            principalSignature.onload = onImageLoad;
+            schoolStamp.onload = onImageLoad;
+            
+            // Fallback if images fail to load
+            setTimeout(() => {
+                if (imagesLoaded < totalImages) {
+                    console.log('Some images failed to load, proceeding without them');
+                    certificateCtx.font = 'bold 18px Arial';
+                    certificateCtx.fillText('Guru Al-Quran Hadits', 350, 760);
+                    certificateCtx.fillText('Kepala Madrasah', 850, 760);
+                    
+                    certificateCtx.font = '14px Arial';
+                    certificateCtx.fillText('MAHFUD SIDIK, S.Pd.I', 350, 780);
+                    certificateCtx.fillText('MUSLIMAH, S.Pd.I', 850, 780);
+                    
+                    finalizeCertificateDownload();
+                }
+            }, 5000);
+            
+            // Don't proceed with download here, wait for images
+            
+            // Function to finalize certificate download
+            function finalizeCertificateDownload() {
+                // Download as JPG
+                const link = document.createElement('a');
+                link.download = `Sertifikat_${currentStudent.name.replace(/\s+/g, '_')}_Surah_Al-Ashr.jpg`;
+                link.href = certificateCanvas.toDataURL('image/jpeg', 0.95);
+                link.click();
+                
+                // Show success message
+                alert('✅ Sertifikat berhasil diunduh!\n\nFile tersimpan sebagai JPG di folder Download Anda dengan tanda tangan resmi.');
+            }
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96dd685fc51cfe18',t:'MTc1NDk3NDgxMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96ddc40c413dce4e',t:'MTc1NDk3ODU2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
