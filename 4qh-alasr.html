@@ -1261,20 +1261,12 @@
         // 🔧 KONFIGURASI GOOGLE DRIVE API
         // ========================================
         
-        const GOOGLE_DRIVE_CONFIG = {
-            folderId: '1C-qp2Jm48DmewY9n6xItlQXU_Azmuozz',       // ID folder Google Drive untuk video
-            uploadUrl: 'https://script.google.com/macros/s/AKfycbzq5tq_AWbaxNQtXBWI05EDDNx5DUbaMwfWCdMtKAAQZV2GnK_YYk1i1JedkK-_BF1q/exec', // URL Google Apps Script
-            maxFileSize: 50 * 1024 * 1024, // 50MB limit
-            allowedTypes: ['video/webm', 'video/mp4', 'video/mov']
-        };
-        
-        // CARA MENDAPATKAN KONFIGURASI:
-        // 1. Buka console.cloud.google.com
-        // 2. Buat project baru atau pilih project yang ada
-        // 3. Aktifkan Google Drive API di Library
-        // 4. Buat credentials (API Key dan OAuth 2.0 Client ID)
-        // 5. Buat folder di Google Drive dan salin ID folder dari URL
-        // 6. Ganti nilai di atas dengan konfigurasi Anda
+      // Konfigurasi upload ke Google Drive via Apps Script (tanpa API key / OAuth)
+const GOOGLE_DRIVE_CONFIG = {
+    folderId: '1C-qp2Jm48DmewY9n6xItlQXU_Azmuozz', // ID folder Drive kamu
+    uploadUrl: 'https://script.google.com/macros/s/AKfycbzq5tq_AWbaxNQtXBWI05EDDNx5DUbaMwfWCdMtKAAQZV2GnK_YYk1i1JedkK-_BF1q/exec'  // URL Web App dari Apps Script
+};
+
         
         // ========================================
         // VARIABEL APLIKASI
@@ -2155,52 +2147,50 @@
         }
 
         // Video recording functions
-        async function startRecording() {
-            try {
-                stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: true, 
-                    audio: true 
-                });
-                
-                recordedChunks = [];
-                mediaRecorder = new MediaRecorder(stream);
-                
-                mediaRecorder.ondataavailable = function(event) {
-                    if (event.data.size > 0) {
-                        recordedChunks.push(event.data);
-                    }
-                };
-                
-                mediaRecorder.onstop = function() {
-                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
-                    const videoURL = URL.createObjectURL(blob);
-                    const videoElement = document.getElementById('recordedVideo');
-                    videoElement.src = videoURL;
-                    videoElement.classList.remove('hidden');
-                    document.getElementById('uploadSection').classList.remove('hidden');
-                };
-                
-                mediaRecorder.start();
-                
-                // Update UI
-                document.getElementById('startBtn').disabled = true;
-                document.getElementById('startBtn').className = 'bg-gradient-to-r from-gray-400 to-gray-500 text-white px-8 py-4 rounded-xl font-bold text-lg transition duration-300 shadow-lg';
-                document.getElementById('stopBtn').disabled = false;
-                document.getElementById('stopBtn').className = 'bg-gradient-to-r from-red-500 to-red-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-red-600 hover:to-red-700 transition duration-300 shadow-lg';
-                
-                document.getElementById('recordIcon').textContent = '🔴';
-                document.getElementById('recordStatus').textContent = 'Sedang merekam...';
-                document.getElementById('recordingTimer').classList.remove('hidden');
-                
-                // Start timer
-                recordingStartTime = Date.now();
-                recordingTimer = setInterval(updateTimer, 1000);
-                
-            } catch (error) {
-                alert('Tidak dapat mengakses kamera/mikrofon. Pastikan Anda memberikan izin akses.');
-                console.error('Error accessing media devices:', error);
+function startRecording() {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(function (mediaStream) {
+            stream = mediaStream;
+
+            // Coba format MP4
+            let options = { mimeType: 'video/mp4;codecs=h264,aac' };
+            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                // Fallback WebM
+                options = { mimeType: 'video/webm;codecs=vp9,opus' };
             }
-        }
+
+            recordedChunks = [];
+            mediaRecorder = new MediaRecorder(stream, options);
+
+            mediaRecorder.ondataavailable = function (e) {
+                if (e.data.size > 0) {
+                    recordedChunks.push(e.data);
+                }
+            };
+
+            mediaRecorder.onstop = function () {
+                const blob = new Blob(recordedChunks, { type: options.mimeType });
+                const videoURL = URL.createObjectURL(blob);
+                const recordedVideo = document.getElementById("recordedVideo");
+                recordedVideo.src = videoURL;
+                recordedVideo.classList.remove("hidden");
+                document.getElementById("uploadSection").classList.remove("hidden");
+            };
+
+            mediaRecorder.start();
+            document.getElementById("recordStatus").innerText = "Merekam...";
+            document.getElementById("recordingTimer").classList.remove("hidden");
+            startTimer();
+
+            document.getElementById("startBtn").disabled = true;
+            document.getElementById("stopBtn").disabled = false;
+        })
+        .catch(function (err) {
+            console.error("Gagal mengakses kamera/mikrofon:", err);
+            alert("❌ Tidak bisa mengakses kamera/mikrofon");
+        });
+}
+
 
         function stopRecording() {
             if (mediaRecorder && mediaRecorder.state === 'recording') {
@@ -2246,8 +2236,8 @@ function submitVideo() {
     kirimBtn.disabled = true;
     kirimBtn.classList.add("opacity-70", "cursor-not-allowed");
 
-    // Ubah ekstensi jadi .mp4 (tetap blob WebM, tapi Drive akan coba convert)
-    const blob = new Blob(recordedChunks, { type: "video/webm" });
+    // Simpan sebagai .mp4
+    const blob = new Blob(recordedChunks, { type: "video/mp4" });
     const filename = (document.getElementById("videoTitle").value || "video_praktik") + ".mp4";
 
     const reader = new FileReader();
