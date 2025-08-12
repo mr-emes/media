@@ -1105,13 +1105,11 @@
         // ========================================
         // PENTING: Ganti nilai-nilai di bawah ini dengan konfigurasi Anda
         
-        const GOOGLE_DRIVE_CONFIG = {
-            apiKey: 'YOUR_GOOGLE_DRIVE_API_KEY_HERE',           // Ganti dengan API Key Anda
-            clientId: 'YOUR_GOOGLE_CLIENT_ID_HERE',             // Ganti dengan Client ID Anda  
-            folderId: 'YOUR_GOOGLE_DRIVE_FOLDER_ID_HERE',       // Ganti dengan ID folder Google Drive Anda
-            discoveryDoc: 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
-            scope: 'https://www.googleapis.com/auth/drive.file'
-        };
+const GOOGLE_DRIVE_CONFIG = {
+    folderId: '1C-qp2Jm48DmewY9n6xItlQXU_Azmuozz',
+    uploadUrl: 'https://script.google.com/macros/s/AKfycbxSdxQR9P7HOErNl2WYDY7vp-VVT5odtm6HEFwde8-VRlQO4JaIVqZ3n8Dd3mZEY0oo/exec'
+};
+
         
         // CARA MENDAPATKAN KONFIGURASI:
         // 1. Buka console.cloud.google.com
@@ -1928,52 +1926,47 @@
             }
         }
 
-        async function submitVideo() {
-            const title = document.getElementById('videoTitle').value || 'Video Bacaan Surah Al-Ashr';
-            const notes = document.getElementById('videoNotes').value || '';
-            const timestamp = new Date().toLocaleString('id-ID');
-            
-            // Show loading message
-            const submitBtn = event.target;
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '⏳ Mengirim...';
-            submitBtn.disabled = true;
-            
-            // Simulate upload process
-            setTimeout(() => {
-                // Store submission record
-                const submission = {
-                    title: title,
-                    notes: notes,
-                    timestamp: timestamp,
-                    student: currentStudent.name,
-                    class: currentStudent.class,
-                    status: 'Terkirim'
-                };
-                
-                submissionHistory.push(submission);
-                updateSubmissionHistory();
-                
-                // Mark video section as completed
-                updateProgress('video');
-                
-                // Show success message
-                alert('✅ Video berhasil dikirim!\n\nTugas video Anda telah selesai. Progress pembelajaran bertambah!\n\nGuru akan memberikan feedback dalam 1-2 hari kerja.');
-                
-                // Reset form
-                document.getElementById('videoTitle').value = '';
-                document.getElementById('videoNotes').value = '';
-                document.getElementById('uploadSection').classList.add('hidden');
-                document.getElementById('recordedVideo').classList.add('hidden');
-                document.getElementById('recordIcon').textContent = '🎥';
-                document.getElementById('recordStatus').textContent = 'Siap untuk merekam';
-                
-                // Reset button
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-                
-            }, 2000); // 2 second delay to simulate upload
-        }
+function submitVideo() {
+    if (!recordedChunks.length) {
+        alert("❌ Tidak ada video untuk dikirim");
+        return;
+    }
+
+    const blob = new Blob(recordedChunks, { type: "video/webm" });
+    const filename = (document.getElementById("videoTitle").value || "video_praktik") + ".webm";
+
+    const reader = new FileReader();
+    reader.onloadend = function () {
+        const base64Data = reader.result.split(',')[1];
+
+        fetch(GOOGLE_DRIVE_CONFIG.uploadUrl, {
+            method: "POST",
+            body: new URLSearchParams({
+                file: base64Data,
+                filename: filename,
+                mimeType: "video/webm"
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                alert("✅ Video terkirim!\n" + data.fileUrl);
+                updateProgress("video");
+                submissionHistory.push({
+                    title: filename,
+                    url: data.fileUrl
+                });
+                renderSubmissionHistory();
+            } else {
+                alert("❌ Gagal upload: " + data.message);
+            }
+        })
+        .catch(err => {
+            alert("❌ Error: " + err);
+        });
+    };
+    reader.readAsDataURL(blob);
+}
 
         // Video upload is now handled locally with simulation
 
