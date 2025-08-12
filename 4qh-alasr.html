@@ -2234,120 +2234,60 @@
             }
         }
 
-        async function submitVideo() {
-            const title = document.getElementById('videoTitle').value || 'Video Bacaan Surah Al-Ashr';
-            const notes = document.getElementById('videoNotes').value || '';
-            const timestamp = new Date().toLocaleString('id-ID');
-            
-            // Show loading message
-            const submitBtn = event.target;
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '⏳ Mengirim ke Google Drive...';
-            submitBtn.disabled = true;
-            
-            try {
-                // Get the recorded video blob
-                const blob = new Blob(recordedChunks, { type: 'video/webm' });
-                
-                // Check file size
-                if (blob.size > GOOGLE_DRIVE_CONFIG.maxFileSize) {
-                    throw new Error('File terlalu besar. Maksimal 50MB.');
-                }
-                
-                // Create filename
-                const fileName = `${currentStudent.name}_${currentStudent.class}_${Date.now()}.webm`;
-                
-                // Convert blob to base64
-                const base64Data = await blobToBase64(blob);
-                
-                // Prepare upload data
-                const uploadData = {
-                    fileName: fileName,
-                    fileData: base64Data,
-                    folderId: GOOGLE_DRIVE_CONFIG.folderId,
-                    metadata: {
-                        title: title,
-                        notes: notes,
-                        student: currentStudent.name,
-                        class: currentStudent.class,
-                        timestamp: timestamp
-                    }
-                };
-                
-                // Upload to Google Drive via Google Apps Script
-                const response = await fetch('https://script.google.com/macros/s/AKfycbxGoogleAppsScriptUploadEndpoint/exec', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(uploadData)
+function submitVideo() {
+    if (!recordedChunks.length) {
+        alert("❌ Tidak ada video untuk dikirim");
+        return;
+    }
+
+    const kirimBtn = document.querySelector("#uploadSection button[onclick='submitVideo()']");
+    const originalText = kirimBtn.innerHTML;
+    kirimBtn.innerHTML = "⏳ Mengirim...";
+    kirimBtn.disabled = true;
+    kirimBtn.classList.add("opacity-70", "cursor-not-allowed");
+
+    // Ubah ekstensi jadi .mp4 (tetap blob WebM, tapi Drive akan coba convert)
+    const blob = new Blob(recordedChunks, { type: "video/webm" });
+    const filename = (document.getElementById("videoTitle").value || "video_praktik") + ".mp4";
+
+    const reader = new FileReader();
+    reader.onloadend = function () {
+        const base64Data = reader.result.split(',')[1];
+
+        fetch(GOOGLE_DRIVE_CONFIG.uploadUrl, {
+            method: "POST",
+            body: new URLSearchParams({
+                file: base64Data,
+                filename: filename,
+                mimeType: "video/mp4"
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                alert("✅ Video terkirim!\n" + data.fileUrl);
+                updateProgress("video");
+                submissionHistory.push({
+                    title: filename,
+                    url: data.fileUrl
                 });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    // Store submission record with Google Drive info
-                    const submission = {
-                        title: title,
-                        notes: notes,
-                        timestamp: timestamp,
-                        student: currentStudent.name,
-                        class: currentStudent.class,
-                        status: 'Terkirim ke Google Drive',
-                        fileName: fileName,
-                        fileId: result.fileId,
-                        driveUrl: result.driveUrl
-                    };
-                    
-                    submissionHistory.push(submission);
-                    updateSubmissionHistory();
-                    
-                    // Mark video section as completed
-                    updateProgress('video');
-                    
-                    // Show success message with file info
-                    alert(`✅ Video berhasil dikirim ke Google Drive!\n\nFile: ${fileName}\nFolder ID: ${GOOGLE_DRIVE_CONFIG.folderId}\n\nTugas video Anda telah selesai. Progress pembelajaran bertambah!\n\nGuru akan memberikan feedback dalam 1-2 hari kerja.`);
-                    
-                } else {
-                    throw new Error(result.error || 'Gagal mengupload ke Google Drive');
-                }
-                
-            } catch (error) {
-                console.error('Upload error:', error);
-                
-                // Fallback: Store locally and show message
-                const submission = {
-                    title: title,
-                    notes: notes,
-                    timestamp: timestamp,
-                    student: currentStudent.name,
-                    class: currentStudent.class,
-                    status: 'Tersimpan Lokal (Upload Gagal)',
-                    error: error.message
-                };
-                
-                submissionHistory.push(submission);
-                updateSubmissionHistory();
-                
-                // Still mark as completed for progress
-                updateProgress('video');
-                
-                alert(`⚠️ Upload ke Google Drive gagal: ${error.message}\n\nVideo tetap tersimpan secara lokal dan tugas dianggap selesai.\nSilakan coba upload manual atau hubungi guru.`);
+                renderSubmissionHistory();
+            } else {
+                alert("❌ Gagal upload: " + data.message);
             }
-            
-            // Reset form
-            document.getElementById('videoTitle').value = '';
-            document.getElementById('videoNotes').value = '';
-            document.getElementById('uploadSection').classList.add('hidden');
-            document.getElementById('recordedVideo').classList.add('hidden');
-            document.getElementById('recordIcon').textContent = '🎥';
-            document.getElementById('recordStatus').textContent = 'Siap untuk merekam';
-            
-            // Reset button
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-        }
-        
+        })
+        .catch(err => {
+            alert("❌ Error: " + err);
+        })
+        .finally(() => {
+            kirimBtn.innerHTML = originalText;
+            kirimBtn.disabled = false;
+            kirimBtn.classList.remove("opacity-70", "cursor-not-allowed");
+        });
+    };
+    reader.readAsDataURL(blob);
+}
+
         // Helper function to convert blob to base64
         function blobToBase64(blob) {
             return new Promise((resolve, reject) => {
