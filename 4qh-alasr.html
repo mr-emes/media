@@ -2148,14 +2148,15 @@ const GOOGLE_DRIVE_CONFIG = {
 
         // Video recording functions
 function startRecording() {
+    // Minta akses media
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
         .then(function (mediaStream) {
             stream = mediaStream;
 
-            // Coba format MP4
+            // Coba pakai MP4
             let options = { mimeType: 'video/mp4;codecs=h264,aac' };
             if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                // Fallback WebM
+                // Fallback ke WebM
                 options = { mimeType: 'video/webm;codecs=vp9,opus' };
             }
 
@@ -2163,9 +2164,7 @@ function startRecording() {
             mediaRecorder = new MediaRecorder(stream, options);
 
             mediaRecorder.ondataavailable = function (e) {
-                if (e.data.size > 0) {
-                    recordedChunks.push(e.data);
-                }
+                if (e.data.size > 0) recordedChunks.push(e.data);
             };
 
             mediaRecorder.onstop = function () {
@@ -2177,6 +2176,7 @@ function startRecording() {
                 document.getElementById("uploadSection").classList.remove("hidden");
             };
 
+            // Mulai rekam
             mediaRecorder.start();
             document.getElementById("recordStatus").innerText = "Merekam...";
             document.getElementById("recordingTimer").classList.remove("hidden");
@@ -2186,11 +2186,45 @@ function startRecording() {
             document.getElementById("stopBtn").disabled = false;
         })
         .catch(function (err) {
-            console.error("Gagal mengakses kamera/mikrofon:", err);
-            alert("❌ Tidak bisa mengakses kamera/mikrofon");
+            console.warn("⚠️ Gagal akses audio+video, coba video-only:", err);
+            // Kalau gagal (misal mic tidak tersedia), coba tanpa audio
+            navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+                .then(function (mediaStream) {
+                    stream = mediaStream;
+                    let options = { mimeType: 'video/mp4' };
+                    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                        options = { mimeType: 'video/webm' };
+                    }
+                    recordedChunks = [];
+                    mediaRecorder = new MediaRecorder(stream, options);
+
+                    mediaRecorder.ondataavailable = e => {
+                        if (e.data.size > 0) recordedChunks.push(e.data);
+                    };
+
+                    mediaRecorder.onstop = function () {
+                        const blob = new Blob(recordedChunks, { type: options.mimeType });
+                        const videoURL = URL.createObjectURL(blob);
+                        const recordedVideo = document.getElementById("recordedVideo");
+                        recordedVideo.src = videoURL;
+                        recordedVideo.classList.remove("hidden");
+                        document.getElementById("uploadSection").classList.remove("hidden");
+                    };
+
+                    mediaRecorder.start();
+                    document.getElementById("recordStatus").innerText = "Merekam (tanpa audio)";
+                    document.getElementById("recordingTimer").classList.remove("hidden");
+                    startTimer();
+
+                    document.getElementById("startBtn").disabled = true;
+                    document.getElementById("stopBtn").disabled = false;
+                })
+                .catch(err2 => {
+                    console.error("❌ Tidak bisa akses kamera/mikrofon:", err2);
+                    alert("Tidak bisa mengakses kamera/mikrofon. Periksa izin browser.");
+                });
         });
 }
-
 
         function stopRecording() {
             if (mediaRecorder && mediaRecorder.state === 'recording') {
