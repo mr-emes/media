@@ -65,12 +65,10 @@
                 <div class="text-left">
                     <p class="text-sm text-gray-800 font-medium">Absensi & Tugas Online</p>
                     <p class="text-sm text-gray-600">Sistem Pembelajaran Jarak Jauh</p>
-                    <p class="text-sm text-blue-600 font-semibold">M.I. Negeri Singkawang</p>
+                    <p class="text-sm text-blue-700 font-semibold">Madrasah Ibtidaiyah Negeri Singkawang</p>
                 </div>
             </div>
-            <div class="text-center">
-                <p class="text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded">2025.08 &copy; MAHFUD SIDIK</p>
-            </div>
+
         </div>
     </div>
 
@@ -193,7 +191,7 @@
 
     <script>
         // Configuration - Replace with your Google Apps Script URL
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyadv8KupyFQ7tYUBUngx9mB9NPPGSe3VivsMjdSzgkqmwOptrILxnbhBj9iEY9RPo52A/exec';
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZgHEJsJVsy9I-MKL_NF_pEzIqgLOb3lNT9BacLOG8V63PRNoIJU4krN9hLNnT2vhQAQ/exec';
 
         let currentStudent = null;
         let isAttended = false;
@@ -226,25 +224,69 @@
                 }
             } catch (error) {
                 hideLoading();
-                showError('Terjadi kesalahan saat login. Coba lagi.');
+                console.error('Login error:', error);
+                
+                // Show more specific error messages
+                if (error.message.includes('HTTP error')) {
+                    showError('Tidak dapat terhubung ke server. Periksa koneksi internet Anda.');
+                } else if (error.message.includes('Failed to fetch')) {
+                    showError('Gagal menghubungi Google Apps Script. Pastikan URL sudah benar dan script sudah di-deploy.');
+                } else {
+                    showError(`Terjadi kesalahan: ${error.message}`);
+                }
             }
         }
+
+        // Sample student data for testing
+        const sampleStudents = {
+            '12345': {
+                nis: '12345',
+                nama: 'Ahmad Rizki',
+                kelas: 'VI A',
+                mapel: 'Matematika',
+                tugas: '<strong>Tugas Matematika:</strong><br>Kerjakan soal-soal berikut:<br>1. 25 + 37 = ?<br>2. 84 - 29 = ?<br>3. 12 × 8 = ?<br>4. 96 ÷ 6 = ?<br><br><em>Kumpulkan dalam bentuk PDF atau foto yang jelas.</em>'
+            },
+            '67890': {
+                nis: '67890',
+                nama: 'Siti Nurhaliza',
+                kelas: 'V B',
+                mapel: 'Bahasa Indonesia',
+                tugas: '<strong>Tugas Bahasa Indonesia:</strong><br>Buatlah karangan tentang "Liburan Sekolahku" dengan ketentuan:<br>• Minimal 2 paragraf<br>• Gunakan ejaan yang benar<br>• Tulis tangan di kertas bergaris<br><br><em>Foto hasil karangan dan upload dalam format JPG/PNG.</em>'
+            },
+            '11111': {
+                nis: '11111',
+                nama: 'Budi Santoso',
+                kelas: 'IV C',
+                mapel: 'IPA',
+                tugas: '<strong>Tugas IPA:</strong><br>Amati tumbuhan di sekitar rumahmu dan jawab:<br>1. Sebutkan 5 nama tumbuhan yang kamu temukan<br>2. Bagian mana yang bisa dimakan?<br>3. Manfaat tumbuhan tersebut untuk manusia<br><br><em>Tulis jawabanmu di buku tugas dan foto hasilnya.</em>'
+            }
+        };
 
         // Get student data from Google Sheets via Apps Script
         async function getStudentData(nis) {
             try {
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'getStudent',
-                        nis: nis
-                    })
+                console.log('Attempting to fetch student data for NIS:', nis);
+                console.log('Using Apps Script URL:', APPS_SCRIPT_URL);
+                
+                // Use GET request with URL parameters to avoid CORS issues
+                const url = `${APPS_SCRIPT_URL}?action=getStudent&nis=${encodeURIComponent(nis)}`;
+                console.log('Full URL:', url);
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    mode: 'cors'
                 });
 
+                console.log('Response status:', response.status);
+                console.log('Response ok:', response.ok);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
                 const result = await response.json();
+                console.log('Apps Script response:', result);
+                
                 if (result.success) {
                     return result.data;
                 } else {
@@ -253,6 +295,20 @@
                 }
             } catch (error) {
                 console.error('Error fetching student data:', error);
+                console.error('Error details:', error.message);
+                
+                // Fallback to sample data for testing
+                console.log('Falling back to sample data for testing...');
+                if (sampleStudents[nis]) {
+                    console.log('Found sample student:', sampleStudents[nis]);
+                    showError('Menggunakan data percobaan. Google Apps Script belum terhubung.');
+                    // Wait a bit to show the error message, then continue
+                    setTimeout(() => {
+                        closeModal('errorModal');
+                    }, 2000);
+                    return sampleStudents[nis];
+                }
+                
                 throw error;
             }
         }
@@ -275,15 +331,10 @@
         // Check today's attendance from Google Sheets via Apps Script
         async function checkTodayAttendance() {
             try {
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'checkAttendance',
-                        nis: currentStudent.nis
-                    })
+                const url = `${APPS_SCRIPT_URL}?action=checkAttendance&nis=${encodeURIComponent(currentStudent.nis)}`;
+                const response = await fetch(url, {
+                    method: 'GET',
+                    mode: 'cors'
                 });
 
                 const result = await response.json();
@@ -328,16 +379,19 @@
         // Save attendance to Google Sheets via Apps Script
         async function saveAttendance() {
             try {
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'saveAttendance',
-                        studentData: currentStudent,
-                        assignmentUploaded: isAssignmentUploaded
-                    })
+                const params = new URLSearchParams({
+                    action: 'saveAttendance',
+                    nis: currentStudent.nis,
+                    nama: currentStudent.nama,
+                    kelas: currentStudent.kelas,
+                    mapel: currentStudent.mapel,
+                    assignmentUploaded: isAssignmentUploaded
+                });
+                
+                const url = `${APPS_SCRIPT_URL}?${params.toString()}`;
+                const response = await fetch(url, {
+                    method: 'GET',
+                    mode: 'cors'
                 });
 
                 const result = await response.json();
@@ -450,15 +504,10 @@
         // Update attendance completeness in Google Sheets via Apps Script
         async function updateAttendanceCompleteness() {
             try {
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'updateCompleteness',
-                        nis: currentStudent.nis
-                    })
+                const url = `${APPS_SCRIPT_URL}?action=updateCompleteness&nis=${encodeURIComponent(currentStudent.nis)}`;
+                const response = await fetch(url, {
+                    method: 'GET',
+                    mode: 'cors'
                 });
 
                 const result = await response.json();
@@ -547,6 +596,5 @@
             console.log('App initialized - ready to use Google Apps Script');
         });
     </script>
-
-    </body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96e951c745dd6d3b',t:'MTc1NTA5OTcxNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
