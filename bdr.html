@@ -3,707 +3,549 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Belajar dari Rumah</title>
+    <title>Absensi Online & Upload Tugas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .loading {
+            animation: spin 1s linear infinite;
         }
-        .card-shadow {
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
-        .pulse-animation {
-            animation: pulse 2s infinite;
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
         }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .success-animation {
-            animation: successPulse 0.6s ease-out;
+        .prose {
+            line-height: 1.6;
         }
-        @keyframes successPulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+            font-weight: 600;
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+        }
+        .prose p {
+            margin-bottom: 1em;
+        }
+        .prose ul, .prose ol {
+            margin-bottom: 1em;
+            padding-left: 1.5em;
+        }
+        .prose li {
+            margin-bottom: 0.25em;
+        }
+        .prose strong {
+            font-weight: 600;
+        }
+        .prose em {
+            font-style: italic;
+        }
+        .prose a {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+        .prose img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            margin: 1em 0;
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-<!-- Header -->
-<div class="gradient-bg text-white py-8">
-    <div class="container mx-auto px-4">
-        <div class="text-center">
-            <div class="flex items-center justify-center gap-3 mb-2">
-                <div class="bg-white rounded-lg p-2 shadow-lg border-2 border-white/30">
-                    <img src="https://i.imgur.com/0Laf7Zu.png" alt="Book icon" class="w-12 h-12" 
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
-                    <span style="display: none;">📚</span>
-                </div>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Header -->
+    <div class="bg-white shadow-lg">
+        <div class="px-4 py-6">
+            <div class="flex items-center justify-center mb-3">
+                <img src="https://i.imgur.com/0Laf7Zu.png" alt="Logo" class="w-16 h-16 mr-4" onerror="this.style.display='none';">
                 <div class="text-left">
-                    <h1 class="text-2xl font-bold">Daftar Hadir Online</h1>
-                    <h2 class="text-xl font-semibold">Belajar dari Rumah (BDR)</h2>
+                    <p class="text-sm text-gray-800 font-medium">Absensi & Tugas Online</p>
+                    <p class="text-sm text-gray-600">Sistem Pembelajaran Jarak Jauh</p>
+                    <p class="text-sm text-blue-600 font-semibold">M.I. Negeri Singkawang</p>
                 </div>
             </div>
-            <p>KELAS PAK MAHFUD SIDIK</p>
-            <div class="mt-4 bg-white/20 rounded-lg p-4 inline-block">
-                <p class="text-lg font-medium" id="currentDate"></p>
-                <p class="text-sm opacity-90" id="currentTime"></p>
+            <div class="text-center">
+                <p class="text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded">2025.08 &copy; MAHFUD SIDIK</p>
             </div>
         </div>
     </div>
-</div>
 
-
-    <!-- Main Content -->
-    <div class="container mx-auto px-4 py-8 max-w-md">
-        <!-- Attendance Form -->
-        <div class="bg-white rounded-lg card-shadow overflow-hidden">
-            <div class="bg-gray-800 text-white p-4 text-center">
-                <h3 class="text-xl font-semibold">✋ Masukkan NIS Anda</h3>
-            </div>
-            
-            <div class="p-6">
-                <!-- NIS Input -->
-                <div class="mb-6">
-                    <label for="nisInput" class="block text-sm font-medium text-gray-700 mb-2">
-                        Nomor Induk Siswa (NIS)
-                    </label>
-                    <input 
-                        type="text" 
-                        id="nisInput" 
-                        placeholder="Memuat data..."
-                        disabled
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none text-lg text-center font-mono disabled:bg-gray-100"
-                        maxlength="6"
-                        autocomplete="off"
-                    >
+    <!-- Main Container -->
+    <div class="container mx-auto px-4 py-6 max-w-md">
+        <!-- Login Form -->
+        <div id="loginForm" class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center">🔐 Login Siswa</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">NIS</label>
+                    <input type="text" id="nisInput" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Masukkan NIS Anda">
                 </div>
+                <button onclick="loginStudent()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200">
+                    Masuk
+                </button>
+            </div>
+        </div>
 
-                <!-- Student Info Display -->
-                <div id="studentInfo" class="hidden mb-6 p-4 bg-blue-50 border-2 border-blue-200 rounded-lg">
-                    <div class="text-center">
-                        <div class="text-4xl mb-2">👤</div>
-                        <div class="text-lg font-semibold text-gray-800" id="studentName">-</div>
-                        <div class="text-sm text-gray-600" id="studentClass">-</div>
-                        <div class="text-xs text-gray-500 mt-1">NIS: <span id="studentNIS">-</span></div>
+        <!-- Student Dashboard -->
+        <div id="dashboard" class="hidden">
+            <!-- Student Info -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span class="text-2xl">👨‍🎓</span>
+                    </div>
+                    <h3 id="studentName" class="text-lg font-semibold text-gray-800"></h3>
+                    <p id="studentClass" class="text-gray-600"></p>
+                    <p id="studentSubject" class="text-sm text-blue-600 font-medium"></p>
+                </div>
+            </div>
+
+            <!-- Attendance Section -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">📋 Absensi Hari Ini</h3>
+                <div id="attendanceStatus" class="mb-4">
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <span class="text-gray-700">Status Kehadiran:</span>
+                        <span id="currentStatus" class="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">Belum Absen</span>
                     </div>
                 </div>
-
-                <!-- Loading Data Message -->
-                <div id="loadingData" class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-blue-700 text-sm text-center">
-                    <div class="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                    Memuat data siswa dari Google Sheets...
-                </div>
-
-                <!-- Error Message -->
-                <div id="errorMessage" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm text-center">
-                    NIS tidak ditemukan. Periksa kembali nomor yang dimasukkan.
-                </div>
-
-                <!-- Success Message -->
-                <div id="successMessage" class="hidden mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm text-center">
-                    ✅ Kehadiran berhasil dicatat!
-                </div>
-
-
-
-
-
-                <!-- Attend Button -->
-                <button 
-                    id="attendButton" 
-                    onclick="markAttendance()" 
-                    disabled
-                    class="w-full bg-gray-400 text-white py-4 rounded-lg text-xl font-semibold cursor-not-allowed transition-all duration-300"
-                >
-                    Hadir! 🙋‍♂️
-                </button>
-
-                <!-- Loading State -->
-                <div id="loadingState" class="hidden text-center py-4">
-                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                    <p class="mt-2 text-gray-600">Menyimpan data...</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Assignment Instructions -->
-        <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h4 class="font-semibold text-blue-800 mb-2">📝 Tugas Belajar di Rumah:</h4>
-            <div class="text-sm text-blue-700 mb-4" id="assignmentInstructions">
-                Masukkan NIS untuk melihat tugas BDR Anda
-            </div>
-            
-            <!-- File Upload Section -->
-            <div id="uploadSection" class="hidden space-y-3">
-                <div>
-                    <label class="block text-sm font-medium text-blue-700 mb-2">
-                        📷 Upload Tugas
-                    </label>
-                    <input 
-                        type="file" 
-                        id="taskFile" 
-                        accept="image/*" 
-                        capture="environment"
-                        class="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:border-blue-500 focus:outline-none text-sm"
-                    >
-                    <p class="text-xs text-blue-600 mt-1">Format: JPG, PNG, HEIC (Max: 10MB)</p>
-                </div>
-
-                <!-- Preview -->
-                <div id="taskImagePreview" class="hidden">
-                    <img id="taskPreviewImg" class="w-full max-h-48 object-contain rounded-lg border-2 border-blue-200" alt="Preview tugas">
-                </div>
-
-                <!-- Upload Button -->
-                <button 
-                    id="uploadTaskButton" 
-                    onclick="uploadTask()" 
-                    disabled
-                    class="w-full bg-gray-400 text-white py-3 rounded-lg font-semibold cursor-not-allowed transition-all duration-300"
-                >
-                    📤 Upload Tugas
+                <button id="attendanceBtn" onclick="markAttendance()" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200">
+                    ✅ Absen Sekarang
                 </button>
             </div>
-        </div>
 
-        <!-- Today's Attendance Count -->
-        <div class="mt-6 bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-            <div class="text-2xl font-bold text-green-600" id="todayCount">0</div>
-            <div class="text-sm text-green-700">Siswa sudah absen hari ini</div>
+            <!-- Assignment Upload Section -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">📤 Upload Tugas</h3>
+                <div id="assignmentInfo" class="mb-4 p-4 bg-blue-50 rounded-lg">
+                    <p class="text-sm text-blue-800 font-medium mb-2">Tugas:</p>
+                    <div id="assignmentTitle" class="text-blue-700 prose prose-sm max-w-none"></div>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pilih File Tugas</label>
+                        <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <p class="text-xs text-gray-500 mt-1">Format: PDF, DOC, DOCX, JPG, PNG (Max 10MB)</p>
+                    </div>
+                    <button id="uploadBtn" onclick="uploadAssignment()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200">
+                        📁 Upload Tugas
+                    </button>
+                </div>
+            </div>
+
+            <!-- Status Summary -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">📊 Status Kelengkapan</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-700">Absensi:</span>
+                        <span id="attendanceComplete" class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">Belum</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-700">Upload Tugas:</span>
+                        <span id="assignmentComplete" class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">Belum</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-700 font-medium">Kelengkapan:</span>
+                        <span id="overallStatus" class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">BELUM LENGKAP</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logout Button -->
+            <button onclick="logout()" class="w-full mt-6 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200">
+                🚪 Keluar
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 text-center">
+            <div class="loading w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+            <p id="loadingText" class="text-gray-700">Memproses...</p>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 text-center max-w-sm mx-4">
+            <div class="text-4xl mb-4">✅</div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Berhasil!</h3>
+            <p id="successMessage" class="text-gray-600 mb-4"></p>
+            <button onclick="closeModal('successModal')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">OK</button>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="errorModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 text-center max-w-sm mx-4">
+            <div class="text-4xl mb-4">❌</div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Error</h3>
+            <p id="errorMessage" class="text-gray-600 mb-4"></p>
+            <button onclick="closeModal('errorModal')" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg">OK</button>
         </div>
     </div>
 
     <script>
-        // Google Sheets configuration
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwc15_4uUW6m2vaRLo7yNLAL6x8ZmDSiM4swo7VKcFxY0eWOfI_HhnJAWULWhgNU7eYQg/exec';
-        const DRIVE_FOLDER_ID = '1oytE0ft1bwlfomndadI3zj6FbdvsOtjA';
-        
-        // Student data cache (will be loaded from Google Sheets)
-        let studentsData = {};
-        let isDataLoaded = false;
+        // Configuration - Replace with your Google Apps Script URL
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyadv8KupyFQ7tYUBUngx9mB9NPPGSe3VivsMjdSzgkqmwOptrILxnbhBj9iEY9RPo52A/exec';
 
-        // Track today's attendance
-        let todayAttendance = new Set();
-        
-        // Current student data
         let currentStudent = null;
+        let isAttended = false;
+        let isAssignmentUploaded = false;
 
-        // Load student data from Google Sheets
-function loadStudentData() {
-  return new Promise((resolve, reject) => {
-    window.handleStudentData = (data) => {
-      if (data.success) {
-        resolve(data.students);
-      } else {
-        reject(new Error(data.message));
-      }
-    };
-    
-    const script = document.createElement('script');
-    script.src = `${GOOGLE_SCRIPT_URL}?action=getStudents&callback=handleStudentData`;
-    script.onerror = () => reject(new Error('Gagal memuat data siswa'));
-    document.body.appendChild(script);
-  });
-}
+        // No initialization needed for Apps Script
 
-        // Untuk POST requests, gunakan formulir tersembunyi
-function postToGoogleScript(action, data) {
-  return new Promise((resolve, reject) => {
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = GOOGLE_SCRIPT_URL;
-    form.style.display = 'none';
-    
-    const inputAction = document.createElement('input');
-    inputAction.name = 'action';
-    inputAction.value = action;
-    form.appendChild(inputAction);
-    
-    const inputData = document.createElement('input');
-    inputData.name = 'data';
-    inputData.value = JSON.stringify(data);
-    form.appendChild(inputData);
-    
-    document.body.appendChild(form);
-    
-    // Handle response dengan iframe
-    const iframe = document.createElement('iframe');
-    iframe.name = 'response-iframe';
-    iframe.style.display = 'none';
-    
-    iframe.onload = function() {
-      try {
-        const response = JSON.parse(iframe.contentDocument.body.textContent);
-        resolve(response);
-      } catch (error) {
-        reject(error);
-      }
-      document.body.removeChild(iframe);
-      document.body.removeChild(form);
-    };
-    
-    iframe.onerror = function() {
-      reject(new Error('Gagal mengirim data'));
-      document.body.removeChild(iframe);
-      document.body.removeChild(form);
-    };
-    
-    document.body.appendChild(iframe);
-    form.target = 'response-iframe';
-    form.submit();
-  });
-}
-        // Update date and time
-function updateDateTime() {
-    try {
-        const now = new Date();
-        const options = { 
-            weekday: 'long', 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
-        };
-        
-        // Pastikan elemen ada sebelum mengakses
-        const dateElement = document.getElementById('currentDate');
-        const timeElement = document.getElementById('currentTime');
-        
-        if (dateElement && timeElement) {
-            dateElement.textContent = now.toLocaleDateString('id-ID', options);
-            timeElement.textContent = now.toLocaleTimeString('id-ID');
-        }
-    } catch (error) {
-        console.error('Error in updateDateTime:', error);
-    }
-}
-        // Handle NIS input
-        function handleNISInput() {
-            if (!isDataLoaded) return;
+        // Login student
+        async function loginStudent() {
+            const nis = document.getElementById('nisInput').value.trim();
             
-            const nisInput = document.getElementById('nisInput');
-            const studentInfo = document.getElementById('studentInfo');
-            const errorMessage = document.getElementById('errorMessage');
-            const attendButton = document.getElementById('attendButton');
-            const successMessage = document.getElementById('successMessage');
-            const assignmentInstructions = document.getElementById('assignmentInstructions');
-            const uploadSection = document.getElementById('uploadSection');
-            
-            const nis = nisInput.value.trim();
-            
-            // Hide previous messages
-            errorMessage.classList.add('hidden');
-            successMessage.classList.add('hidden');
-            
-            if (nis.length === 0) {
-                studentInfo.classList.add('hidden');
-                uploadSection.classList.add('hidden');
-                assignmentInstructions.textContent = 'Masukkan NIS untuk melihat tugas BDR Anda';
-                attendButton.disabled = true;
-                attendButton.className = "w-full bg-gray-400 text-white py-4 rounded-lg text-xl font-semibold cursor-not-allowed transition-all duration-300";
-                currentStudent = null;
+            if (!nis) {
+                showError('Mohon masukkan NIS Anda');
                 return;
             }
+
+            showLoading('Mencari data siswa...');
+
+            try {
+                // Demo data - replace with actual Google Sheets API call
+                const studentData = await getStudentData(nis);
+                
+                if (studentData) {
+                    currentStudent = studentData;
+                    showDashboard();
+                    hideLoading();
+                } else {
+                    hideLoading();
+                    showError('NIS tidak ditemukan. Mohon periksa kembali.');
+                }
+            } catch (error) {
+                hideLoading();
+                showError('Terjadi kesalahan saat login. Coba lagi.');
+            }
+        }
+
+        // Get student data from Google Sheets via Apps Script
+        async function getStudentData(nis) {
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'getStudent',
+                        nis: nis
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    return result.data;
+                } else {
+                    console.error('Error from Apps Script:', result.error);
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error fetching student data:', error);
+                throw error;
+            }
+        }
+
+        // Show dashboard
+        function showDashboard() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
             
-            if (studentsData[nis]) {
-                // Student found
-                currentStudent = {nis: nis, ...studentsData[nis]};
-                
-                document.getElementById('studentName').textContent = studentsData[nis].name;
-                document.getElementById('studentClass').textContent = studentsData[nis].class;
-                document.getElementById('studentNIS').textContent = nis;
-                
-                // Update assignment instructions
-                assignmentInstructions.textContent = studentsData[nis].assignment || 'Tidak ada tugas khusus untuk hari ini';
-                
-                // Show upload section if there's an assignment
-                if (studentsData[nis].assignment && studentsData[nis].assignment !== 'Tidak ada tugas khusus') {
-                    uploadSection.classList.remove('hidden');
-                    setupTaskFileUpload();
-                } else {
-                    uploadSection.classList.add('hidden');
+            // Update student info
+            document.getElementById('studentName').textContent = currentStudent.nama;
+            document.getElementById('studentClass').textContent = currentStudent.kelas;
+            document.getElementById('studentSubject').textContent = currentStudent.mapel;
+            document.getElementById('assignmentTitle').innerHTML = currentStudent.tugas;
+            
+            // Check today's attendance status
+            checkTodayAttendance();
+        }
+
+        // Check today's attendance from Google Sheets via Apps Script
+        async function checkTodayAttendance() {
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'checkAttendance',
+                        nis: currentStudent.nis
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    isAttended = result.data.attended;
+                    isAssignmentUploaded = result.data.assignmentUploaded;
                 }
                 
-                studentInfo.classList.remove('hidden');
-                errorMessage.classList.add('hidden');
-                
-                // Check if already attended today
-                if (todayAttendance.has(nis)) {
-                    attendButton.disabled = true;
-                    attendButton.textContent = "Sudah Absen Hari Ini ✅";
-                    attendButton.className = "w-full bg-green-500 text-white py-4 rounded-lg text-xl font-semibold cursor-not-allowed";
-                } else {
-                    attendButton.disabled = false;
-                    attendButton.textContent = "Hadir! 🙋‍♂️";
-                    attendButton.className = "w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg text-xl font-semibold cursor-pointer transition-all duration-300 transform hover:scale-105";
-                }
-            } else {
-                // Student not found
-                studentInfo.classList.add('hidden');
-                uploadSection.classList.add('hidden');
-                assignmentInstructions.textContent = 'NIS tidak ditemukan';
-                errorMessage.classList.remove('hidden');
-                attendButton.disabled = true;
-                attendButton.className = "w-full bg-gray-400 text-white py-4 rounded-lg text-xl font-semibold cursor-not-allowed transition-all duration-300";
-                currentStudent = null;
+                updateStatusDisplay();
+            } catch (error) {
+                console.error('Error checking attendance:', error);
+                updateStatusDisplay();
             }
         }
 
         // Mark attendance
         async function markAttendance() {
-            if (!currentStudent || todayAttendance.has(currentStudent.nis)) {
+            if (isAttended) {
+                showError('Anda sudah melakukan absensi hari ini');
                 return;
             }
 
-            const loadingState = document.getElementById('loadingState');
-            const attendButton = document.getElementById('attendButton');
-            const successMessage = document.getElementById('successMessage');
-            
-            // Show loading
-            attendButton.style.display = 'none';
-            loadingState.classList.remove('hidden');
-            
-            try {
-                // Check if student has assignment and if task is uploaded
-                const hasAssignment = currentStudent.assignment && currentStudent.assignment !== 'Tidak ada tugas khusus';
-                const taskUploaded = localStorage.getItem(`task_${currentStudent.nis}_${new Date().toDateString()}`) === 'uploaded';
-                
-                // Determine completion status
-                let completionStatus = 'LENGKAP';
-                if (hasAssignment && !taskUploaded) {
-                    completionStatus = 'BELUM LENGKAP';
-                }
-                
-                // Prepare data for Google Sheets
-                const attendanceData = {
-                    timestamp: new Date().toISOString(),
-                    date: new Date().toLocaleDateString('id-ID'),
-                    time: new Date().toLocaleTimeString('id-ID'),
-                    nis: currentStudent.nis,
-                    name: currentStudent.name,
-                    class: currentStudent.class,
-                    subject: currentStudent.subject || 'Al-Qur\'an Hadits',
-                    status: 'Hadir',
-                    completion: completionStatus
-                };
+            showLoading('Menyimpan absensi...');
 
-                // Send to Google Sheets
-                await sendToGoogleSheets(attendanceData);
+            try {
+                // Demo implementation - replace with actual Google Sheets API
+                await saveAttendance();
                 
-                // Mark as attended
-                todayAttendance.add(currentStudent.nis);
-                updateTodayCount();
+                isAttended = true;
+                const today = new Date().toDateString();
+                localStorage.setItem(`attendance_${currentStudent.nis}_${today}`, 'true');
                 
-                // Show success
-                successMessage.classList.remove('hidden');
-                successMessage.classList.add('success-animation');
-                
-                // Update button state
-                attendButton.disabled = true;
-                attendButton.textContent = "Sudah Absen Hari Ini ✅";
-                attendButton.className = "w-full bg-green-500 text-white py-4 rounded-lg text-xl font-semibold cursor-not-allowed";
-                attendButton.style.display = 'block';
-                
-                // Clear form after 3 seconds
-                setTimeout(() => {
-                    clearForm();
-                }, 3000);
-                
+                hideLoading();
+                showSuccess('Absensi berhasil disimpan!');
+                updateStatusDisplay();
+            } catch (error) {
+                hideLoading();
+                showError('Gagal menyimpan absensi. Coba lagi.');
+            }
+        }
+
+        // Save attendance to Google Sheets via Apps Script
+        async function saveAttendance() {
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'saveAttendance',
+                        studentData: currentStudent,
+                        assignmentUploaded: isAssignmentUploaded
+                    })
+                });
+
+                const result = await response.json();
+                if (!result.success) {
+                    throw new Error(result.error || 'Failed to save attendance');
+                }
+
+                console.log('Attendance saved to Google Sheets');
             } catch (error) {
                 console.error('Error saving attendance:', error);
-                alert('Terjadi kesalahan saat menyimpan data. Silakan coba lagi.');
-            } finally {
-                loadingState.classList.add('hidden');
+                throw error;
             }
         }
 
-        // Send data to Google Sheets
-async function sendToGoogleSheets(data) {
-    try {
-        // Pastikan URL benar dan sudah di-deploy
-        const response = await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                action: 'addAttendance',
-                data: data
-            })
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const result = await response.json();
-        
-        if (!result.success) {
-            throw new Error(result.message || 'Failed to save attendance');
-        }
-        
-        return result;
-    } catch (error) {
-        console.error('Error sending to Google Sheets:', error);
-        
-        // Tampilkan pesan error ke user
-        alert('Gagal terhubung ke server. Silakan coba lagi atau hubungi admin.');
-        
-        // Simpan data sementara di localStorage jika gagal
-        const pendingData = JSON.parse(localStorage.getItem('pendingAttendance') || '[]');
-        pendingData.push(data);
-        localStorage.setItem('pendingAttendance', JSON.stringify(pendingData));
-        
-        return { success: false, message: error.message };
-    }
-}
-
-        // Update today's attendance count
-        function updateTodayCount() {
-            document.getElementById('todayCount').textContent = todayAttendance.size;
-        }
-
-        // Setup task file upload functionality
-        function setupTaskFileUpload() {
-            const fileInput = document.getElementById('taskFile');
-            const uploadButton = document.getElementById('uploadTaskButton');
-            const imagePreview = document.getElementById('taskImagePreview');
-            const previewImg = document.getElementById('taskPreviewImg');
+        // Upload assignment
+        async function uploadAssignment() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
             
-            fileInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    // Validate file size (10MB max)
-                    if (file.size > 10 * 1024 * 1024) {
-                        alert('Ukuran file terlalu besar. Maksimal 10MB.');
-                        fileInput.value = '';
-                        return;
-                    }
-                    
-                    // Validate file type
-                    if (!file.type.startsWith('image/')) {
-                        alert('File harus berupa gambar (JPG, PNG, HEIC).');
-                        fileInput.value = '';
-                        return;
-                    }
-                    
-                    // Show preview
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        previewImg.src = e.target.result;
-                        imagePreview.classList.remove('hidden');
-                    };
-                    reader.readAsDataURL(file);
-                    
-                    // Enable upload button
-                    uploadButton.disabled = false;
-                    uploadButton.className = "w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold cursor-pointer transition-all duration-300";
-                } else {
-                    // Hide preview and disable button
-                    imagePreview.classList.add('hidden');
-                    uploadButton.disabled = true;
-                    uploadButton.className = "w-full bg-gray-400 text-white py-3 rounded-lg font-semibold cursor-not-allowed transition-all duration-300";
-                }
-            });
-        }
-
-        // Upload task to Google Drive
-        async function uploadTask() {
-            const fileInput = document.getElementById('taskFile');
-            const uploadButton = document.getElementById('uploadTaskButton');
-            const loadingState = document.getElementById('loadingState');
-            
-            if (!fileInput.files[0]) {
-                alert('Pilih file terlebih dahulu!');
+            if (!file) {
+                showError('Mohon pilih file tugas terlebih dahulu');
                 return;
             }
-            
-            // Show loading
-            uploadButton.style.display = 'none';
-            loadingState.classList.remove('hidden');
-            loadingState.querySelector('p').textContent = 'Mengirim tugas ke Google Drive...';
-            
+
+            // Validate file size (10MB max)
+            if (file.size > 10 * 1024 * 1024) {
+                showError('Ukuran file terlalu besar. Maksimal 10MB.');
+                return;
+            }
+
+            // Validate file type
+            const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/jpg', 'image/png'];
+            if (!allowedTypes.includes(file.type)) {
+                showError('Format file tidak didukung. Gunakan PDF, DOC, DOCX, JPG, atau PNG.');
+                return;
+            }
+
+            showLoading('Mengupload tugas ke Google Drive...');
+
             try {
-                const file = fileInput.files[0];
+                // Demo implementation - replace with actual Google Drive API
+                await uploadToGoogleDrive(file);
                 
-                // Convert file to base64
-                const base64 = await fileToBase64(file);
+                isAssignmentUploaded = true;
+                const today = new Date().toDateString();
+                localStorage.setItem(`assignment_${currentStudent.nis}_${today}`, 'true');
                 
-                // Prepare upload data
-                const uploadData = {
-                    fileName: `${currentStudent.nis}_${currentStudent.name}_${new Date().toISOString().split('T')[0]}_${file.name}`,
-                    fileData: base64,
-                    mimeType: file.type,
-                    folderId: DRIVE_FOLDER_ID,
-                    studentInfo: {
-                        nis: currentStudent.nis,
-                        name: currentStudent.name,
-                        class: currentStudent.class,
-                        subject: currentStudent.subject,
-                        assignment: currentStudent.assignment
-                    },
-                    timestamp: new Date().toISOString()
-                };
+                // Update attendance record if already attended
+                if (isAttended) {
+                    await updateAttendanceCompleteness();
+                }
                 
-                // Send to Google Drive via Apps Script
-                await uploadToGoogleDrive(uploadData);
+                hideLoading();
+                showSuccess('Tugas berhasil diupload ke Google Drive!');
+                updateStatusDisplay();
                 
-                // Mark task as uploaded
-                localStorage.setItem(`task_${currentStudent.nis}_${new Date().toDateString()}`, 'uploaded');
-                
-                // Update attendance status to LENGKAP
-                await updateAttendanceStatus(currentStudent.nis, 'LENGKAP');
-                
-                // Show success message
-                alert('✅ Tugas berhasil dikirim ke Google Drive!');
-                
-                // Clear form
-                clearForm();
-                
+                // Clear file input
+                fileInput.value = '';
             } catch (error) {
-                console.error('Error uploading task:', error);
-                alert('Terjadi kesalahan saat mengirim tugas. Silakan coba lagi.');
-                uploadButton.style.display = 'block';
-            } finally {
-                loadingState.classList.add('hidden');
+                hideLoading();
+                showError('Gagal mengupload tugas. Coba lagi.');
             }
         }
 
-        // Clear all form data
-        function clearForm() {
-            document.getElementById('nisInput').value = '';
-            document.getElementById('studentInfo').classList.add('hidden');
-            document.getElementById('successMessage').classList.add('hidden');
-            document.getElementById('uploadSection').classList.add('hidden');
-            document.getElementById('assignmentInstructions').textContent = 'Masukkan NIS untuk melihat tugas BDR Anda';
-            
-            const attendButton = document.getElementById('attendButton');
-            attendButton.disabled = true;
-            attendButton.textContent = "Hadir! 🙋‍♂️";
-            attendButton.className = "w-full bg-gray-400 text-white py-4 rounded-lg text-xl font-semibold cursor-not-allowed transition-all duration-300";
-            attendButton.style.display = 'block';
-            
-            // Reset file input
-            document.getElementById('taskFile').value = '';
-            document.getElementById('taskImagePreview').classList.add('hidden');
-            document.getElementById('uploadTaskButton').disabled = true;
-            document.getElementById('uploadTaskButton').className = "w-full bg-gray-400 text-white py-3 rounded-lg font-semibold cursor-not-allowed transition-all duration-300";
-            
-            currentStudent = null;
-            document.getElementById('nisInput').focus();
+        // Upload to Google Drive via Apps Script
+        async function uploadToGoogleDrive(file) {
+            try {
+                const fileName = `${currentStudent.nis}_${currentStudent.nama}_${new Date().toISOString().split('T')[0]}_${file.name}`;
+                
+                // Convert file to base64 for upload
+                const base64Data = await fileToBase64(file);
+                
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'uploadFile',
+                        fileName: fileName,
+                        fileData: base64Data,
+                        mimeType: file.type,
+                        studentData: currentStudent
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    console.log('File uploaded to Google Drive:', result.data);
+                    return result.data;
+                } else {
+                    throw new Error(result.error || 'Upload failed');
+                }
+            } catch (error) {
+                console.error('Error uploading to Google Drive:', error);
+                throw error;
+            }
         }
 
-        // Convert file to base64
+        // Helper function to convert file to base64
         function fileToBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
-                reader.onload = () => {
-                    // Remove data:image/jpeg;base64, prefix
-                    const base64 = reader.result.split(',')[1];
-                    resolve(base64);
-                };
+                reader.onload = () => resolve(reader.result);
                 reader.onerror = error => reject(error);
             });
         }
 
-        // Upload to Google Drive
-        async function uploadToGoogleDrive(uploadData) {
-            console.log('Data yang akan dikirim ke Google Drive:', uploadData);
-            
+        // Update attendance completeness in Google Sheets via Apps Script
+        async function updateAttendanceCompleteness() {
             try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        action: 'uploadTask',
-                        data: uploadData
+                        action: 'updateCompleteness',
+                        nis: currentStudent.nis
                     })
                 });
-                
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                
+
                 const result = await response.json();
-                
-                if (!result.success) {
-                    throw new Error(result.message || 'Failed to upload task');
+                if (result.success) {
+                    console.log('Attendance completeness updated to LENGKAP');
+                } else {
+                    console.error('Error updating completeness:', result.error);
                 }
-                
-                return result;
             } catch (error) {
-                console.error('Error uploading to Google Drive:', error);
-                // Simulate success for demo purposes
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                return { success: true, message: 'Demo mode - file logged to console' };
+                console.error('Error updating attendance completeness:', error);
             }
         }
 
-        // Update attendance status
-        async function updateAttendanceStatus(nis, status) {
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'updateAttendanceStatus',
-                        nis: nis,
-                        status: status,
-                        date: new Date().toLocaleDateString('id-ID')
-                    })
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                
-                const result = await response.json();
-                return result;
-            } catch (error) {
-                console.error('Error updating attendance status:', error);
-                // Simulate success for demo purposes
-                await new Promise(resolve => setTimeout(resolve, 500));
-                return { success: true };
+        // Update status display
+        function updateStatusDisplay() {
+            // Attendance status
+            const attendanceStatus = document.getElementById('currentStatus');
+            const attendanceComplete = document.getElementById('attendanceComplete');
+            const attendanceBtn = document.getElementById('attendanceBtn');
+            
+            if (isAttended) {
+                attendanceStatus.textContent = 'Sudah Absen';
+                attendanceStatus.className = 'px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800';
+                attendanceComplete.textContent = 'Sudah';
+                attendanceComplete.className = 'px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800';
+                attendanceBtn.textContent = '✅ Sudah Absen';
+                attendanceBtn.disabled = true;
+                attendanceBtn.className = 'w-full bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg cursor-not-allowed';
+            }
+            
+            // Assignment status
+            const assignmentComplete = document.getElementById('assignmentComplete');
+            if (isAssignmentUploaded) {
+                assignmentComplete.textContent = 'Sudah';
+                assignmentComplete.className = 'px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800';
+            }
+            
+            // Overall status
+            const overallStatus = document.getElementById('overallStatus');
+            if (isAttended && isAssignmentUploaded) {
+                overallStatus.textContent = 'LENGKAP';
+                overallStatus.className = 'px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800';
+            } else if (isAttended || isAssignmentUploaded) {
+                overallStatus.textContent = 'SEBAGIAN';
+                overallStatus.className = 'px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800';
             }
         }
 
-        // Initialize the application
-        async function init() {
-            updateDateTime();
-            updateTodayCount();
+        // Logout
+        function logout() {
+            currentStudent = null;
+            isAttended = false;
+            isAssignmentUploaded = false;
             
-            // Update time every second
-            setInterval(updateDateTime, 1000);
-            
-            // Load student data from Google Sheets
-            await loadStudentData();
-            
-            // Add input event listener
-            document.getElementById('nisInput').addEventListener('input', handleNISInput);
-            
-            // Add enter key support
-            document.getElementById('nisInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' && !document.getElementById('attendButton').disabled) {
-                    markAttendance();
-                }
-            });
-            
-            // Focus on input after data is loaded
-            if (isDataLoaded) {
-                document.getElementById('nisInput').focus();
-            }
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('nisInput').value = '';
         }
 
-        // Start the application when page loads
-        document.addEventListener('DOMContentLoaded', init);
+        // Utility functions
+        function showLoading(message) {
+            document.getElementById('loadingText').textContent = message;
+            document.getElementById('loadingModal').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingModal').classList.add('hidden');
+        }
+
+        function showSuccess(message) {
+            document.getElementById('successMessage').textContent = message;
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorModal').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('App initialized - ready to use Google Apps Script');
+        });
     </script>
-    </body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96e932dae03781e9',t:'MTc1NTA5ODQ0OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
