@@ -179,7 +179,7 @@
 
     <script>
         // Google Sheets configuration
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxYRiAeCmPgLgFrV-DQYL0Wkj3V8VrncAWCFVVC-dQxfMMsOQ4W5ZsG4jJZDKVDDvBAZQ/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwyNmxq6A860FIVwy5pgMtUZbmMYBLe7KQvpm_jXbwY7YcDhohzeCzWqBL3ypOtAFacCQ/exec';
         const DRIVE_FOLDER_ID = '1oytE0ft1bwlfomndadI3zj6FbdvsOtjA';
         
         // Student data cache (will be loaded from Google Sheets)
@@ -242,18 +242,28 @@
         }
 
         // Update date and time
-        function updateDateTime() {
-            const now = new Date();
-            const options = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            };
-            document.getElementById('currentDate').textContent = now.toLocaleDateString('id-ID', options);
-            document.getElementById('currentTime').textContent = now.toLocaleTimeString('id-ID');
+function updateDateTime() {
+    try {
+        const now = new Date();
+        const options = { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        };
+        
+        // Pastikan elemen ada sebelum mengakses
+        const dateElement = document.getElementById('currentDate');
+        const timeElement = document.getElementById('currentTime');
+        
+        if (dateElement && timeElement) {
+            dateElement.textContent = now.toLocaleDateString('id-ID', options);
+            timeElement.textContent = now.toLocaleTimeString('id-ID');
         }
-
+    } catch (error) {
+        console.error('Error in updateDateTime:', error);
+    }
+}
         // Handle NIS input
         function handleNISInput() {
             if (!isDataLoaded) return;
@@ -395,39 +405,45 @@
         }
 
         // Send data to Google Sheets
-        async function sendToGoogleSheets(data) {
-            console.log('Data yang akan dikirim ke Google Sheets:', data);
-            
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'addAttendance',
-                        data: data
-                    })
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                
-                const result = await response.json();
-                
-                if (!result.success) {
-                    throw new Error(result.message || 'Failed to save attendance');
-                }
-                
-                return result;
-            } catch (error) {
-                console.error('Error sending to Google Sheets:', error);
-                // Simulate success for demo purposes
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                return { success: true, message: 'Demo mode - data logged to console' };
-            }
+async function sendToGoogleSheets(data) {
+    try {
+        // Pastikan URL benar dan sudah di-deploy
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'addAttendance',
+                data: data
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
+        
+        const result = await response.json();
+        
+        if (!result.success) {
+            throw new Error(result.message || 'Failed to save attendance');
+        }
+        
+        return result;
+    } catch (error) {
+        console.error('Error sending to Google Sheets:', error);
+        
+        // Tampilkan pesan error ke user
+        alert('Gagal terhubung ke server. Silakan coba lagi atau hubungi admin.');
+        
+        // Simpan data sementara di localStorage jika gagal
+        const pendingData = JSON.parse(localStorage.getItem('pendingAttendance') || '[]');
+        pendingData.push(data);
+        localStorage.setItem('pendingAttendance', JSON.stringify(pendingData));
+        
+        return { success: false, message: error.message };
+    }
+}
 
         // Update today's attendance count
         function updateTodayCount() {
