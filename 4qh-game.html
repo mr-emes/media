@@ -298,7 +298,6 @@
             align-content: center;
         }
 
-        /* Gaya baru untuk mystery box */
         .mystery-box {
             width: 100%;
             min-height: 70px;
@@ -314,91 +313,8 @@
             transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
-            box-shadow: 
-                0 4px 15px rgba(0,0,0,0.3),
-                inset 0 0 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             margin: 0;
-            perspective: 1000px;
-        }
-
-        .mystery-box-content {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transform-style: preserve-3d;
-            transition: transform 0.6s;
-        }
-
-        .box-number {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #ffd700;
-            text-shadow: 
-                0 0 5px #000,
-                0 0 10px #8B4513,
-                0 0 15px #654321;
-            position: relative;
-            z-index: 2;
-            background: rgba(0,0,0,0.3);
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            border: 3px solid #ffd700;
-            box-shadow: 
-                0 0 15px rgba(255,215,0,0.7),
-                inset 0 0 15px rgba(255,215,0,0.5);
-            animation: numberGlow 2s ease-in-out infinite alternate;
-        }
-
-        .box-icon {
-            position: absolute;
-            font-size: 2.5rem;
-            opacity: 0.2;
-            z-index: 1;
-            animation: iconFloat 3s ease-in-out infinite;
-        }
-
-        .box-decoration {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 20%, rgba(255,215,0,0.1) 0%, transparent 20%),
-                radial-gradient(circle at 80% 80%, rgba(255,215,0,0.1) 0%, transparent 20%);
-            z-index: 0;
-        }
-
-        @keyframes numberGlow {
-            from {
-                box-shadow: 
-                    0 0 10px rgba(255,215,0,0.5),
-                    inset 0 0 10px rgba(255,215,0,0.3);
-                transform: scale(1) rotate(0deg);
-            }
-            to {
-                box-shadow: 
-                    0 0 20px rgba(255,215,0,0.9),
-                    inset 0 0 15px rgba(255,215,0,0.7);
-                transform: scale(1.05) rotate(5deg);
-            }
-        }
-
-        @keyframes iconFloat {
-            0%, 100% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 0.2;
-            }
-            50% {
-                transform: translateY(-15px) rotate(15deg);
-                opacity: 0.3;
-            }
         }
 
         .mystery-box::before {
@@ -423,10 +339,6 @@
             border-color: #ffd700;
         }
 
-        .mystery-box:hover .box-number {
-            animation: numberGlow 0.5s ease-in-out infinite alternate;
-        }
-
         .mystery-box.opened {
             background: linear-gradient(45deg, #27ae60, #2ecc71);
             border-color: #229954;
@@ -434,18 +346,10 @@
             animation: openedBox 1s ease;
         }
 
-        .mystery-box.opened .box-number {
-            animation: none;
-            background: rgba(0,0,0,0.6);
-            color: white;
-            border-color: white;
-            box-shadow: 
-                0 0 15px rgba(255,255,255,0.7),
-                inset 0 0 15px rgba(255,255,255,0.5);
-        }
-
-        .mystery-box.opened .box-icon {
-            display: none;
+        @keyframes openedBox {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2) rotate(10deg); }
+            100% { transform: scale(1); }
         }
 
         .mystery-box.opened::after {
@@ -455,16 +359,9 @@
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 2rem;
-            z-index: 3;
         }
 
-        @keyframes openedBox {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2) rotate(10deg); }
-            100% { transform: scale(1); }
-        }
-
-        /* Gaya baru untuk modal question (fullscreen) */
+        /* NEW QUESTION MODAL STYLES */
         .question-modal {
             display: none;
             position: fixed;
@@ -472,7 +369,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.8);
             backdrop-filter: blur(10px);
             z-index: 1000;
             animation: modalFadeIn 0.3s ease;
@@ -485,162 +382,153 @@
 
         .question-content {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             background: white;
-            padding: 20px;
+            border-radius: 25px;
+            padding: 30px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
             display: flex;
             flex-direction: column;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+            border: 3px solid #667eea;
             animation: modalSlideIn 0.5s ease;
+            overflow: hidden;
         }
 
         @keyframes modalSlideIn {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from { transform: translate(-50%, -60%) scale(0.8); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
 
         .question-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-            border-bottom: 3px solid #eee;
-        }
-
-        .team-display {
-            font-size: 1.8rem;
-            font-weight: bold;
-            padding: 15px 25px;
-            border-radius: 15px;
-            color: white;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .team-display i {
-            margin-right: 10px;
-            font-size: 1.5rem;
-        }
-
-        .timer-container {
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 15px;
             text-align: center;
-            min-width: 120px;
-            border: 3px solid #fff;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .team-timer-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+
+        .current-team-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
             position: relative;
             overflow: hidden;
         }
 
-        .timer-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+        .progress-bar-container {
             width: 100%;
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .progress-bar {
             height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
-            transform: translateX(-100%);
-            animation: timerShimmer 2s linear infinite;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            width: 100%;
+            transition: width 1s linear;
+            border-radius: 10px;
         }
 
-        @keyframes timerShimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        .progress-bar.warning {
+            background: linear-gradient(90deg, #f39c12, #e67e22);
         }
 
-        .timer-label {
-            font-size: 0.9rem;
-            font-weight: bold;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .progress-bar.critical {
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            animation: pulseCritical 0.5s infinite alternate;
         }
 
-        .timer-display {
-            font-size: 2rem;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            animation: timerPulse 1s ease-in-out infinite;
+        @keyframes pulseCritical {
+            from { opacity: 1; }
+            to { opacity: 0.8; }
         }
 
-        @keyframes timerPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .timer-warning {
-            background: linear-gradient(45deg, #f39c12, #e67e22) !important;
-            animation: timerWarning 0.5s ease-in-out infinite alternate;
-        }
-
-        .timer-critical {
-            background: linear-gradient(45deg, #e74c3c, #c0392b) !important;
-            animation: timerCritical 0.3s ease-in-out infinite alternate;
-        }
-
-        @keyframes timerWarning {
-            from { box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-            to { box-shadow: 0 5px 25px rgba(243,156,18,0.6), 0 0 20px rgba(243,156,18,0.4); }
-        }
-
-        @keyframes timerCritical {
-            from { box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-            to { box-shadow: 0 5px 25px rgba(231,76,60,0.8), 0 0 30px rgba(231,76,60,0.6); }
-        }
-
-        .question-body {
+        .question-text-container {
             flex: 1;
             display: flex;
             flex-direction: column;
-            padding: 20px 0;
-            overflow-y: auto;
+            min-height: 0;
+            overflow: hidden;
         }
 
         .question-text {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             line-height: 1.6;
-            font-weight: bold;
             color: #333;
             text-align: center;
-            padding: 25px;
+            padding: 20px;
             background: linear-gradient(45deg, #f8f9fa, #e9ecef);
             border-radius: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             border-left: 6px solid #667eea;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+
+        .question-text::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        .options-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
         }
 
         .options-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 30px;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            overflow-y: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+            padding: 5px;
+        }
+
+        .options-grid::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
         }
 
         .option-btn {
-            padding: 5px;
+            padding: 20px;
             border: 3px solid #ddd;
-            border-radius: 5px;
+            border-radius: 15px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 1.2rem;
             font-weight: 600;
             transition: all 0.3s ease;
             background: white;
             color: #333;
             text-align: center;
-            min-height: 50px;
+            min-height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            word-break: break-word;
         }
 
         .option-btn:hover {
@@ -684,10 +572,10 @@
             75% { transform: translateX(10px); }
         }
 
-        .modal-footer {
+        .modal-buttons {
             text-align: center;
-            padding: 20px 0;
-            border-top: 3px solid #eee;
+            margin-top: 20px;
+            flex-shrink: 0;
         }
 
         .modal-btn {
@@ -744,207 +632,6 @@
         .control-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-
-        /* Animasi dan efek khusus */
-        .celebration-burst {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 1000;
-        }
-
-        .celebration-star {
-            position: absolute;
-            font-size: 2rem;
-            pointer-events: none;
-            z-index: 1000;
-            animation: starBurst 1.5s ease-out forwards;
-        }
-
-        @keyframes starBurst {
-            0% {
-                transform: scale(0) rotate(0deg);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.5) rotate(180deg);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(2) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        .celebration-particle {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 1000;
-        }
-
-        @keyframes particleBurst {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(0);
-                opacity: 0;
-            }
-        }
-
-        .fullscreen-celebration {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: celebrationFadeIn 0.5s ease;
-        }
-
-        .fullscreen-sad {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(139, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: sadFadeIn 0.5s ease;
-        }
-
-        @keyframes celebrationFadeIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes sadFadeIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .celebration-content {
-            text-align: center;
-            color: white;
-            animation: celebrationBounce 1s ease;
-        }
-
-        .sad-content {
-            text-align: center;
-            color: white;
-            animation: sadShake 1s ease;
-        }
-
-        @keyframes celebrationBounce {
-            0% { transform: scale(0.3) rotate(-10deg); opacity: 0; }
-            25% { transform: scale(1.2) rotate(5deg); opacity: 1; }
-            50% { transform: scale(0.9) rotate(-3deg); }
-            75% { transform: scale(1.1) rotate(2deg); }
-            100% { transform: scale(1) rotate(0deg); }
-        }
-
-        @keyframes sadShake {
-            0% { transform: translateX(0) scale(0.3); opacity: 0; }
-            25% { transform: translateX(-20px) scale(1.1); opacity: 1; }
-            50% { transform: translateX(20px) scale(0.9); }
-            75% { transform: translateX(-10px) scale(1.05); }
-            100% { transform: translateX(0) scale(1); }
-        }
-
-        .celebration-emoji {
-            font-size: 15rem;
-            margin-bottom: 30px;
-            animation: emojiSpin 2s ease-in-out;
-        }
-
-        .sad-emoji {
-            font-size: 15rem;
-            margin-bottom: 30px;
-            animation: emojiSad 2s ease-in-out;
-        }
-
-        @keyframes emojiSpin {
-            0% { transform: rotate(0deg) scale(0.5); }
-            50% { transform: rotate(180deg) scale(1.2); }
-            100% { transform: rotate(360deg) scale(1); }
-        }
-
-        @keyframes emojiSad {
-            0% { transform: scale(0.5) rotate(-10deg); }
-            25% { transform: scale(1.1) rotate(5deg); }
-            50% { transform: scale(0.9) rotate(-3deg); }
-            75% { transform: scale(1.05) rotate(2deg); }
-            100% { transform: scale(1) rotate(0deg); }
-        }
-
-        .celebration-text {
-            font-size: 3rem;
-            font-weight: bold;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
-            animation: textGlow 2s ease-in-out infinite alternate;
-        }
-
-        .sad-text {
-            font-size: 3rem;
-            font-weight: bold;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
-            animation: textSad 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes textGlow {
-            from { text-shadow: 3px 3px 6px rgba(0,0,0,0.5); }
-            to { text-shadow: 3px 3px 6px rgba(0,0,0,0.5), 0 0 30px #ffd700; }
-        }
-
-        @keyframes textSad {
-            from { text-shadow: 3px 3px 6px rgba(0,0,0,0.5); }
-            to { text-shadow: 3px 3px 6px rgba(0,0,0,0.5), 0 0 20px #ff4444; }
-        }
-
-        .celebration-fireworks {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        .firework {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            animation: fireworkExplode 2s ease-out forwards;
-        }
-
-        @keyframes fireworkExplode {
-            0% {
-                transform: scale(0);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(2);
-                opacity: 0;
-            }
         }
 
         .winner-announcement {
@@ -1042,29 +729,19 @@
                 font-size: 2.2rem;
             }
             
-            /* Responsive modal */
             .question-content {
-                padding: 10px;
+                padding: 20px;
             }
             
-            .question-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .team-display, .timer-container {
-                width: 100%;
-                margin-bottom: 10px;
-                text-align: center;
-            }
-            
-            .options-grid {
-                grid-template-columns: 1fr;
+            .question-text {
+                font-size: 1.4rem;
+                padding: 15px;
             }
             
             .option-btn {
-                min-height: 80px;
+                padding: 15px;
                 font-size: 1.1rem;
+                min-height: 70px;
             }
         }
     </style>
@@ -1132,28 +809,29 @@
         </div>
     </div>
 
-    <!-- Question Modal (Fullscreen) -->
+    <!-- Question Modal -->
     <div class="question-modal" id="question-modal">
         <div class="question-content">
             <div class="question-header">
-                <div class="team-display" id="modal-team-display">
-                    <span>🔴 TIM MERAH</span>
-                </div>
-                <div class="timer-container" id="timer-container">
-                    <div class="timer-label">⏰ WAKTU</div>
-                    <div class="timer-display" id="timer-display">20</div>
+                <div class="team-timer-container">
+                    <div class="current-team-display" id="modal-team-display">TIM MERAH</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
                 </div>
             </div>
             
-            <div class="question-body">
+            <div class="question-text-container">
                 <div class="question-text" id="modal-question-text">Loading...</div>
-                
+            </div>
+            
+            <div class="options-container">
                 <div class="options-grid" id="modal-options-grid">
                     <!-- Options will be generated by JavaScript -->
                 </div>
             </div>
             
-            <div class="modal-footer">
+            <div class="modal-buttons">
                 <button class="modal-btn" id="submit-answer" onclick="submitAnswer()" disabled>
                     ✨ JAWAB ✨
                 </button>
@@ -1321,7 +999,7 @@
             },
             {
                 question: "Bacaan <span class='arabic-text'>مِنْ جَنَّةٍ</span> hukumnya adalah...",
-                options: ["Izhar", "Ikhfa", "Idgham", "Iqlab"],
+                options: ["Ikhfa", "Izhar", "Idgham", "Iqlab"],
                 correct: 1,
                 points: 15
             },
@@ -1353,7 +1031,6 @@
 
         const teamNames = ['🔴 TIM MERAH', '🔵 TIM BIRU', '🟢 TIM HIJAU', '🟡 TIM KUNING', '🟣 TIM UNGU'];
         const teamClasses = ['team-red', 'team-blue', 'team-green', 'team-yellow', 'team-purple'];
-        const teamEmojis = ['🔴', '🔵', '🟢', '🟡', '🟣'];
 
         function initializeGame() {
             generateBoxes();
@@ -1376,8 +1053,7 @@
                 box.innerHTML = `
                     <div class="mystery-box-content">
                         <div class="box-number">${i}</div>
-                        <div class="box-icon">${getRandomTreasureIcon()}</div>
-                        <div class="box-decoration"></div>
+                        <div class="box-icon">🏴‍☠️</div>
                     </div>
                 `;
                 box.onclick = () => openBox(i);
@@ -1386,19 +1062,9 @@
             }
         }
 
-        function getRandomTreasureIcon() {
-            const icons = ['💰', '💎', '🏆', '👑', '🔶', '🔷', '🪙', '⚜️', '💍', '🔱'];
-            return icons[Math.floor(Math.random() * icons.length)];
-        }
-
         function openBox(boxNumber) {
             if (gameState.openedBoxes.includes(boxNumber)) {
                 return;
-            }
-            
-            // Minimize header when first box is opened
-            if (gameState.openedBoxes.length === 0) {
-                minimizeHeader();
             }
             
             // Get random question
@@ -1424,201 +1090,6 @@
             showQuestionModal();
         }
 
-        function minimizeHeader() {
-            const header = document.querySelector('.game-header');
-            header.classList.add('minimized');
-        }
-
-        function restoreHeader() {
-            const header = document.querySelector('.game-header');
-            header.classList.remove('minimized');
-        }
-
-        function startTimer() {
-            gameState.timeLeft = 20;
-            const timerDisplay = document.getElementById('timer-display');
-            const timerContainer = document.getElementById('timer-container');
-            
-            // Reset timer styling
-            timerContainer.classList.remove('timer-warning', 'timer-critical');
-            
-            gameState.timer = setInterval(() => {
-                gameState.timeLeft--;
-                timerDisplay.textContent = gameState.timeLeft;
-                
-                // Change timer color based on time left
-                if (gameState.timeLeft <= 5) {
-                    timerContainer.classList.remove('timer-warning');
-                    timerContainer.classList.add('timer-critical');
-                } else if (gameState.timeLeft <= 10) {
-                    timerContainer.classList.add('timer-warning');
-                }
-                
-                // Auto submit when time runs out
-                if (gameState.timeLeft <= 0) {
-                    clearInterval(gameState.timer);
-                    if (gameState.selectedAnswer !== null) {
-                        submitAnswer();
-                    } else {
-                        // No answer selected, close modal
-                        setTimeout(() => {
-                            closeModal();
-                        }, 1000);
-                    }
-                }
-            }, 1000);
-        }
-
-        function stopTimer() {
-            if (gameState.timer) {
-                clearInterval(gameState.timer);
-                gameState.timer = null;
-            }
-        }
-
-        function createFullscreenCelebration() {
-            // Create fullscreen celebration overlay
-            const celebration = document.createElement('div');
-            celebration.className = 'fullscreen-celebration';
-            
-            const content = document.createElement('div');
-            content.className = 'celebration-content';
-            
-            const emoji = document.createElement('div');
-            emoji.className = 'celebration-emoji';
-            emoji.textContent = '🏆';
-            
-            const text = document.createElement('div');
-            text.className = 'celebration-text';
-            text.textContent = '🎉 BENAR! 🎉';
-            
-            const fireworks = document.createElement('div');
-            fireworks.className = 'celebration-fireworks';
-            
-            // Create fireworks
-            const colors = ['#ffd700', '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff'];
-            for (let i = 0; i < 50; i++) {
-                setTimeout(() => {
-                    const firework = document.createElement('div');
-                    firework.className = 'firework';
-                    firework.style.background = colors[Math.floor(Math.random() * colors.length)];
-                    firework.style.left = Math.random() * 100 + '%';
-                    firework.style.top = Math.random() * 100 + '%';
-                    firework.style.animationDelay = Math.random() * 1 + 's';
-                    fireworks.appendChild(firework);
-                    
-                    setTimeout(() => {
-                        firework.remove();
-                    }, 2000);
-                }, i * 50);
-            }
-            
-            content.appendChild(emoji);
-            content.appendChild(text);
-            celebration.appendChild(content);
-            celebration.appendChild(fireworks);
-            document.body.appendChild(celebration);
-            
-            // Auto close after 3 seconds
-            setTimeout(() => {
-                celebration.remove();
-            }, 3000);
-        }
-
-        function createFullscreenSad() {
-            // Create fullscreen sad overlay
-            const sadScreen = document.createElement('div');
-            sadScreen.className = 'fullscreen-sad';
-            
-            const content = document.createElement('div');
-            content.className = 'sad-content';
-            
-            const emoji = document.createElement('div');
-            emoji.className = 'sad-emoji';
-            emoji.textContent = '😢';
-            
-            const text = document.createElement('div');
-            text.className = 'sad-text';
-            text.textContent = '❌ SALAH! ❌';
-            
-            content.appendChild(emoji);
-            content.appendChild(text);
-            sadScreen.appendChild(content);
-            document.body.appendChild(sadScreen);
-            
-            // Auto close after 3 seconds
-            setTimeout(() => {
-                sadScreen.remove();
-            }, 3000);
-        }
-
-        function createCelebration(element) {
-            const rect = element.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            
-            // Create stars
-            const stars = ['⭐', '🌟', '✨', '💫', '🎉'];
-            for (let i = 0; i < 8; i++) {
-                const star = document.createElement('div');
-                star.className = 'celebration-star';
-                star.textContent = stars[Math.floor(Math.random() * stars.length)];
-                star.style.left = centerX + 'px';
-                star.style.top = centerY + 'px';
-                
-                // Random direction
-                const angle = (i * 45) + Math.random() * 30;
-                const distance = 100 + Math.random() * 50;
-                const endX = centerX + Math.cos(angle * Math.PI / 180) * distance;
-                const endY = centerY + Math.sin(angle * Math.PI / 180) * distance;
-                
-                star.style.setProperty('--end-x', endX + 'px');
-                star.style.setProperty('--end-y', endY + 'px');
-                
-                document.body.appendChild(star);
-                
-                // Remove after animation
-                setTimeout(() => {
-                    star.remove();
-                }, 1500);
-            }
-            
-            // Create colorful particles
-            const colors = ['#ffd700', '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff'];
-            for (let i = 0; i < 15; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'celebration-particle';
-                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-                particle.style.left = centerX + 'px';
-                particle.style.top = centerY + 'px';
-                
-                // Random direction and distance
-                const angle = Math.random() * 360;
-                const distance = 80 + Math.random() * 120;
-                const duration = 0.8 + Math.random() * 0.7;
-                
-                particle.style.animation = `particleBurst ${duration}s ease-out forwards`;
-                particle.style.setProperty('--dx', Math.cos(angle * Math.PI / 180) * distance + 'px');
-                particle.style.setProperty('--dy', Math.sin(angle * Math.PI / 180) * distance + 'px');
-                
-                // Apply the movement
-                particle.animate([
-                    { transform: 'translate(0, 0) scale(1)', opacity: 1 },
-                    { transform: `translate(${Math.cos(angle * Math.PI / 180) * distance}px, ${Math.sin(angle * Math.PI / 180) * distance}px) scale(0)`, opacity: 0 }
-                ], {
-                    duration: duration * 1000,
-                    easing: 'ease-out'
-                });
-                
-                document.body.appendChild(particle);
-                
-                // Remove after animation
-                setTimeout(() => {
-                    particle.remove();
-                }, duration * 1000);
-            }
-        }
-
         function showQuestionModal() {
             const question = questions[gameState.currentQuestion];
             const modal = document.getElementById('question-modal');
@@ -1626,9 +1097,9 @@
             const questionText = document.getElementById('modal-question-text');
             const optionsGrid = document.getElementById('modal-options-grid');
             
-            // Set team display with appropriate class and emoji
-            teamDisplay.innerHTML = `<span>${teamEmojis[gameState.currentTeam - 1]} ${teamNames[gameState.currentTeam - 1]}</span>`;
-            teamDisplay.className = `team-display ${teamClasses[gameState.currentTeam - 1]}`;
+            // Set team display with appropriate class
+            teamDisplay.textContent = teamNames[gameState.currentTeam - 1];
+            teamDisplay.className = `current-team-display ${teamClasses[gameState.currentTeam - 1]}`;
             
             questionText.innerHTML = question.question;
             
@@ -1637,7 +1108,7 @@
             question.options.forEach((option, index) => {
                 const optionBtn = document.createElement('button');
                 optionBtn.className = 'option-btn';
-                optionBtn.innerHTML = `<span style="font-weight:bold;">${String.fromCharCode(65 + index)}.</span> ${option}`;
+                optionBtn.innerHTML = `${String.fromCharCode(65 + index)}. ${option}`;
                 optionBtn.onclick = () => selectOption(index, optionBtn);
                 optionsGrid.appendChild(optionBtn);
             });
@@ -1651,7 +1122,56 @@
             modal.style.display = 'block';
             
             // Start timer
-            startTimer();
+            startProgressBar();
+        }
+
+        function startProgressBar() {
+            const progressBar = document.getElementById('progress-bar');
+            progressBar.className = 'progress-bar';
+            progressBar.style.width = '100%';
+            
+            // Reset time
+            gameState.timeLeft = 20;
+            
+            // Clear existing timer if any
+            if (gameState.timer) {
+                clearInterval(gameState.timer);
+            }
+            
+            // Calculate step size for smooth animation
+            const steps = 200; // Number of steps for smooth animation
+            const stepTime = (20 * 1000) / steps; // Total time divided by steps
+            const stepSize = 100 / steps;
+            
+            let currentStep = 0;
+            
+            gameState.timer = setInterval(() => {
+                currentStep++;
+                const newWidth = 100 - (currentStep * stepSize);
+                progressBar.style.width = `${newWidth}%`;
+                
+                // Change color based on time left
+                if (newWidth <= 25) {
+                    progressBar.className = 'progress-bar critical';
+                } else if (newWidth <= 50) {
+                    progressBar.className = 'progress-bar warning';
+                }
+                
+                // Update time left
+                gameState.timeLeft = Math.ceil((20 * (100 - currentStep * stepSize)) / 100);
+                
+                // Time's up
+                if (newWidth <= 0) {
+                    clearInterval(gameState.timer);
+                    if (gameState.selectedAnswer !== null) {
+                        submitAnswer();
+                    } else {
+                        setTimeout(() => {
+                            closeModal();
+                        }, 1000);
+                    }
+                }
+            }, stepTime);
         }
 
         function selectOption(optionIndex, optionElement) {
@@ -1671,7 +1191,7 @@
             if (gameState.selectedAnswer === null) return;
             
             // Stop timer
-            stopTimer();
+            clearInterval(gameState.timer);
             
             const question = questions[gameState.currentQuestion];
             const options = document.querySelectorAll('.option-btn');
@@ -1682,16 +1202,6 @@
                 option.onclick = null; // Disable further clicks
                 if (index === question.correct) {
                     option.classList.add('correct');
-                    // Create celebration animation for correct answer
-                    if (isCorrect) {
-                        setTimeout(() => {
-                            createCelebration(option);
-                            // Show fullscreen celebration
-                            setTimeout(() => {
-                                createFullscreenCelebration();
-                            }, 500);
-                        }, 300);
-                    }
                 } else if (index === gameState.selectedAnswer && !isCorrect) {
                     option.classList.add('incorrect');
                 }
@@ -1701,11 +1211,6 @@
             if (isCorrect) {
                 gameState.teamScores[gameState.currentTeam - 1] += question.points;
                 updateScoreboard();
-            } else {
-                // Show fullscreen sad animation for wrong answer
-                setTimeout(() => {
-                    createFullscreenSad();
-                }, 800);
             }
             
             // Hide submit button, show close button
@@ -1715,12 +1220,12 @@
             // Auto close modal after animations complete
             setTimeout(() => {
                 closeModal();
-            }, 4000);
+            }, 3000);
         }
 
         function closeModal() {
             // Stop timer if still running
-            stopTimer();
+            clearInterval(gameState.timer);
             
             document.getElementById('question-modal').style.display = 'none';
             
@@ -1805,7 +1310,7 @@
 
         function resetGame() {
             // Stop timer if running
-            stopTimer();
+            clearInterval(gameState.timer);
             
             gameState = {
                 currentTeam: 1,
@@ -1822,9 +1327,6 @@
             updateScoreboard();
             updateCurrentTeamDisplay();
             generateBoxes();
-            
-            // Restore header to full size
-            restoreHeader();
             
             // Close any open modals
             document.getElementById('question-modal').style.display = 'none';
