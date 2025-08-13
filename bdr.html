@@ -1,604 +1,281 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi Online & Upload Tugas</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .loading {
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .fade-in {
-            animation: fadeIn 0.3s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .prose {
-            line-height: 1.6;
-        }
-        .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
-            font-weight: 600;
-            margin-top: 1em;
-            margin-bottom: 0.5em;
-        }
-        .prose p {
-            margin-bottom: 1em;
-        }
-        .prose ul, .prose ol {
-            margin-bottom: 1em;
-            padding-left: 1.5em;
-        }
-        .prose li {
-            margin-bottom: 0.25em;
-        }
-        .prose strong {
-            font-weight: 600;
-        }
-        .prose em {
-            font-style: italic;
-        }
-        .prose a {
-            color: #2563eb;
-            text-decoration: underline;
-        }
-        .prose img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 0.5rem;
-            margin: 1em 0;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <title>BDR Attendance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- SweetAlert2 untuk notifikasi yang rapi (opsional, tapi saya pakai) -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    :root { --brand:#2563eb; --bg:#0b1220; --card:#0f172a; --muted:#94a3b8; --ok:#16a34a; --warn:#f59e0b; --err:#dc2626; }
+    html,body { margin:0; background:#0b1220; color:#e5e7eb; font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial; }
+    .wrap { max-width:900px; margin:40px auto; padding:0 16px; }
+    .card { background:linear-gradient(180deg,#0f172a, #0b1220); border:1px solid rgba(148,163,184,.2); border-radius:16px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,.35);}
+    h1 { font-size:22px; margin:0 0 12px; }
+    p.muted { color:var(--muted); margin:0 0 20px; }
+    .grid { display:grid; gap:14px; grid-template-columns:repeat(12,1fr); }
+    .row { grid-column:span 12; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    label { font-size:14px; color:#cbd5e1; display:block; margin-bottom:6px; }
+    input[type="text"], input[type="file"] { width:100%; background:#0b1220; border:1px solid rgba(148,163,184,.35); color:#e5e7eb; border-radius:10px; padding:10px 12px; outline:none; }
+    .col-4 { grid-column:span 12; } .col-6{grid-column:span 12;} .col-8{grid-column:span 12;}
+    @media (min-width:720px){ .col-4{grid-column:span 4} .col-6{grid-column:span 6} .col-8{grid-column:span 8} }
+    .btn { background:var(--brand); border:none; color:white; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:600; }
+    .btn.secondary { background:#1f2937; }
+    .btn.warn { background:var(--warn); }
+    .btn.ok { background:var(--ok); }
+    .btn:disabled { opacity:.6; cursor:not-allowed; }
+    .badge { display:inline-block; padding:4px 10px; border-radius:999px; font-size:12px; border:1px solid rgba(148,163,184,.35); color:#cbd5e1; }
+    .status { font-weight:700; }
+    .hidden{ display:none !important; }
+    .kv { display:grid; grid-template-columns:130px 1fr; gap:8px 14px; }
+    .foot { color:#64748b; font-size:12px; margin-top:16px; }
+    .hr { height:1px; background:rgba(148,163,184,.16); margin:14px 0; }
+  </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
-    <!-- Header -->
-    <div class="bg-white shadow-lg">
-        <div class="px-4 py-6">
-            <div class="flex items-center justify-center mb-3">
-                <img src="https://i.imgur.com/0Laf7Zu.png" alt="Logo" class="w-16 h-16 mr-4" onerror="this.style.display='none';">
-                <div class="text-left">
-                    <p class="text-sm text-gray-800 font-medium">Absensi & Tugas Online</p>
-                    <p class="text-sm text-gray-600">Sistem Pembelajaran dari Rumah</p>
-                    <p class="text-sm text-blue-1000 font-semibold">MIN SINGKAWANG</p>
-                </div>
-            </div>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>📚 BDR Attendance</h1>
+      <p class="muted">Masukkan NIS, cek data siswa, absen, lalu unggah bukti tugas. File akan otomatis dinamai <code>NIS_Nama_YYYY-MM-DD.ext</code> di Google Drive.</p>
 
+      <div class="grid">
+        <div class="col-6">
+          <label for="nisInput">NIS</label>
+          <input id="nisInput" type="text" placeholder="contoh: 20231001" />
         </div>
+        <div class="col-6" style="display:flex;align-items:flex-end;gap:10px;">
+          <button class="btn" id="btnCek">Cek Data</button>
+          <span id="cekLoading" class="badge hidden">memeriksa...</span>
+        </div>
+
+        <div class="col-12 hr"></div>
+
+        <div class="col-6">
+          <div class="kv">
+            <div>Nama</div><div id="infoNama" class="status">-</div>
+            <div>Kelas</div><div id="infoKelas">-</div>
+            <div>Mapel</div><div id="infoMapel">-</div>
+            <div>Tugas</div><div id="infoTugas">-</div>
+            <div>Absen Hari Ini</div><div id="infoAbsen"><span class="badge">-</span></div>
+            <div>Kelengkapan</div><div id="infoLengkap"><span class="badge">-</span></div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <label for="taskFile">Unggah Tugas (foto/pdf/doc)</label>
+          <input id="taskFile" type="file" />
+          <div class="row" style="margin-top:10px;">
+            <button id="btnAbsen" class="btn ok" disabled>Absen</button>
+            <button id="btnUpload" class="btn" disabled>Upload Tugas</button>
+            <span id="loadingState" class="badge hidden">proses...</span>
+          </div>
+          <div class="foot">Pastikan ukuran file wajar &amp; koneksi stabil.</div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Main Container -->
-    <div class="container mx-auto px-4 py-6 max-w-md">
-        <!-- Login Form -->
-        <div id="loginForm" class="bg-white rounded-xl shadow-lg p-6 mb-6">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center">🔐 Login Siswa</h2>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">NIS</label>
-                    <input type="text" id="nisInput" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Masukkan NIS Anda">
-                </div>
-                <button onclick="loginStudent()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200">
-                    Masuk
-                </button>
-            </div>
-        </div>
+  <script>
+    // === KONFIGURASI ===
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwtmEZaCmxgK9XYVNDNUz8uxiQBdSrwG9Zax8bcrh-v6EYvT5PLS6izdgvkZmqAC5UPrg/exec";
 
-        <!-- Student Dashboard -->
-        <div id="dashboard" class="hidden">
-            <!-- Student Info -->
-            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span class="text-2xl">👨‍🎓</span>
-                    </div>
-                    <h3 id="studentName" class="text-lg font-semibold text-gray-800"></h3>
-                    <p id="studentClass" class="text-gray-600"></p>
-                    <p id="studentSubject" class="text-sm text-blue-600 font-medium"></p>
-                </div>
-            </div>
+    // === STATE ===
+    let currentStudent = null; // { nis, name, class, subject, assignment }
+    let todayStatus = { attended:false, assignmentUploaded:false };
 
-            <!-- Attendance Section -->
-            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">📋 Absensi Hari Ini</h3>
-                <div id="attendanceStatus" class="mb-4">
-                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <span class="text-gray-700">Status Kehadiran:</span>
-                        <span id="currentStatus" class="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">Belum Absen</span>
-                    </div>
-                </div>
-                <button id="attendanceBtn" onclick="markAttendance()" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200">
-                    ✅ Absen Sekarang
-                </button>
-            </div>
+    // === UTIL ALERT ===
+    function toast(icon, title, text){
+      return Swal.fire({ icon, title, text, confirmButtonText:'OK' });
+    }
+    const showSuccessAlert = (t, m)=>toast('success', t, m);
+    const showErrorAlert = (t, m)=>toast('error', t, m);
+    const showInfoAlert = (t, m)=>toast('info', t, m);
 
-            <!-- Assignment Upload Section -->
-            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">📤 Upload Tugas</h3>
-                <div id="assignmentInfo" class="mb-4 p-4 bg-blue-50 rounded-lg">
-                    <p class="text-sm text-blue-800 font-medium mb-2">Tugas:</p>
-                    <div id="assignmentTitle" class="text-blue-700 prose prose-sm max-w-none"></div>
-                </div>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Pilih File Tugas</label>
-                        <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                        <p class="text-xs text-gray-500 mt-1">Format: PDF, DOC, DOCX, JPG, PNG (Max 10MB)</p>
-                    </div>
-                    <button id="uploadBtn" onclick="uploadAssignment()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200">
-                        📁 Upload Tugas
-                    </button>
-                </div>
-            </div>
+    // === HELPER: GET & POST ===
+    async function gasGet(params){
+      const url = new URL(WEB_APP_URL);
+      Object.entries(params).forEach(([k,v])=>url.searchParams.set(k, v));
+      const res = await fetch(url.toString(), { method:'GET' });
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      return res.json();
+    }
+    async function gasPost(payload){
+      const res = await fetch(WEB_APP_URL, {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      return res.json();
+    }
 
-            <!-- Status Summary -->
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">📊 Status Kelengkapan</h3>
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="text-gray-700">Absensi:</span>
-                        <span id="attendanceComplete" class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">Belum</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-gray-700">Upload Tugas:</span>
-                        <span id="assignmentComplete" class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">Belum</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-gray-700 font-medium">Kelengkapan:</span>
-                        <span id="overallStatus" class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">BELUM LENGKAP</span>
-                    </div>
-                </div>
-            </div>
+    // === READ FILE AS BASE64 (data URL) ===
+    function readFileAsBase64(file){
+      return new Promise((resolve,reject)=>{
+        const r = new FileReader();
+        r.onload = () => resolve(r.result);     // includes data:...;base64,
+        r.onerror = () => reject(new Error('Gagal membaca file'));
+        r.readAsDataURL(file);
+      });
+    }
 
-            <!-- Logout Button -->
-            <button onclick="logout()" class="w-full mt-6 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200">
-                🚪 Keluar
-            </button>
-        </div>
-    </div>
+    // === RENDER INFO SISWA & STATUS ===
+    function renderStudentInfo(stu){
+      document.getElementById('infoNama').textContent   = stu?.nama || '-';
+      document.getElementById('infoKelas').textContent  = stu?.kelas || '-';
+      document.getElementById('infoMapel').textContent  = stu?.mapel || '-';
+      document.getElementById('infoTugas').textContent  = stu?.tugas || '-';
+    }
+    function renderAttendanceStatus(st){
+      const absenEl = document.getElementById('infoAbsen');
+      const lengEl  = document.getElementById('infoLengkap');
+      absenEl.innerHTML = `<span class="badge">${st.attended ? 'SUDAH' : 'BELUM'}</span>`;
+      lengEl.innerHTML  = `<span class="badge">${st.assignmentUploaded ? 'LENGKAP' : 'BELUM LENGKAP'}</span>`;
 
-    <!-- Loading Modal -->
-    <div id="loadingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-xl p-6 text-center">
-            <div class="loading w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
-            <p id="loadingText" class="text-gray-700">Memproses...</p>
-        </div>
-    </div>
+      // tombol aktif bila ada student
+      const hasStu = !!currentStudent;
+      document.getElementById('btnAbsen').disabled  = !hasStu || st.attended;
+      document.getElementById('btnUpload').disabled = !hasStu;
+    }
 
-    <!-- Success Modal -->
-    <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-xl p-6 text-center max-w-sm mx-4">
-            <div class="text-4xl mb-4">✅</div>
-            <h3 class="text-lg font-semibold text-gray-800 mb-2">Berhasil!</h3>
-            <p id="successMessage" class="text-gray-600 mb-4"></p>
-            <button onclick="closeModal('successModal')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">OK</button>
-        </div>
-    </div>
-
-    <!-- Error Modal -->
-    <div id="errorModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-xl p-6 text-center max-w-sm mx-4">
-            <div class="text-4xl mb-4">❌</div>
-            <h3 class="text-lg font-semibold text-gray-800 mb-2">Error</h3>
-            <p id="errorMessage" class="text-gray-600 mb-4"></p>
-            <button onclick="closeModal('errorModal')" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg">OK</button>
-        </div>
-    </div>
-
-    <script>
-        // Configuration - Replace with your Google Apps Script URL
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwtmEZaCmxgK9XYVNDNUz8uxiQBdSrwG9Zax8bcrh-v6EYvT5PLS6izdgvkZmqAC5UPrg/exec';
-
-        let currentStudent = null;
-        let isAttended = false;
-        let isAssignmentUploaded = false;
-
-        // No initialization needed for Apps Script
-
-        // Login student
-        async function loginStudent() {
-            const nis = document.getElementById('nisInput').value.trim();
-            
-            if (!nis) {
-                showError('Mohon masukkan NIS Anda');
-                return;
-            }
-
-            showLoading('Mencari data siswa...');
-
-            try {
-                // Demo data - replace with actual Google Sheets API call
-                const studentData = await getStudentData(nis);
-                
-                if (studentData) {
-                    currentStudent = studentData;
-                    showDashboard();
-                    hideLoading();
-                } else {
-                    hideLoading();
-                    showError('NIS tidak ditemukan. Mohon periksa kembali.');
-                }
-            } catch (error) {
-                hideLoading();
-                console.error('Login error:', error);
-                
-                // Show more specific error messages
-                if (error.message.includes('HTTP error')) {
-                    showError('Tidak dapat terhubung ke server. Periksa koneksi internet Anda.');
-                } else if (error.message.includes('Failed to fetch')) {
-                    showError('Gagal menghubungi Google Apps Script. Pastikan URL sudah benar dan script sudah di-deploy.');
-                } else {
-                    showError(`Terjadi kesalahan: ${error.message}`);
-                }
-            }
-        }
-
-        // Sample student data for testing
-        const sampleStudents = {
-            '12345': {
-                nis: '12345',
-                nama: 'Ahmad Rizki',
-                kelas: 'VI A',
-                mapel: 'Matematika',
-                tugas: '<strong>Tugas Matematika:</strong><br>Kerjakan soal-soal berikut:<br>1. 25 + 37 = ?<br>2. 84 - 29 = ?<br>3. 12 × 8 = ?<br>4. 96 ÷ 6 = ?<br><br><em>Kumpulkan dalam bentuk PDF atau foto yang jelas.</em>'
-            },
-            '67890': {
-                nis: '67890',
-                nama: 'Siti Nurhaliza',
-                kelas: 'V B',
-                mapel: 'Bahasa Indonesia',
-                tugas: '<strong>Tugas Bahasa Indonesia:</strong><br>Buatlah karangan tentang "Liburan Sekolahku" dengan ketentuan:<br>• Minimal 2 paragraf<br>• Gunakan ejaan yang benar<br>• Tulis tangan di kertas bergaris<br><br><em>Foto hasil karangan dan upload dalam format JPG/PNG.</em>'
-            },
-            '11111': {
-                nis: '11111',
-                nama: 'Budi Santoso',
-                kelas: 'IV C',
-                mapel: 'IPA',
-                tugas: '<strong>Tugas IPA:</strong><br>Amati tumbuhan di sekitar rumahmu dan jawab:<br>1. Sebutkan 5 nama tumbuhan yang kamu temukan<br>2. Bagian mana yang bisa dimakan?<br>3. Manfaat tumbuhan tersebut untuk manusia<br><br><em>Tulis jawabanmu di buku tugas dan foto hasilnya.</em>'
-            }
+    // === AKSI: CEK SISWA ===
+    async function handleCek(){
+      const nis = document.getElementById('nisInput').value.trim();
+      if(!nis) return showInfoAlert('Perlu NIS','Masukkan NIS terlebih dahulu.');
+      const cekLoad = document.getElementById('cekLoading');
+      cekLoad.classList.remove('hidden');
+      try{
+        // 1) getStudent
+        const s = await gasGet({ action:'getStudent', nis });
+        if(!s.success || !s.data) throw new Error(s.error || 'Siswa tidak ditemukan');
+        currentStudent = {
+          nis: s.data.nis,
+          nama: s.data.nama,
+          kelas: s.data.kelas,
+          mapel: s.data.mapel,
+          subject: s.data.mapel,
+          assignment: s.data.tugas || 'Tidak ada tugas untuk hari ini'
         };
+        renderStudentInfo(currentStudent);
 
-        // Get student data from Google Sheets via Apps Script
-        async function getStudentData(nis) {
-            try {
-                console.log('Attempting to fetch student data for NIS:', nis);
-                console.log('Using Apps Script URL:', APPS_SCRIPT_URL);
-                
-                // Use GET request with URL parameters to avoid CORS issues
-                const url = `${APPS_SCRIPT_URL}?action=getStudent&nis=${encodeURIComponent(nis)}`;
-                console.log('Full URL:', url);
-                
-                const response = await fetch(url, {
-                    method: 'GET',
-                    mode: 'cors'
-                });
+        // 2) checkAttendance
+        const c = await gasGet({ action:'checkAttendance', nis });
+        if(!c.success) throw new Error(c.error || 'Gagal cek kehadiran');
+        todayStatus = c.data || { attended:false, assignmentUploaded:false };
+        renderAttendanceStatus(todayStatus);
 
-                console.log('Response status:', response.status);
-                console.log('Response ok:', response.ok);
+        await showSuccessAlert('Siap!','Data siswa berhasil dimuat.');
+      }catch(err){
+        console.error(err);
+        await showErrorAlert('Gagal', err.message || 'Gagal memeriksa data siswa.');
+      }finally{
+        cekLoad.classList.add('hidden');
+      }
+    }
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const result = await response.json();
-                console.log('Apps Script response:', result);
-                
-                if (result.success) {
-                    return result.data;
-                } else {
-                    console.error('Error from Apps Script:', result.error);
-                    return null;
-                }
-            } catch (error) {
-                console.error('Error fetching student data:', error);
-                console.error('Error details:', error.message);
-                
-                // Fallback to sample data for testing
-                console.log('Falling back to sample data for testing...');
-                if (sampleStudents[nis]) {
-                    console.log('Found sample student:', sampleStudents[nis]);
-                    showError('Menggunakan data percobaan. Google Apps Script belum terhubung.');
-                    // Wait a bit to show the error message, then continue
-                    setTimeout(() => {
-                        closeModal('errorModal');
-                    }, 2000);
-                    return sampleStudents[nis];
-                }
-                
-                throw error;
-            }
-        }
-
-        // Show dashboard
-        function showDashboard() {
-            document.getElementById('loginForm').classList.add('hidden');
-            document.getElementById('dashboard').classList.remove('hidden');
-            
-            // Update student info
-            document.getElementById('studentName').textContent = currentStudent.nama;
-            document.getElementById('studentClass').textContent = currentStudent.kelas;
-            document.getElementById('studentSubject').textContent = currentStudent.mapel;
-            document.getElementById('assignmentTitle').innerHTML = currentStudent.tugas;
-            
-            // Check today's attendance status
-            checkTodayAttendance();
-        }
-
-        // Check today's attendance from Google Sheets via Apps Script
-        async function checkTodayAttendance() {
-            try {
-                const url = `${APPS_SCRIPT_URL}?action=checkAttendance&nis=${encodeURIComponent(currentStudent.nis)}`;
-                const response = await fetch(url, {
-                    method: 'GET',
-                    mode: 'cors'
-                });
-
-                const result = await response.json();
-                if (result.success) {
-                    isAttended = result.data.attended;
-                    isAssignmentUploaded = result.data.assignmentUploaded;
-                }
-                
-                updateStatusDisplay();
-            } catch (error) {
-                console.error('Error checking attendance:', error);
-                updateStatusDisplay();
-            }
-        }
-
-        // Mark attendance
-        async function markAttendance() {
-            if (isAttended) {
-                showError('Anda sudah melakukan absensi hari ini');
-                return;
-            }
-
-            showLoading('Menyimpan absensi...');
-
-            try {
-                // Demo implementation - replace with actual Google Sheets API
-                await saveAttendance();
-                
-                isAttended = true;
-                const today = new Date().toDateString();
-                localStorage.setItem(`attendance_${currentStudent.nis}_${today}`, 'true');
-                
-                hideLoading();
-                showSuccess('Absensi berhasil disimpan!');
-                updateStatusDisplay();
-            } catch (error) {
-                hideLoading();
-                showError('Gagal menyimpan absensi. Coba lagi.');
-            }
-        }
-
-        // Save attendance to Google Sheets via Apps Script
-        async function saveAttendance() {
-            try {
-                const params = new URLSearchParams({
-                    action: 'saveAttendance',
-                    nis: currentStudent.nis,
-                    nama: currentStudent.nama,
-                    kelas: currentStudent.kelas,
-                    mapel: currentStudent.mapel,
-                    assignmentUploaded: isAssignmentUploaded
-                });
-                
-                const url = `${APPS_SCRIPT_URL}?${params.toString()}`;
-                const response = await fetch(url, {
-                    method: 'GET',
-                    mode: 'cors'
-                });
-
-                const result = await response.json();
-                if (!result.success) {
-                    throw new Error(result.error || 'Failed to save attendance');
-                }
-
-                console.log('Attendance saved to Google Sheets');
-            } catch (error) {
-                console.error('Error saving attendance:', error);
-                throw error;
-            }
-        }
-
-        // Upload assignment
-        async function uploadAssignment() {
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
-            
-            if (!file) {
-                showError('Mohon pilih file tugas terlebih dahulu');
-                return;
-            }
-
-            // Validate file size (10MB max)
-            if (file.size > 10 * 1024 * 1024) {
-                showError('Ukuran file terlalu besar. Maksimal 10MB.');
-                return;
-            }
-
-            // Validate file type
-            const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/jpg', 'image/png'];
-            if (!allowedTypes.includes(file.type)) {
-                showError('Format file tidak didukung. Gunakan PDF, DOC, DOCX, JPG, atau PNG.');
-                return;
-            }
-
-            showLoading('Mengupload tugas ke Google Drive...');
-
-            try {
-                // Demo implementation - replace with actual Google Drive API
-                await uploadToGoogleDrive(file);
-                
-                isAssignmentUploaded = true;
-                const today = new Date().toDateString();
-                localStorage.setItem(`assignment_${currentStudent.nis}_${today}`, 'true');
-                
-                // Update attendance record if already attended
-                if (isAttended) {
-                    await updateAttendanceCompleteness();
-                }
-                
-                hideLoading();
-                showSuccess('Tugas berhasil diupload ke Google Drive!');
-                updateStatusDisplay();
-                
-                // Clear file input
-                fileInput.value = '';
-            } catch (error) {
-                hideLoading();
-                showError('Gagal mengupload tugas. Coba lagi.');
-            }
-        }
-
-        // Upload to Google Drive via Apps Script
-        async function uploadToGoogleDrive(file) {
-            try {
-                // For demo purposes, simulate successful upload
-                console.log('Simulating file upload for:', file.name);
-                
-                // In a real implementation, you would need to use Google Drive API directly
-                // or implement a different upload method that works with CORS
-                
-                // Simulate upload delay
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                // Log the "upload" to localStorage for demo
-                const uploadRecord = {
-                    fileName: file.name,
-                    fileSize: file.size,
-                    fileType: file.type,
-                    studentNis: currentStudent.nis,
-                    studentName: currentStudent.nama,
-                    uploadDate: new Date().toISOString()
-                };
-                
-                const uploads = JSON.parse(localStorage.getItem('fileUploads') || '[]');
-                uploads.push(uploadRecord);
-                localStorage.setItem('fileUploads', JSON.stringify(uploads));
-                
-                console.log('File upload simulated successfully');
-                return {
-                    fileId: 'demo_' + Date.now(),
-                    fileName: file.name,
-                    fileUrl: 'https://drive.google.com/demo'
-                };
-            } catch (error) {
-                console.error('Error uploading to Google Drive:', error);
-                throw error;
-            }
-        }
-
-        // Helper function to convert file to base64
-        function fileToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
-            });
-        }
-
-        // Update attendance completeness in Google Sheets via Apps Script
-        async function updateAttendanceCompleteness() {
-            try {
-                const url = `${APPS_SCRIPT_URL}?action=updateCompleteness&nis=${encodeURIComponent(currentStudent.nis)}`;
-                const response = await fetch(url, {
-                    method: 'GET',
-                    mode: 'cors'
-                });
-
-                const result = await response.json();
-                if (result.success) {
-                    console.log('Attendance completeness updated to LENGKAP');
-                } else {
-                    console.error('Error updating completeness:', result.error);
-                }
-            } catch (error) {
-                console.error('Error updating attendance completeness:', error);
-            }
-        }
-
-        // Update status display
-        function updateStatusDisplay() {
-            // Attendance status
-            const attendanceStatus = document.getElementById('currentStatus');
-            const attendanceComplete = document.getElementById('attendanceComplete');
-            const attendanceBtn = document.getElementById('attendanceBtn');
-            
-            if (isAttended) {
-                attendanceStatus.textContent = 'Sudah Absen';
-                attendanceStatus.className = 'px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800';
-                attendanceComplete.textContent = 'Sudah';
-                attendanceComplete.className = 'px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800';
-                attendanceBtn.textContent = '✅ Sudah Absen';
-                attendanceBtn.disabled = true;
-                attendanceBtn.className = 'w-full bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg cursor-not-allowed';
-            }
-            
-            // Assignment status
-            const assignmentComplete = document.getElementById('assignmentComplete');
-            if (isAssignmentUploaded) {
-                assignmentComplete.textContent = 'Sudah';
-                assignmentComplete.className = 'px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800';
-            }
-            
-            // Overall status
-            const overallStatus = document.getElementById('overallStatus');
-            if (isAttended && isAssignmentUploaded) {
-                overallStatus.textContent = 'LENGKAP';
-                overallStatus.className = 'px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800';
-            } else if (isAttended || isAssignmentUploaded) {
-                overallStatus.textContent = 'SEBAGIAN';
-                overallStatus.className = 'px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800';
-            }
-        }
-
-        // Logout
-        function logout() {
-            currentStudent = null;
-            isAttended = false;
-            isAssignmentUploaded = false;
-            
-            document.getElementById('dashboard').classList.add('hidden');
-            document.getElementById('loginForm').classList.remove('hidden');
-            document.getElementById('nisInput').value = '';
-        }
-
-        // Utility functions
-        function showLoading(message) {
-            document.getElementById('loadingText').textContent = message;
-            document.getElementById('loadingModal').classList.remove('hidden');
-        }
-
-        function hideLoading() {
-            document.getElementById('loadingModal').classList.add('hidden');
-        }
-
-        function showSuccess(message) {
-            document.getElementById('successMessage').textContent = message;
-            document.getElementById('successModal').classList.remove('hidden');
-        }
-
-        function showError(message) {
-            document.getElementById('errorMessage').textContent = message;
-            document.getElementById('errorModal').classList.remove('hidden');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-        }
-
-        // Initialize app
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('App initialized - ready to use Google Apps Script');
+    // === AKSI: ABSEN ===
+    async function handleAbsen(){
+      if(!currentStudent) return showInfoAlert('Belum pilih siswa','Cek data siswa dulu.');
+      const load = document.getElementById('loadingState');
+      load.textContent = 'menyimpan absen...';
+      load.classList.remove('hidden');
+      try{
+        const payload = {
+          action:'saveAttendance', // untuk konsistensi tapi server pakai doGet
+        };
+        // Apps Script Anda untuk absen menggunakan doGet(saveAttendance),
+        // jadi kita panggil GET:
+        const res = await gasGet({
+          action:'saveAttendance',
+          nis: currentStudent.nis,
+          nama: currentStudent.nama,
+          kelas: currentStudent.kelas,
+          mapel: currentStudent.mapel,
+          assignmentUploaded: todayStatus.assignmentUploaded ? 'true' : 'false'
         });
-    </script>
+        if(!res.success) throw new Error(res.error || 'Gagal menyimpan absen');
 
-    </body>
+        todayStatus.attended = true;
+        // jika di server mendeteksi sudah upload, status akan LENGKAP
+        // untuk tampil cepat, refresh dari server:
+        const c = await gasGet({ action:'checkAttendance', nis: currentStudent.nis });
+        if(c.success && c.data) todayStatus = c.data;
+        renderAttendanceStatus(todayStatus);
+
+        await showSuccessAlert('Berhasil','Absen tersimpan.');
+      }catch(err){
+        console.error(err);
+        await showErrorAlert('Gagal', err.message || 'Gagal menyimpan absen.');
+      }finally{
+        load.classList.add('hidden');
+      }
+    }
+
+    // === AKSI: UPLOAD TUGAS ===
+    async function handleUpload(){
+      if(!currentStudent) return showInfoAlert('Belum pilih siswa','Cek data siswa dulu.');
+      const fileEl = document.getElementById('taskFile');
+      if(!fileEl.files[0]) return showInfoAlert('Pilih File','Silakan pilih file tugas.');
+      const load = document.getElementById('loadingState');
+      load.textContent = 'mengirim tugas...';
+      load.classList.remove('hidden');
+      const btnU = document.getElementById('btnUpload'); btnU.disabled = true;
+
+      try{
+        const f = fileEl.files[0];
+        const base64 = await readFileAsBase64(f);
+
+        // Kirim ke doPost -> uploadFile
+        const result = await gasPost({
+          action: 'uploadFile',
+          fileData: base64,      // sudah termasuk prefix data:mime;base64,
+          fileName: f.name,
+          mimeType: f.type || 'application/octet-stream',
+          studentData: {
+            nis: currentStudent.nis,
+            nama: currentStudent.nama,
+            kelas: currentStudent.kelas,
+            mapel: currentStudent.mapel
+          }
+        });
+
+        if(!result.success) throw new Error(result.error || 'Upload gagal');
+
+        // Refresh status kehadiran (server mungkin set LENGKAP)
+        const c = await gasGet({ action:'checkAttendance', nis: currentStudent.nis });
+        if(c.success && c.data) todayStatus = c.data;
+        renderAttendanceStatus(todayStatus);
+
+        await showSuccessAlert('Terkirim!',
+          'Tugas berhasil diunggah ke Google Drive.\n' +
+          (result.data?.fileName ? `Nama file: ${result.data.fileName}` : '')
+        );
+        fileEl.value = '';
+
+      }catch(err){
+        console.error(err);
+        await showErrorAlert('Gagal Upload', err.message || 'Terjadi kesalahan saat upload.');
+      }finally{
+        load.classList.add('hidden');
+        btnU.disabled = false;
+      }
+    }
+
+    // === EVENT LISTENER ===
+    document.getElementById('btnCek').addEventListener('click', handleCek);
+    document.getElementById('btnAbsen').addEventListener('click', handleAbsen);
+    document.getElementById('btnUpload').addEventListener('click', handleUpload);
+
+    // enable tombol jika siswa sudah ada
+    const btns = ['btnAbsen','btnUpload'];
+    setInterval(()=>{
+      const hasStu = !!currentStudent;
+      btns.forEach(id=>{
+        const el = document.getElementById(id);
+        if(id==='btnAbsen') el.disabled = !hasStu || (todayStatus?.attended ?? false);
+        if(id==='btnUpload') el.disabled = !hasStu;
+      });
+    }, 500);
+  </script>
+</body>
 </html>
