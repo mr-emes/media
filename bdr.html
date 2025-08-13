@@ -193,54 +193,70 @@
         let currentStudent = null;
 
         // Load student data from Google Sheets
-        async function loadStudentData() {
-            try {
-                const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getStudents`);
-                const data = await response.json();
-                
-                if (data.success) {
-                    // Convert array to object for faster lookup
-                    studentsData = {};
-                    data.students.forEach(student => {
-                        studentsData[student.nis] = {
-                            name: student.name,
-                            class: student.class,
-                            subject: student.subject,
-                            assignment: student.assignment
-                        };
-                    });
-                    isDataLoaded = true;
-                    
-                    // Hide loading message and enable input
-                    document.getElementById('loadingData').classList.add('hidden');
-                    document.getElementById('nisInput').disabled = false;
-                    document.getElementById('nisInput').placeholder = "Contoh: 210053";
-                } else {
-                    throw new Error(data.message || 'Failed to load student data');
-                }
-            } catch (error) {
-                console.error('Error loading student data:', error);
-                
-                // Show error and use fallback data
-                document.getElementById('loadingData').innerHTML = 
-                    '<div class="text-red-600">⚠️ Gagal memuat data dari Google Sheets. Menggunakan data demo.</div>';
-                
-                // Fallback to demo data
-                studentsData = {
-                    "210053": {name: "AHMAD YUSRIL", class: "5B", subject: "Al-Qur'an Hadits", assignment: "Membaca Surah Al-Fatihah dan menulis artinya"},
-                    "210061": {name: "AISYAH ZAHRA", class: "5B", subject: "Al-Qur'an Hadits", assignment: "Membaca Surah Al-Fatihah dan menulis artinya"},
-                    "210048": {name: "AKILATUL MURNI", class: "5B", subject: "Al-Qur'an Hadits", assignment: "Membaca Surah Al-Fatihah dan menulis artinya"}
-                };
-                isDataLoaded = true;
-                
-                setTimeout(() => {
-                    document.getElementById('loadingData').classList.add('hidden');
-                    document.getElementById('nisInput').disabled = false;
-                    document.getElementById('nisInput').placeholder = "Contoh: 210053";
-                }, 3000);
-            }
-        }
+function loadStudentData() {
+  return new Promise((resolve, reject) => {
+    window.handleStudentData = (data) => {
+      if (data.success) {
+        resolve(data.students);
+      } else {
+        reject(new Error(data.message));
+      }
+    };
+    
+    const script = document.createElement('script');
+    script.src = `${GOOGLE_SCRIPT_URL}?action=getStudents&callback=handleStudentData`;
+    script.onerror = () => reject(new Error('Gagal memuat data siswa'));
+    document.body.appendChild(script);
+  });
+}
 
+        // Untuk POST requests, gunakan formulir tersembunyi
+function postToGoogleScript(action, data) {
+  return new Promise((resolve, reject) => {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = GOOGLE_SCRIPT_URL;
+    form.style.display = 'none';
+    
+    const inputAction = document.createElement('input');
+    inputAction.name = 'action';
+    inputAction.value = action;
+    form.appendChild(inputAction);
+    
+    const inputData = document.createElement('input');
+    inputData.name = 'data';
+    inputData.value = JSON.stringify(data);
+    form.appendChild(inputData);
+    
+    document.body.appendChild(form);
+    
+    // Handle response dengan iframe
+    const iframe = document.createElement('iframe');
+    iframe.name = 'response-iframe';
+    iframe.style.display = 'none';
+    
+    iframe.onload = function() {
+      try {
+        const response = JSON.parse(iframe.contentDocument.body.textContent);
+        resolve(response);
+      } catch (error) {
+        reject(error);
+      }
+      document.body.removeChild(iframe);
+      document.body.removeChild(form);
+    };
+    
+    iframe.onerror = function() {
+      reject(new Error('Gagal mengirim data'));
+      document.body.removeChild(iframe);
+      document.body.removeChild(form);
+    };
+    
+    document.body.appendChild(iframe);
+    form.target = 'response-iframe';
+    form.submit();
+  });
+}
         // Update date and time
 function updateDateTime() {
     try {
@@ -689,7 +705,5 @@ async function sendToGoogleSheets(data) {
         // Start the application when page loads
         document.addEventListener('DOMContentLoaded', init);
     </script>
-
-
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96e7496d452f44ae',t:'MTc1NTA3ODQwMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    </body>
 </html>
