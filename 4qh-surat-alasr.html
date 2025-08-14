@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Pembelajaran Al-Quran Hadits - Surah Al-Asr</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+        
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1.8;
+        }
+        
+        .card-flip {
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+        
+        .card-flip.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            backface-visibility: hidden;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .card-back {
+            transform: rotateY(180deg);
+        }
+        
+        .matched {
+            animation: matchPulse 0.6s ease-in-out;
+        }
+        
+        @keyframes matchPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .bounce {
+            animation: bounce 0.5s ease-in-out;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .quiz-option {
+            transition: all 0.3s ease;
+        }
+        
+        .quiz-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .correct {
+            background-color: #10b981 !important;
+            color: white !important;
+        }
+        
+        .incorrect {
+            background-color: #ef4444 !important;
+            color: white !important;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-emerald-50 to-teal-100 min-h-screen font-['Inter']">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-40">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <!-- Left side: School info -->
+                <div class="flex items-center space-x-4">
+                    <img src="https://i.imgur.com/0Laf7Zu.png" alt="Logo MIN Singkawang" class="w-12 h-12 object-contain">
+                    <div>
+                        <h1 class="text-lg font-bold text-emerald-1000">MIN SINGKAWANG</h1>
+                        <p class="text-sm text-emerald-600 italic">Madrasah Maju, Bermutu, Mendunia</p>
+                    </div>
+                </div>
+                
+                <!-- Right side: Subject info and student info -->
+                <div class="flex items-center space-x-6">
+                    <div class="text-right">
+                      <p class="text-sm text-emerald-600">Media Pembelajaran</p>
+                        <h2 class="text-lg font-bold text-emerald-800">Al-Quran Hadits</h2>
+                        <p class="text-sm text-emerald-600">Kelas 4 MI - Surah Al-Asr</p>
+                    </div>
+                    <div id="studentInfo" class="hidden bg-emerald-100 px-4 py-2 rounded-lg">
+                        <p class="text-sm font-medium text-emerald-800" id="navStudentName"></p>
+                        <p class="text-xs text-emerald-600" id="navStudentClass"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Welcome Screen -->
+        <div id="welcomeScreen" class="max-w-md mx-auto">
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4">📚</div>
+                <h1 class="text-3xl font-bold text-emerald-800 mb-2">Selamat Datang!</h1>
+                <h2 class="text-xl text-emerald-700 mb-4">Media Pembelajaran Surah Al-Asr</h2>
+                <p class="text-gray-600 mb-6">Mari belajar tentang Surah Al-Asr dengan cara yang menyenangkan!</p>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h3 class="text-xl font-semibold text-emerald-800 mb-6 text-center">Data Siswa</h3>
+                <form id="studentForm" class="space-y-4">
+                    <div>
+                        <label for="studentName" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                        <input type="text" id="studentName" name="studentName" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
+                               placeholder="Masukkan nama lengkap">
+                    </div>
+                    <div>
+                        <label for="studentClass" class="block text-sm font-medium text-gray-700 mb-2">Kelas</label>
+                        <select id="studentClass" name="studentClass" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors">
+                            <option value="">Pilih Kelas</option>
+                            <option value="4A">4A</option>
+                            <option value="4B">4B</option>
+                            <option value="4C">4C</option>
+                            <option value="4D">4D</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors duration-200">
+                        📖 Mulai Belajar
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Main Menu -->
+        <div id="mainMenu" class="hidden">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-emerald-800 mb-2">🕌 Surah Al-Asr</h1>
+                <p class="text-lg text-emerald-700">Pilih menu pembelajaran yang ingin kamu pelajari</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow cursor-pointer" onclick="showSection('materi')">
+                    <div class="text-4xl mb-4 text-center">📖</div>
+                    <h3 class="text-xl font-semibold text-emerald-800 mb-2 text-center">Materi Pembelajaran</h3>
+                    <p class="text-gray-600 text-center">Pelajari teks, terjemahan, dan makna Surah Al-Asr</p>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow cursor-pointer" onclick="showSection('games')">
+                    <div class="text-4xl mb-4 text-center">🎮</div>
+                    <h3 class="text-xl font-semibold text-emerald-800 mb-2 text-center">Game Edukatif</h3>
+                    <p class="text-gray-600 text-center">Bermain sambil belajar dengan berbagai permainan seru</p>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow cursor-pointer" onclick="showSection('evaluation')">
+                    <div class="text-4xl mb-4 text-center">📝</div>
+                    <h3 class="text-xl font-semibold text-emerald-800 mb-2 text-center">Uji Kompetensi</h3>
+                    <p class="text-gray-600 text-center">Evaluasi pemahaman dan dapatkan sertifikat</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Materi Section -->
+        <div id="materiSection" class="hidden">
+            <div class="max-w-4xl mx-auto">
+                <div class="flex items-center mb-6">
+                    <button onclick="showSection('menu')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg mr-4">
+                        ← Kembali
+                    </button>
+                    <h2 class="text-3xl font-bold text-emerald-800">📖 Materi Pembelajaran</h2>
+                </div>
+                
+                <!-- Teks Arab -->
+                <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+                    <h3 class="text-2xl font-semibold text-emerald-800 mb-6 text-center">Surah Al-Asr</h3>
+                    <div class="text-center mb-6">
+                        <p class="arabic-text text-emerald-800 mb-4 leading-relaxed">
+                            بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+                        </p>
+                        <p class="arabic-text text-emerald-800 mb-2 text-3xl leading-relaxed">
+                            وَالْعَصْرِ ۝ إِنَّ الْإِنسَانَ لَفِي خُسْرٍ ۝
+                        </p>
+                        <p class="arabic-text text-emerald-800 text-3xl leading-relaxed">
+                            إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِالصَّبْرِ ۝
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Terjemahan -->
+                <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+                    <h3 class="text-2xl font-semibold text-emerald-800 mb-6">🌟 Terjemahan</h3>
+                    <div class="space-y-4 text-lg">
+                        <p><span class="font-semibold text-emerald-700">1.</span> Demi masa.</p>
+                        <p><span class="font-semibold text-emerald-700">2.</span> Sungguh, manusia berada dalam kerugian,</p>
+                        <p><span class="font-semibold text-emerald-700">3.</span> kecuali orang-orang yang beriman dan mengerjakan kebajikan serta saling menasihati untuk kebenaran dan saling menasihati untuk kesabaran.</p>
+                    </div>
+                </div>
+                
+                <!-- Mufradat -->
+                <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+                    <h3 class="text-2xl font-semibold text-emerald-800 mb-6">📚 Mufradat (Kosakata)</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-emerald-50 p-4 rounded-lg">
+                            <p class="arabic-text text-emerald-800 text-xl mb-2">وَالْعَصْرِ</p>
+                            <p class="text-gray-700">Demi masa</p>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-lg">
+                            <p class="arabic-text text-emerald-800 text-xl mb-2">إِنَّ</p>
+                            <p class="text-gray-700">Sungguh</p>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-lg">
+                            <p class="arabic-text text-emerald-800 text-xl mb-2">الْإِنسَانَ</p>
+                            <p class="text-gray-700">Manusia</p>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-lg">
+                            <p class="arabic-text text-emerald-800 text-xl mb-2">لَفِي خُسْرٍ</p>
+                            <p class="text-gray-700">Dalam kerugian</p>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-lg">
+                            <p class="arabic-text text-emerald-800 text-xl mb-2">إِلَّا الَّذِينَ</p>
+                            <p class="text-gray-700">Kecuali orang-orang</p>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-lg">
+                            <p class="arabic-text text-emerald-800 text-xl mb-2">آمَنُوا</p>
+                            <p class="text-gray-700">Yang beriman</p>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-lg">
+                            <p class="arabic-text text-emerald-800 text-xl mb-2">وَعَمِلُوا الصَّالِحَاتِ</p>
+                            <p class="text-gray-700">Dan beramal saleh</p>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-lg">
+                            <p class="arabic-text text-emerald-800 text-xl mb-2">وَتَوَاصَوْا بِالْحَقِّ</p>
+                            <p class="text-gray-700">Saling menasihati kebenaran</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Kandungan Surah -->
+                <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+                    <h3 class="text-2xl font-semibold text-emerald-800 mb-6">💎 Kandungan Surah Al-Asr</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-emerald-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">1</div>
+                            <div>
+                                <h4 class="font-semibold text-emerald-800 mb-2">Beriman kepada Allah</h4>
+                                <p class="text-gray-700">Memiliki keyakinan yang kuat kepada Allah SWT dan ajaran-Nya.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-emerald-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">2</div>
+                            <div>
+                                <h4 class="font-semibold text-emerald-800 mb-2">Beramal Saleh</h4>
+                                <p class="text-gray-700">Melakukan perbuatan baik yang bermanfaat untuk diri sendiri dan orang lain.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-emerald-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">3</div>
+                            <div>
+                                <h4 class="font-semibold text-emerald-800 mb-2">Saling Menasihati Kebenaran</h4>
+                                <p class="text-gray-700">Saling mengingatkan untuk berbuat benar dan meninggalkan yang salah.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-emerald-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">4</div>
+                            <div>
+                                <h4 class="font-semibold text-emerald-800 mb-2">Saling Menasihati Kesabaran</h4>
+                                <p class="text-gray-700">Saling menguatkan untuk bersabar dalam menghadapi cobaan dan ujian.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Games Section -->
+        <div id="gamesSection" class="hidden">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex items-center mb-6">
+                    <button onclick="showSection('menu')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg mr-4">
+                        ← Kembali
+                    </button>
+                    <h2 class="text-3xl font-bold text-emerald-800">🎮 Game Edukatif</h2>
+                </div>
+                
+                <div id="gameSelector" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow cursor-pointer" onclick="showGame('memory')">
+                        <div class="text-4xl mb-4 text-center">🧠</div>
+                        <h3 class="text-xl font-semibold text-emerald-800 mb-2 text-center">Memory Game</h3>
+                        <p class="text-gray-600 text-center">Cocokkan kata Arab dengan terjemahannya</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow cursor-pointer" onclick="showGame('puzzle')">
+                        <div class="text-4xl mb-4 text-center">🧩</div>
+                        <h3 class="text-xl font-semibold text-emerald-800 mb-2 text-center">Puzzle Ayat</h3>
+                        <p class="text-gray-600 text-center">Susun ayat Surah Al-Asr dengan benar</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow cursor-pointer" onclick="showGame('quiz')">
+                        <div class="text-4xl mb-4 text-center">❓</div>
+                        <h3 class="text-xl font-semibold text-emerald-800 mb-2 text-center">Kuis Cepat</h3>
+                        <p class="text-gray-600 text-center">Jawab pertanyaan tentang Surah Al-Asr</p>
+                    </div>
+                </div>
+                
+                <!-- Memory Game -->
+                <div id="memoryGame" class="hidden bg-white rounded-xl shadow-lg p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-semibold text-emerald-800">🧠 Memory Game - Mufradat</h3>
+                        <button onclick="backToGameMenu()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
+                            Kembali
+                        </button>
+                    </div>
+                    
+                    <div class="flex justify-center gap-8 mb-6">
+                        <div class="bg-emerald-50 rounded-lg px-6 py-3">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-emerald-600" id="memoryMoves">0</div>
+                                <div class="text-sm text-gray-600">Langkah</div>
+                            </div>
+                        </div>
+                        <div class="bg-emerald-50 rounded-lg px-6 py-3">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-emerald-600" id="memoryMatches">0/8</div>
+                                <div class="text-sm text-gray-600">Pasangan</div>
+                            </div>
+                        </div>
+                        <div class="bg-emerald-50 rounded-lg px-6 py-3">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-emerald-600" id="memoryTimer">00:00</div>
+                                <div class="text-sm text-gray-600">Waktu</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="memoryBoard" class="grid grid-cols-4 gap-4 mb-6 max-w-4xl mx-auto">
+                        <!-- Cards will be generated by JavaScript -->
+                    </div>
+                    
+                    <div class="text-center">
+                        <button id="newMemoryGameBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition-colors duration-200 mr-4">
+                            🎮 Permainan Baru
+                        </button>
+                        <button id="memoryHintBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition-colors duration-200">
+                            💡 Petunjuk
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Puzzle Game -->
+                <div id="puzzleGame" class="hidden bg-white rounded-xl shadow-lg p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-semibold text-emerald-800">🧩 Puzzle Ayat</h3>
+                        <button onclick="backToGameMenu()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
+                            Kembali
+                        </button>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <p class="text-center text-gray-600 mb-4">Susun potongan ayat berikut menjadi Surah Al-Asr yang benar!</p>
+                        <div class="bg-emerald-50 p-4 rounded-lg text-center mb-4">
+                            <p class="text-lg font-semibold text-emerald-800">Target:</p>
+                            <p class="arabic-text text-emerald-800 text-xl">وَالْعَصْرِ ۝ إِنَّ الْإِنسَانَ لَفِي خُسْرٍ ۝ إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِالصَّبْرِ ۝</p>
+                        </div>
+                    </div>
+                    
+                    <div id="puzzleContainer" class="mb-6">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" id="puzzlePieces">
+                            <!-- Puzzle pieces will be generated here -->
+                        </div>
+                        
+                        <div class="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-6 min-h-32" id="puzzleDropZone">
+                            <p class="text-center text-gray-500">Seret potongan ayat ke sini untuk menyusun Surah Al-Asr</p>
+                            <div id="puzzleResult" class="mt-4"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button id="checkPuzzleBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition-colors duration-200 mr-4">
+                            ✅ Periksa Jawaban
+                        </button>
+                        <button id="resetPuzzleBtn" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition-colors duration-200">
+                            🔄 Reset
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Quick Quiz Game -->
+                <div id="quizGame" class="hidden bg-white rounded-xl shadow-lg p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-semibold text-emerald-800">❓ Kuis Cepat</h3>
+                        <button onclick="backToGameMenu()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
+                            Kembali
+                        </button>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-lg font-semibold text-emerald-800">Pertanyaan <span id="quizCurrentQuestion">1</span> dari <span id="quizTotalQuestions">5</span></span>
+                            <span class="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-semibold">Skor: <span id="quizScore">0</span></span>
+                        </div>
+                        
+                        <div class="bg-emerald-50 p-6 rounded-lg mb-6">
+                            <h4 class="text-xl font-semibold text-emerald-800 mb-4" id="quizQuestion">Loading...</h4>
+                            <div id="quizOptions" class="space-y-3">
+                                <!-- Options will be generated here -->
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button id="nextQuizBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition-colors duration-200 hidden">
+                                Pertanyaan Selanjutnya →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evaluation Section -->
+        <div id="evaluationSection" class="hidden">
+            <div class="max-w-4xl mx-auto">
+                <div class="flex items-center mb-6">
+                    <button onclick="showSection('menu')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg mr-4">
+                        ← Kembali
+                    </button>
+                    <h2 class="text-3xl font-bold text-emerald-800">📝 Uji Kompetensi</h2>
+                </div>
+                
+                <div id="evaluationStart" class="bg-white rounded-xl shadow-lg p-8 text-center">
+                    <div class="text-6xl mb-4">📋</div>
+                    <h3 class="text-2xl font-semibold text-emerald-800 mb-4">Siap untuk Uji Kompetensi?</h3>
+                    <p class="text-gray-600 mb-6">Evaluasi ini terdiri dari 20 soal komprehensif tentang Surah Al-Asr. Nilai minimal untuk mendapat sertifikat adalah 70.</p>
+                    
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                        <p class="text-blue-800 font-semibold">📊 Penyimpanan Data:</p>
+                        <p class="text-blue-700 text-sm mt-1">Hasil evaluasi akan disimpan ke Google Sheets untuk monitoring pembelajaran</p>
+                    </div>
+                    
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                        <p class="text-yellow-800 font-semibold">⚠️ Perhatian:</p>
+                        <ul class="text-yellow-700 text-left mt-2 space-y-1">
+                            <li>• Waktu pengerjaan: 20 menit</li>
+                            <li>• Setiap soal bernilai 5 poin</li>
+                            <li>• Tidak bisa kembali ke soal sebelumnya</li>
+                            <li>• Nilai ≥70 mendapat sertifikat</li>
+                            <li>• Hasil otomatis tersimpan ke database</li>
+                        </ul>
+                    </div>
+                    <button id="startEvaluationBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition-colors duration-200">
+                        🚀 Mulai Evaluasi
+                    </button>
+                </div>
+                
+                <div id="evaluationQuiz" class="hidden bg-white rounded-xl shadow-lg p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <span class="text-lg font-semibold text-emerald-800">Soal <span id="evalCurrentQuestion">1</span> dari <span id="evalTotalQuestions">10</span></span>
+                        </div>
+                        <div class="flex space-x-4">
+                            <span class="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-semibold">Skor: <span id="evalScore">0</span></span>
+                            <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full font-semibold">Waktu: <span id="evalTimer">20:00</span></span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-emerald-50 p-6 rounded-lg mb-6">
+                        <h4 class="text-xl font-semibold text-emerald-800 mb-4" id="evalQuestion">Loading...</h4>
+                        <div id="evalOptions" class="space-y-3">
+                            <!-- Options will be generated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button id="nextEvalBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition-colors duration-200 hidden">
+                            Soal Selanjutnya →
+                        </button>
+                        <button id="finishEvalBtn" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition-colors duration-200 hidden">
+                            🏁 Selesai
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modals -->
+        <!-- Memory Game Victory Modal -->
+        <div id="memoryVictoryModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md mx-4 text-center">
+                <div class="text-6xl mb-4">🎉</div>
+                <h3 class="text-2xl font-bold text-emerald-800 mb-2">Selamat!</h3>
+                <p class="text-gray-600 mb-4">Kamu berhasil menyelesaikan Memory Game!</p>
+                <div id="memoryFinalStats" class="bg-emerald-50 rounded-lg p-4 mb-6">
+                    <!-- Final stats will be inserted here -->
+                </div>
+                <button id="playMemoryAgainBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors duration-200">
+                    Main Lagi
+                </button>
+            </div>
+        </div>
+
+        <!-- Certificate Modal -->
+        <div id="certificateModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-2xl mx-4 text-center">
+                <div id="certificateContent">
+                    <!-- Certificate will be generated here -->
+                </div>
+                <div class="mt-6 space-x-4">
+                    <button id="downloadCertBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors duration-200">
+                        📥 Download Sertifikat
+                    </button>
+                    <button onclick="closeCertificateModal()" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors duration-200">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Modal -->
+        <div id="resultsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md mx-4 text-center">
+                <div id="resultsContent">
+                    <!-- Results will be generated here -->
+                </div>
+                <div class="mt-6">
+                    <button onclick="closeResultsModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors duration-200">
+                        Kembali ke Menu
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-emerald-800 text-white mt-16">
+        <div class="container mx-auto px-4 py-4">
+            <div class="text-center">
+                <p class="text-emerald-200">&copy; 2024 MIN Singkawang | Dev by: Mahfud Sidik</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables
+        let currentStudent = { name: '', class: '' };
+        let memoryGameInstance = null;
+        let puzzleGameInstance = null;
+        let quizGameInstance = null;
+        let evaluationInstance = null;
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Student form submission
+            document.getElementById('studentForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('studentName').value.trim();
+                const className = document.getElementById('studentClass').value;
+                
+                if (name && className) {
+                    currentStudent = { name, class: className };
+                    document.getElementById('navStudentName').textContent = name;
+                    document.getElementById('navStudentClass').textContent = `Kelas ${className}`;
+                    document.getElementById('studentInfo').classList.remove('hidden');
+                    showSection('menu');
+                }
+            });
+
+            // Initialize games
+            initializeMemoryGame();
+            initializePuzzleGame();
+            initializeQuizGame();
+            initializeEvaluation();
+        });
+
+        // Navigation functions
+        function showSection(section) {
+            // Hide all sections
+            const sections = ['welcomeScreen', 'mainMenu', 'materiSection', 'gamesSection', 'evaluationSection'];
+            sections.forEach(s => {
+                document.getElementById(s).classList.add('hidden');
+            });
+
+            // Show selected section
+            switch(section) {
+                case 'menu':
+                    document.getElementById('mainMenu').classList.remove('hidden');
+                    break;
+                case 'materi':
+                    document.getElementById('materiSection').classList.remove('hidden');
+                    break;
+                case 'games':
+                    document.getElementById('gamesSection').classList.remove('hidden');
+                    document.getElementById('gameSelector').classList.remove('hidden');
+                    hideAllGames();
+                    break;
+                case 'evaluation':
+                    document.getElementById('evaluationSection').classList.remove('hidden');
+                    break;
+            }
+        }
+
+        function showGame(game) {
+            // Hide game selector menu
+            document.getElementById('gameSelector').classList.add('hidden');
+            
+            // Hide all individual games
+            hideAllGames();
+            
+            switch(game) {
+                case 'memory':
+                    document.getElementById('memoryGame').classList.remove('hidden');
+                    if (memoryGameInstance) {
+                        memoryGameInstance.initializeGame();
+                    }
+                    break;
+                case 'puzzle':
+                    document.getElementById('puzzleGame').classList.remove('hidden');
+                    if (puzzleGameInstance) {
+                        puzzleGameInstance.resetGame();
+                    }
+                    break;
+                case 'quiz':
+                    document.getElementById('quizGame').classList.remove('hidden');
+                    if (quizGameInstance) {
+                        quizGameInstance.startQuiz();
+                    }
+                    break;
+            }
+        }
+
+        function hideAllGames() {
+            const games = ['memoryGame', 'puzzleGame', 'quizGame'];
+            games.forEach(game => {
+                document.getElementById(game).classList.add('hidden');
+            });
+        }
+
+        function backToGameMenu() {
+            hideAllGames();
+            document.getElementById('gameSelector').classList.remove('hidden');
+        }
+
+        // Memory Game Class
+        class MemoryGame {
+            constructor() {
+                this.cards = [
+                    { id: 1, arabic: 'وَالْعَصْرِ', indonesian: 'Demi masa', type: 'arabic' },
+                    { id: 1, arabic: 'وَالْعَصْرِ', indonesian: 'Demi masa', type: 'indonesian' },
+                    { id: 2, arabic: 'إِنَّ', indonesian: 'Sungguh', type: 'arabic' },
+                    { id: 2, arabic: 'إِنَّ', indonesian: 'Sungguh', type: 'indonesian' },
+                    { id: 3, arabic: 'الْإِنسَانَ', indonesian: 'Manusia', type: 'arabic' },
+                    { id: 3, arabic: 'الْإِنسَانَ', indonesian: 'Manusia', type: 'indonesian' },
+                    { id: 4, arabic: 'لَفِي خُسْرٍ', indonesian: 'Dalam kerugian', type: 'arabic' },
+                    { id: 4, arabic: 'لَفِي خُسْرٍ', indonesian: 'Dalam kerugian', type: 'indonesian' },
+                    { id: 5, arabic: 'إِلَّا الَّذِينَ', indonesian: 'Kecuali orang-orang', type: 'arabic' },
+                    { id: 5, arabic: 'إِلَّا الَّذِينَ', indonesian: 'Kecuali orang-orang', type: 'indonesian' },
+                    { id: 6, arabic: 'آمَنُوا', indonesian: 'Yang beriman', type: 'arabic' },
+                    { id: 6, arabic: 'آمَنُوا', indonesian: 'Yang beriman', type: 'indonesian' },
+                    { id: 7, arabic: 'وَعَمِلُوا الصَّالِحَاتِ', indonesian: 'Dan beramal saleh', type: 'arabic' },
+                    { id: 7, arabic: 'وَعَمِلُوا الصَّالِحَاتِ', indonesian: 'Dan beramal saleh', type: 'indonesian' },
+                    { id: 8, arabic: 'وَتَوَاصَوْا بِالْحَقِّ', indonesian: 'Saling menasihati kebenaran', type: 'arabic' },
+                    { id: 8, arabic: 'وَتَوَاصَوْا بِالْحَقِّ', indonesian: 'Saling menasihati kebenaran', type: 'indonesian' }
+                ];
+                
+                this.flippedCards = [];
+                this.matchedPairs = 0;
+                this.moves = 0;
+                this.startTime = null;
+                this.timerInterval = null;
+                this.gameBoard = document.getElementById('memoryBoard');
+                this.isGameActive = false;
+                
+                this.bindEvents();
+            }
+            
+            shuffle(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            
+            initializeGame() {
+                this.flippedCards = [];
+                this.matchedPairs = 0;
+                this.moves = 0;
+                this.startTime = null;
+                this.isGameActive = true;
+                
+                if (this.timerInterval) {
+                    clearInterval(this.timerInterval);
+                }
+                
+                this.updateStats();
+                this.createBoard();
+            }
+            
+            createBoard() {
+                const shuffledCards = this.shuffle([...this.cards]);
+                this.gameBoard.innerHTML = '';
+                
+                shuffledCards.forEach((card, index) => {
+                    const cardElement = this.createCardElement(card, index);
+                    this.gameBoard.appendChild(cardElement);
+                });
+            }
+            
+            createCardElement(card, index) {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'relative h-32 cursor-pointer';
+                cardDiv.dataset.cardId = card.id;
+                cardDiv.dataset.cardType = card.type;
+                cardDiv.dataset.index = index;
+                
+                const cardInner = document.createElement('div');
+                cardInner.className = 'card-flip w-full h-full relative';
+                
+                // Card front (hidden)
+                const cardFront = document.createElement('div');
+                cardFront.className = 'card-front bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg shadow-md flex items-center justify-center';
+                cardFront.innerHTML = '<div class="text-white text-2xl">🕌</div>';
+                
+                // Card back (content)
+                const cardBack = document.createElement('div');
+                cardBack.className = 'card-back bg-white rounded-lg shadow-md border-2 border-emerald-200 flex items-center justify-center p-3';
+                
+                if (card.type === 'arabic') {
+                    cardBack.innerHTML = `<div class="arabic-text text-emerald-800 text-center text-lg">${card.arabic}</div>`;
+                } else {
+                    cardBack.innerHTML = `<div class="text-emerald-800 text-center font-medium">${card.indonesian}</div>`;
+                }
+                
+                cardInner.appendChild(cardFront);
+                cardInner.appendChild(cardBack);
+                cardDiv.appendChild(cardInner);
+                
+                cardDiv.addEventListener('click', () => this.flipCard(cardDiv));
+                
+                return cardDiv;
+            }
+            
+            flipCard(cardElement) {
+                if (!this.isGameActive) return;
+                if (cardElement.classList.contains('flipped')) return;
+                if (this.flippedCards.length >= 2) return;
+                
+                if (!this.startTime) {
+                    this.startTime = Date.now();
+                    this.startTimer();
+                }
+                
+                cardElement.querySelector('.card-flip').classList.add('flipped');
+                this.flippedCards.push(cardElement);
+                
+                if (this.flippedCards.length === 2) {
+                    this.moves++;
+                    this.updateStats();
+                    setTimeout(() => this.checkMatch(), 1000);
+                }
+            }
+            
+            checkMatch() {
+                const [card1, card2] = this.flippedCards;
+                const id1 = card1.dataset.cardId;
+                const id2 = card2.dataset.cardId;
+                const type1 = card1.dataset.cardType;
+                const type2 = card2.dataset.cardType;
+                
+                if (id1 === id2 && type1 !== type2) {
+                    // Match found
+                    card1.classList.add('matched');
+                    card2.classList.add('matched');
+                    this.matchedPairs++;
+                    this.updateStats();
+                    
+                    if (this.matchedPairs === 8) {
+                        this.gameWon();
+                    }
+                } else {
+                    // No match
+                    card1.classList.add('shake');
+                    card2.classList.add('shake');
+                    
+                    setTimeout(() => {
+                        card1.querySelector('.card-flip').classList.remove('flipped');
+                        card2.querySelector('.card-flip').classList.remove('flipped');
+                        card1.classList.remove('shake');
+                        card2.classList.remove('shake');
+                    }, 500);
+                }
+                
+                this.flippedCards = [];
+            }
+            
+            updateStats() {
+                document.getElementById('memoryMoves').textContent = this.moves;
+                document.getElementById('memoryMatches').textContent = `${this.matchedPairs}/8`;
+            }
+            
+            startTimer() {
+                this.timerInterval = setInterval(() => {
+                    const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
+                    const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+                    const seconds = (elapsed % 60).toString().padStart(2, '0');
+                    document.getElementById('memoryTimer').textContent = `${minutes}:${seconds}`;
+                }, 1000);
+            }
+            
+            gameWon() {
+                this.isGameActive = false;
+                clearInterval(this.timerInterval);
+                
+                const finalTime = document.getElementById('memoryTimer').textContent;
+                const finalStats = document.getElementById('memoryFinalStats');
+                finalStats.innerHTML = `
+                    <div class="mb-4 p-3 bg-emerald-100 rounded-lg">
+                        <div class="font-semibold text-emerald-800">${currentStudent.name}</div>
+                        <div class="text-sm text-emerald-600">Kelas: ${currentStudent.class}</div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <div class="font-semibold text-emerald-800">Waktu</div>
+                            <div>${finalTime}</div>
+                        </div>
+                        <div>
+                            <div class="font-semibold text-emerald-800">Langkah</div>
+                            <div>${this.moves}</div>
+                        </div>
+                    </div>
+                `;
+                
+                setTimeout(() => {
+                    document.getElementById('memoryVictoryModal').classList.remove('hidden');
+                }, 1000);
+            }
+            
+            showHint() {
+                if (!this.isGameActive) return;
+                
+                const unmatched = Array.from(this.gameBoard.children).filter(card => 
+                    !card.classList.contains('matched') && 
+                    !card.querySelector('.card-flip').classList.contains('flipped')
+                );
+                
+                if (unmatched.length > 0) {
+                    const randomCard = unmatched[Math.floor(Math.random() * unmatched.length)];
+                    randomCard.querySelector('.card-flip').classList.add('flipped');
+                    
+                    setTimeout(() => {
+                        randomCard.querySelector('.card-flip').classList.remove('flipped');
+                    }, 2000);
+                }
+            }
+            
+            bindEvents() {
+                document.getElementById('newMemoryGameBtn').addEventListener('click', () => {
+                    this.initializeGame();
+                });
+                
+                document.getElementById('memoryHintBtn').addEventListener('click', () => {
+                    this.showHint();
+                });
+                
+                document.getElementById('playMemoryAgainBtn').addEventListener('click', () => {
+                    document.getElementById('memoryVictoryModal').classList.add('hidden');
+                    this.initializeGame();
+                });
+                
+                // Close modal when clicking outside
+                document.getElementById('memoryVictoryModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'memoryVictoryModal') {
+                        document.getElementById('memoryVictoryModal').classList.add('hidden');
+                    }
+                });
+            }
+        }
+
+        // Puzzle Game Class
+        class PuzzleGame {
+            constructor() {
+                this.pieces = [
+                    { id: 1, text: 'وَالْعَصْرِ ۝', order: 1 },
+                    { id: 2, text: 'إِنَّ الْإِنسَانَ', order: 2 },
+                    { id: 3, text: 'لَفِي خُسْرٍ ۝', order: 3 },
+                    { id: 4, text: 'إِلَّا الَّذِينَ آمَنُوا', order: 4 },
+                    { id: 5, text: 'وَعَمِلُوا الصَّالِحَاتِ', order: 5 },
+                    { id: 6, text: 'وَتَوَاصَوْا بِالْحَقِّ', order: 6 },
+                    { id: 7, text: 'وَتَوَاصَوْا بِالصَّبْرِ ۝', order: 7 }
+                ];
+                
+                this.currentOrder = [];
+                this.bindEvents();
+                this.resetGame();
+            }
+            
+            resetGame() {
+                this.currentOrder = [];
+                this.createPuzzlePieces();
+                this.clearDropZone();
+            }
+            
+            createPuzzlePieces() {
+                const container = document.getElementById('puzzlePieces');
+                const shuffledPieces = this.shuffle([...this.pieces]);
+                
+                container.innerHTML = '';
+                
+                shuffledPieces.forEach(piece => {
+                    const pieceElement = document.createElement('div');
+                    pieceElement.className = 'bg-emerald-100 border-2 border-emerald-300 rounded-lg p-4 cursor-move hover:bg-emerald-200 transition-colors';
+                    pieceElement.draggable = true;
+                    pieceElement.dataset.pieceId = piece.id;
+                    pieceElement.dataset.order = piece.order;
+                    pieceElement.innerHTML = `<p class="arabic-text text-emerald-800 text-center">${piece.text}</p>`;
+                    
+                    pieceElement.addEventListener('dragstart', (e) => {
+                        e.dataTransfer.setData('text/plain', piece.id);
+                    });
+                    
+                    pieceElement.addEventListener('click', () => {
+                        this.addPieceToResult(piece);
+                        pieceElement.style.display = 'none';
+                    });
+                    
+                    container.appendChild(pieceElement);
+                });
+            }
+            
+            clearDropZone() {
+                const resultDiv = document.getElementById('puzzleResult');
+                resultDiv.innerHTML = '';
+            }
+            
+            addPieceToResult(piece) {
+                this.currentOrder.push(piece);
+                this.updateResult();
+            }
+            
+            updateResult() {
+                const resultDiv = document.getElementById('puzzleResult');
+                resultDiv.innerHTML = '';
+                
+                this.currentOrder.forEach((piece, index) => {
+                    const pieceElement = document.createElement('div');
+                    pieceElement.className = 'bg-white border border-emerald-300 rounded-lg p-3 mb-2 flex justify-between items-center';
+                    pieceElement.innerHTML = `
+                        <span class="arabic-text text-emerald-800">${piece.text}</span>
+                        <button onclick="puzzleGameInstance.removePiece(${index})" class="text-red-500 hover:text-red-700 font-bold">×</button>
+                    `;
+                    resultDiv.appendChild(pieceElement);
+                });
+            }
+            
+            removePiece(index) {
+                const removedPiece = this.currentOrder.splice(index, 1)[0];
+                this.updateResult();
+                
+                // Show the piece back in the pieces container
+                const pieceElements = document.querySelectorAll(`[data-piece-id="${removedPiece.id}"]`);
+                pieceElements.forEach(el => el.style.display = 'block');
+            }
+            
+            checkAnswer() {
+                if (this.currentOrder.length !== this.pieces.length) {
+                    this.showMessage('Silakan susun semua potongan ayat terlebih dahulu!', 'warning');
+                    return;
+                }
+                
+                const isCorrect = this.currentOrder.every((piece, index) => piece.order === index + 1);
+                
+                if (isCorrect) {
+                    this.showMessage('🎉 Selamat! Susunan ayat Anda benar!', 'success');
+                    this.showSuccess();
+                } else {
+                    this.showMessage('❌ Susunan belum benar. Coba lagi!', 'error');
+                    this.showError();
+                }
+            }
+            
+            showSuccess() {
+                const resultDiv = document.getElementById('puzzleResult');
+                resultDiv.classList.add('bg-green-100', 'border-green-300');
+                setTimeout(() => {
+                    resultDiv.classList.remove('bg-green-100', 'border-green-300');
+                }, 2000);
+            }
+            
+            showError() {
+                const resultDiv = document.getElementById('puzzleResult');
+                resultDiv.classList.add('bg-red-100', 'border-red-300', 'shake');
+                setTimeout(() => {
+                    resultDiv.classList.remove('bg-red-100', 'border-red-300', 'shake');
+                }, 2000);
+            }
+            
+            showMessage(message, type) {
+                // Create message element
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `fixed top-20 left-1/2 transform -translate-x-1/2 px-6 py-4 rounded-lg shadow-lg z-50 fade-in`;
+                
+                switch(type) {
+                    case 'success':
+                        messageDiv.classList.add('bg-green-500', 'text-white');
+                        break;
+                    case 'error':
+                        messageDiv.classList.add('bg-red-500', 'text-white');
+                        break;
+                    case 'warning':
+                        messageDiv.classList.add('bg-yellow-500', 'text-white');
+                        break;
+                    default:
+                        messageDiv.classList.add('bg-blue-500', 'text-white');
+                }
+                
+                messageDiv.textContent = message;
+                document.body.appendChild(messageDiv);
+                
+                // Remove message after 3 seconds
+                setTimeout(() => {
+                    messageDiv.remove();
+                }, 3000);
+            }
+            
+            shuffle(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            
+            bindEvents() {
+                document.getElementById('checkPuzzleBtn').addEventListener('click', () => {
+                    this.checkAnswer();
+                });
+                
+                document.getElementById('resetPuzzleBtn').addEventListener('click', () => {
+                    this.resetGame();
+                });
+                
+                // Drop zone events
+                const dropZone = document.getElementById('puzzleDropZone');
+                dropZone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    dropZone.classList.add('bg-emerald-50');
+                });
+                
+                dropZone.addEventListener('dragleave', () => {
+                    dropZone.classList.remove('bg-emerald-50');
+                });
+                
+                dropZone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    dropZone.classList.remove('bg-emerald-50');
+                    
+                    const pieceId = parseInt(e.dataTransfer.getData('text/plain'));
+                    const piece = this.pieces.find(p => p.id === pieceId);
+                    
+                    if (piece) {
+                        this.addPieceToResult(piece);
+                        // Hide the dragged piece
+                        const pieceElement = document.querySelector(`[data-piece-id="${pieceId}"]`);
+                        if (pieceElement) {
+                            pieceElement.style.display = 'none';
+                        }
+                    }
+                });
+            }
+        }
+
+        // Quiz Game Class
+        class QuizGame {
+            constructor() {
+                this.questions = [
+                    {
+                        question: "Apa arti dari كلمة 'وَالْعَصْرِ'?",
+                        options: ["Demi waktu", "Demi masa", "Demi hari", "Demi malam"],
+                        correct: 1
+                    },
+                    {
+                        question: "Surah Al-Asr terdiri dari berapa ayat?",
+                        options: ["2 ayat", "3 ayat", "4 ayat", "5 ayat"],
+                        correct: 1
+                    },
+                    {
+                        question: "Apa arti dari 'لَفِي خُسْرٍ'?",
+                        options: ["Dalam keuntungan", "Dalam kerugian", "Dalam kebahagiaan", "Dalam kesedihan"],
+                        correct: 1
+                    },
+                    {
+                        question: "Siapa yang dikecualikan dari kerugian menurut Surah Al-Asr?",
+                        options: ["Orang kaya", "Orang beriman dan beramal saleh", "Orang pintar", "Orang terkenal"],
+                        correct: 1
+                    },
+                    {
+                        question: "Apa saja yang harus dilakukan agar tidak rugi menurut Surah Al-Asr?",
+                        options: ["Beriman saja", "Beramal saleh saja", "Beriman, beramal saleh, saling menasihati kebenaran dan kesabaran", "Berdoa saja"],
+                        correct: 2
+                    }
+                ];
+                
+                this.currentQuestion = 0;
+                this.score = 0;
+                this.answered = false;
+            }
+            
+            startQuiz() {
+                this.currentQuestion = 0;
+                this.score = 0;
+                this.answered = false;
+                this.showQuestion();
+            }
+            
+            showQuestion() {
+                if (this.currentQuestion >= this.questions.length) {
+                    this.endQuiz();
+                    return;
+                }
+                
+                const question = this.questions[this.currentQuestion];
+                
+                document.getElementById('quizCurrentQuestion').textContent = this.currentQuestion + 1;
+                document.getElementById('quizTotalQuestions').textContent = this.questions.length;
+                document.getElementById('quizScore').textContent = this.score;
+                document.getElementById('quizQuestion').textContent = question.question;
+                
+                const optionsContainer = document.getElementById('quizOptions');
+                optionsContainer.innerHTML = '';
+                
+                question.options.forEach((option, index) => {
+                    const optionElement = document.createElement('button');
+                    optionElement.className = 'quiz-option w-full text-left bg-white border-2 border-emerald-200 rounded-lg p-4 hover:border-emerald-400 transition-colors';
+                    optionElement.textContent = option;
+                    optionElement.addEventListener('click', () => this.selectAnswer(index));
+                    optionsContainer.appendChild(optionElement);
+                });
+                
+                document.getElementById('nextQuizBtn').classList.add('hidden');
+                this.answered = false;
+            }
+            
+            selectAnswer(selectedIndex) {
+                if (this.answered) return;
+                
+                this.answered = true;
+                const question = this.questions[this.currentQuestion];
+                const options = document.querySelectorAll('.quiz-option');
+                
+                options.forEach((option, index) => {
+                    option.style.pointerEvents = 'none';
+                    
+                    if (index === question.correct) {
+                        // Correct answer - green background
+                        option.style.backgroundColor = '#10b981';
+                        option.style.color = 'white';
+                        option.style.borderColor = '#059669';
+                        option.innerHTML = '✓ ' + option.textContent;
+                    } else if (index === selectedIndex && index !== question.correct) {
+                        // Wrong selected answer - red background
+                        option.style.backgroundColor = '#ef4444';
+                        option.style.color = 'white';
+                        option.style.borderColor = '#dc2626';
+                        option.innerHTML = '✗ ' + option.textContent;
+                    } else if (index === selectedIndex && index === question.correct) {
+                        // Correct selected answer - green background with checkmark
+                        option.style.backgroundColor = '#10b981';
+                        option.style.color = 'white';
+                        option.style.borderColor = '#059669';
+                        option.innerHTML = '✓ ' + option.textContent;
+                    } else {
+                        // Unselected options - gray background
+                        option.style.backgroundColor = '#f3f4f6';
+                        option.style.color = '#6b7280';
+                        option.style.borderColor = '#d1d5db';
+                    }
+                });
+                
+                if (selectedIndex === question.correct) {
+                    this.score += 20;
+                    document.getElementById('quizScore').textContent = this.score;
+                }
+                
+                setTimeout(() => {
+                    document.getElementById('nextQuizBtn').classList.remove('hidden');
+                }, 1500);
+            }
+            
+            nextQuestion() {
+                this.currentQuestion++;
+                this.showQuestion();
+            }
+            
+            endQuiz() {
+                alert(`Quiz selesai! Skor Anda: ${this.score}/100`);
+                backToGameMenu();
+            }
+            
+            bindEvents() {
+                document.getElementById('nextQuizBtn').addEventListener('click', () => {
+                    this.nextQuestion();
+                });
+            }
+        }
+
+        // Google Sheets Configuration
+        const GOOGLE_SHEETS_CONFIG = {
+            // SETUP GOOGLE SHEETS:
+            // 1. Buat Google Sheet baru
+            // 2. Buat Google Apps Script (script.google.com)
+            // 3. Copy kode Apps Script dari komentar di bawah
+            // 4. Deploy sebagai Web App
+            // 5. Ganti YOUR_SCRIPT_ID dengan ID script Anda
+            scriptUrl: 'https://script.google.com/macros/s/AKfycbxxvuqV8s2YjZgqmo00a2bS2BsLdlIj3eYZLA3fItZEAlv-Kujo3M9q74ts4ZBRN0cw/exec',
+            
+            // Mode demo untuk testing (ubah ke false setelah setup)
+            demoMode: true,
+            demoUrl: 'https://httpbin.org/post' // URL demo untuk testing
+        };
+
+        /*
+        KODE GOOGLE APPS SCRIPT:
+        Copy kode berikut ke Google Apps Script:
+
+        function doPost(e) {
+          try {
+            const data = JSON.parse(e.postData.contents);
+            const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+            
+            // Header kolom (jalankan sekali untuk setup)
+            const headers = ['Timestamp', 'Tanggal', 'Waktu', 'Nama', 'Kelas', 'Skor', 'Persentase', 'Status', 'Waktu Pengerjaan', 'Jumlah Benar', 'Jumlah Salah', 'Detail Jawaban'];
+            
+            // Cek apakah header sudah ada
+            if (sheet.getLastRow() === 0) {
+              sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+            }
+            
+            // Tambah data baru
+            const row = [
+              data.timestamp,
+              data.tanggal,
+              data.waktu,
+              data.nama,
+              data.kelas,
+              data.skor,
+              data.persentase + '%',
+              data.status,
+              data.waktu_pengerjaan,
+              data.jumlah_benar,
+              data.jumlah_salah,
+              data.detail_jawaban
+            ];
+            
+            sheet.appendRow(row);
+            
+            return ContentService
+              .createTextOutput(JSON.stringify({success: true, message: 'Data berhasil disimpan'}))
+              .setMimeType(ContentService.MimeType.JSON);
+              
+          } catch (error) {
+            return ContentService
+              .createTextOutput(JSON.stringify({success: false, error: error.toString()}))
+              .setMimeType(ContentService.MimeType.JSON);
+          }
+        }
+        */
+
+        // Google Sheets Helper Functions
+        async function saveToGoogleSheets(data) {
+            try {
+                const url = GOOGLE_SHEETS_CONFIG.demoMode ? 
+                    GOOGLE_SHEETS_CONFIG.demoUrl : 
+                    GOOGLE_SHEETS_CONFIG.scriptUrl;
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (GOOGLE_SHEETS_CONFIG.demoMode) {
+                    console.log('Demo mode: Data yang akan disimpan:', data);
+                    return { success: true, demo: true };
+                }
+                
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                console.error('Error saving to Google Sheets:', error);
+                return { success: false, error: error.message };
+            }
+        }
+
+        function formatEvaluationData(student, score, answers, timeSpent) {
+            const now = new Date();
+            return {
+                timestamp: now.toISOString(),
+                tanggal: now.toLocaleDateString('id-ID'),
+                waktu: now.toLocaleTimeString('id-ID'),
+                nama: student.name,
+                kelas: student.class,
+                skor: score,
+                persentase: ((score / 100) * 100).toFixed(1),
+                status: score >= 70 ? 'LULUS' : 'TIDAK LULUS',
+                waktu_pengerjaan: timeSpent,
+                detail_jawaban: JSON.stringify(answers),
+                jumlah_benar: answers.filter(a => a.isCorrect).length,
+                jumlah_salah: answers.filter(a => !a.isCorrect).length
+            };
+        }
+
+        // Evaluation Class
+        class Evaluation {
+            constructor() {
+                this.originalQuestions = [
+                    // Soal 1-5: Pengetahuan Dasar Surah
+                    {
+                        question: "Surah Al-Asr termasuk golongan surah...",
+                        options: ["Makkiyah", "Madaniyah", "Makkiyah-Madaniyah", "Tidak diketahui"],
+                        correct: 0
+                    },
+                    {
+                        question: "Jumlah ayat dalam Surah Al-Asr adalah...",
+                        options: ["2 ayat", "3 ayat", "4 ayat", "5 ayat"],
+                        correct: 1
+                    },
+                    {
+                        question: "Surah Al-Asr terletak pada urutan ke berapa dalam Al-Quran?",
+                        options: ["101", "102", "103", "104"],
+                        correct: 2
+                    },
+                    {
+                        question: "Surah Al-Asr diturunkan di kota...",
+                        options: ["Madinah", "Makkah", "Thaif", "Yaman"],
+                        correct: 1
+                    },
+                    {
+                        question: "Kata 'Al-Asr' dalam bahasa Indonesia berarti...",
+                        options: ["Waktu", "Masa", "Sore", "Semua benar"],
+                        correct: 3
+                    },
+
+                    // Soal 6-10: Arti Kata (Mufradat)
+                    {
+                        question: "Arti dari kata 'وَالْعَصْرِ' adalah...",
+                        options: ["Demi waktu", "Demi masa", "Demi sore", "Semua benar"],
+                        correct: 3
+                    },
+                    {
+                        question: "Arti dari kata 'إِنَّ' adalah...",
+                        options: ["Sesungguhnya", "Sungguh", "Benar-benar", "Semua benar"],
+                        correct: 3
+                    },
+                    {
+                        question: "Arti dari kata 'الْإِنسَانَ' adalah...",
+                        options: ["Manusia", "Orang", "Makhluk", "Hamba"],
+                        correct: 0
+                    },
+                    {
+                        question: "Arti dari kata 'لَفِي خُسْرٍ' adalah...",
+                        options: ["Dalam keuntungan", "Dalam kerugian", "Dalam kebahagiaan", "Dalam kesedihan"],
+                        correct: 1
+                    },
+                    {
+                        question: "Arti dari kata 'إِلَّا' adalah...",
+                        options: ["Tetapi", "Kecuali", "Selain", "Hanya"],
+                        correct: 1
+                    },
+
+                    // Soal 11-15: Terjemah Ayat dan Kandungan
+                    {
+                        question: "Terjemahan lengkap ayat pertama Surah Al-Asr adalah...",
+                        options: ["Demi masa", "Demi waktu yang berlalu", "Demi sore hari", "Demi masa (waktu)"],
+                        correct: 0
+                    },
+                    {
+                        question: "Ayat 'إِنَّ الْإِنسَانَ لَفِي خُسْرٍ' artinya...",
+                        options: ["Sungguh manusia dalam keuntungan", "Sungguh manusia berada dalam kerugian", "Sungguh manusia dalam kebahagiaan", "Sungguh manusia dalam kesulitan"],
+                        correct: 1
+                    },
+                    {
+                        question: "Menurut Surah Al-Asr, siapa yang dikecualikan dari kerugian?",
+                        options: ["Orang kaya", "Orang beriman dan beramal saleh serta saling menasihati", "Orang pintar", "Orang berkuasa"],
+                        correct: 1
+                    },
+                    {
+                        question: "Kandungan utama Surah Al-Asr mengajarkan tentang...",
+                        options: ["Pentingnya waktu dan amal saleh", "Pentingnya harta", "Pentingnya ilmu", "Pentingnya kedudukan"],
+                        correct: 0
+                    },
+                    {
+                        question: "Empat hal yang harus dilakukan agar tidak rugi menurut Surah Al-Asr adalah...",
+                        options: ["Beriman, beramal saleh, menasihati kebenaran, menasihati kesabaran", "Shalat, puasa, zakat, haji", "Membaca, menulis, berhitung, menghafal", "Sabar, syukur, tawakkal, istighfar"],
+                        correct: 0
+                    },
+
+                    // Soal 16-20: Urutan Ayat dan Penerapan
+                    {
+                        question: "Urutan ayat yang benar dalam Surah Al-Asr adalah...",
+                        options: ["وَالْعَصْرِ - إِلَّا الَّذِينَ آمَنُوا - إِنَّ الْإِنسَانَ لَفِي خُسْرٍ", "وَالْعَصْرِ - إِنَّ الْإِنسَانَ لَفِي خُسْرٍ - إِلَّا الَّذِينَ آمَنُوا", "إِنَّ الْإِنسَانَ لَفِي خُسْرٍ - وَالْعَصْرِ - إِلَّا الَّذِينَ آمَنُوا", "إِلَّا الَّذِينَ آمَنُوا - وَالْعَصْرِ - إِنَّ الْإِنسَانَ لَفِي خُسْرٍ"],
+                        correct: 1
+                    },
+                    {
+                        question: "Ayat ke-2 dari Surah Al-Asr adalah...",
+                        options: ["وَالْعَصْرِ", "إِنَّ الْإِنسَانَ لَفِي خُسْرٍ", "إِلَّا الَّذِينَ آمَنُوا", "وَتَوَاصَوْا بِالصَّبْرِ"],
+                        correct: 1
+                    },
+                    {
+                        question: "Ayat ke-3 dari Surah Al-Asr dimulai dengan kata...",
+                        options: ["وَالْعَصْرِ", "إِنَّ", "إِلَّا", "وَتَوَاصَوْا"],
+                        correct: 2
+                    },
+                    {
+                        question: "Hikmah yang dapat diambil dari Surah Al-Asr dalam kehidupan sehari-hari adalah...",
+                        options: ["Memanfaatkan waktu dengan baik", "Selalu berbuat kebaikan", "Saling mengingatkan dalam kebenaran", "Semua benar"],
+                        correct: 3
+                    },
+                    {
+                        question: "Contoh penerapan 'تَوَاصَوْا بِالْحَقِّ' dalam kehidupan adalah...",
+                        options: ["Mengingatkan teman untuk shalat", "Memberi hadiah kepada teman", "Bermain bersama teman", "Belajar kelompok"],
+                        correct: 0
+                    }
+                ];
+                
+                this.questions = [];
+                this.currentQuestion = 0;
+                this.score = 0;
+                this.timeLeft = 1200; // 20 minutes in seconds
+                this.timerInterval = null;
+                this.answered = false;
+                this.userAnswers = [];
+                this.startTime = null;
+            }
+            
+            shuffle(array) {
+                const shuffled = [...array];
+                for (let i = shuffled.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+                return shuffled;
+            }
+            
+            shuffleOptions(question) {
+                const correctAnswer = question.options[question.correct];
+                const shuffledOptions = this.shuffle(question.options);
+                const newCorrectIndex = shuffledOptions.indexOf(correctAnswer);
+                
+                return {
+                    ...question,
+                    options: shuffledOptions,
+                    correct: newCorrectIndex
+                };
+            }
+            
+            startEvaluation() {
+                this.currentQuestion = 0;
+                this.score = 0;
+                this.timeLeft = 1200;
+                this.answered = false;
+                this.userAnswers = [];
+                this.startTime = new Date();
+                
+                // Shuffle questions and their options
+                const shuffledQuestions = this.shuffle(this.originalQuestions);
+                this.questions = shuffledQuestions.map(q => this.shuffleOptions(q));
+                
+                document.getElementById('evaluationStart').classList.add('hidden');
+                document.getElementById('evaluationQuiz').classList.remove('hidden');
+                
+                this.startTimer();
+                this.showQuestion();
+            }
+            
+            startTimer() {
+                this.timerInterval = setInterval(() => {
+                    this.timeLeft--;
+                    const minutes = Math.floor(this.timeLeft / 60);
+                    const seconds = this.timeLeft % 60;
+                    document.getElementById('evalTimer').textContent = 
+                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    
+                    if (this.timeLeft <= 0) {
+                        this.endEvaluation();
+                    }
+                }, 1000);
+            }
+            
+            showQuestion() {
+                if (this.currentQuestion >= this.questions.length) {
+                    this.endEvaluation();
+                    return;
+                }
+                
+                const question = this.questions[this.currentQuestion];
+                
+                document.getElementById('evalCurrentQuestion').textContent = this.currentQuestion + 1;
+                document.getElementById('evalTotalQuestions').textContent = this.questions.length;
+                document.getElementById('evalScore').textContent = this.score;
+                document.getElementById('evalQuestion').textContent = question.question;
+                
+                const optionsContainer = document.getElementById('evalOptions');
+                optionsContainer.innerHTML = '';
+                
+                question.options.forEach((option, index) => {
+                    const optionElement = document.createElement('button');
+                    optionElement.className = 'quiz-option w-full text-left bg-white border-2 border-emerald-200 rounded-lg p-4 hover:border-emerald-400 transition-colors';
+                    optionElement.textContent = option;
+                    optionElement.addEventListener('click', () => this.selectAnswer(index));
+                    optionsContainer.appendChild(optionElement);
+                });
+                
+                // Show appropriate button
+                if (this.currentQuestion === this.questions.length - 1) {
+                    document.getElementById('nextEvalBtn').classList.add('hidden');
+                    document.getElementById('finishEvalBtn').classList.remove('hidden');
+                } else {
+                    document.getElementById('nextEvalBtn').classList.add('hidden');
+                    document.getElementById('finishEvalBtn').classList.add('hidden');
+                }
+                
+                this.answered = false;
+            }
+            
+            selectAnswer(selectedIndex) {
+                if (this.answered) return;
+                
+                this.answered = true;
+                const question = this.questions[this.currentQuestion];
+                const options = document.querySelectorAll('.quiz-option');
+                
+                // Store user answer
+                this.userAnswers.push({
+                    question: this.currentQuestion,
+                    selected: selectedIndex,
+                    correct: question.correct,
+                    isCorrect: selectedIndex === question.correct
+                });
+                
+                options.forEach((option, index) => {
+                    option.style.pointerEvents = 'none';
+                    
+                    if (index === question.correct) {
+                        // Correct answer - green background
+                        option.style.backgroundColor = '#10b981';
+                        option.style.color = 'white';
+                        option.style.borderColor = '#059669';
+                        option.innerHTML = '✓ ' + option.textContent;
+                    } else if (index === selectedIndex && index !== question.correct) {
+                        // Wrong selected answer - red background
+                        option.style.backgroundColor = '#ef4444';
+                        option.style.color = 'white';
+                        option.style.borderColor = '#dc2626';
+                        option.innerHTML = '✗ ' + option.textContent;
+                    } else if (index === selectedIndex && index === question.correct) {
+                        // Correct selected answer - green background with checkmark
+                        option.style.backgroundColor = '#10b981';
+                        option.style.color = 'white';
+                        option.style.borderColor = '#059669';
+                        option.innerHTML = '✓ ' + option.textContent;
+                    } else {
+                        // Unselected options - gray background
+                        option.style.backgroundColor = '#f3f4f6';
+                        option.style.color = '#6b7280';
+                        option.style.borderColor = '#d1d5db';
+                    }
+                });
+                
+                if (selectedIndex === question.correct) {
+                    this.score += 5;
+                    document.getElementById('evalScore').textContent = this.score;
+                }
+                
+                setTimeout(() => {
+                    if (this.currentQuestion === this.questions.length - 1) {
+                        document.getElementById('finishEvalBtn').classList.remove('hidden');
+                    } else {
+                        document.getElementById('nextEvalBtn').classList.remove('hidden');
+                    }
+                }, 1500);
+            }
+            
+            nextQuestion() {
+                this.currentQuestion++;
+                this.showQuestion();
+            }
+            
+            async endEvaluation() {
+                clearInterval(this.timerInterval);
+                
+                const endTime = new Date();
+                const timeSpent = Math.round((endTime - this.startTime) / 1000); // in seconds
+                const timeSpentFormatted = this.formatTime(timeSpent);
+                
+                const percentage = (this.score / 100) * 100;
+                const passed = percentage >= 70;
+                
+                // Prepare data for Google Sheets
+                const evaluationData = formatEvaluationData(
+                    currentStudent, 
+                    this.score, 
+                    this.userAnswers, 
+                    timeSpentFormatted
+                );
+                
+                // Show loading indicator
+                this.showSavingIndicator();
+                
+                // Save to Google Sheets
+                try {
+                    const saveResult = await saveToGoogleSheets(evaluationData);
+                    
+                    if (saveResult.success) {
+                        console.log('Data berhasil disimpan ke Google Sheets');
+                        if (saveResult.demo) {
+                            this.showDemoNotification();
+                        }
+                    } else {
+                        console.error('Gagal menyimpan data:', saveResult.error);
+                        this.showSaveError();
+                    }
+                } catch (error) {
+                    console.error('Error saat menyimpan:', error);
+                    this.showSaveError();
+                }
+                
+                // Hide loading indicator
+                this.hideSavingIndicator();
+                
+                if (passed) {
+                    this.showCertificate();
+                } else {
+                    this.showResults(false);
+                }
+            }
+            
+            showResults(passed) {
+                const resultsContent = document.getElementById('resultsContent');
+                const percentage = (this.score / 100) * 100;
+                
+                resultsContent.innerHTML = `
+                    <div class="text-6xl mb-4">${passed ? '🎉' : '😔'}</div>
+                    <h3 class="text-2xl font-bold ${passed ? 'text-emerald-800' : 'text-red-800'} mb-4">
+                        ${passed ? 'Selamat!' : 'Belum Berhasil'}
+                    </h3>
+                    <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                        <div class="font-semibold text-gray-800">${currentStudent.name}</div>
+                        <div class="text-sm text-gray-600">Kelas: ${currentStudent.class}</div>
+                    </div>
+                    <div class="text-lg mb-4">
+                        <p>Skor Anda: <span class="font-bold ${passed ? 'text-emerald-600' : 'text-red-600'}">${this.score}/100 (${percentage}%)</span></p>
+                    </div>
+                    <p class="text-gray-600">
+                        ${passed ? 
+                            'Anda telah lulus evaluasi dan berhak mendapat sertifikat!' : 
+                            'Nilai minimum untuk lulus adalah 70. Silakan pelajari materi lagi dan coba evaluasi ulang.'}
+                    </p>
+                `;
+                
+                document.getElementById('resultsModal').classList.remove('hidden');
+            }
+            
+            showCertificate() {
+                const today = new Date();
+                const dateStr = today.toLocaleDateString('id-ID', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+                
+                const certificateContent = document.getElementById('certificateContent');
+                certificateContent.innerHTML = `
+                    <div class="bg-gradient-to-br from-emerald-50 to-teal-50 border-4 border-emerald-600 rounded-xl p-8">
+                        <div class="text-center">
+                            <div class="text-4xl mb-4">🏆</div>
+                            <h2 class="text-3xl font-bold text-emerald-800 mb-2">SERTIFIKAT KETUNTASAN</h2>
+                            <h3 class="text-xl text-emerald-700 mb-6">Media Pembelajaran Al-Quran Hadits</h3>
+                            
+                            <div class="bg-white rounded-lg p-6 mb-6 shadow-inner">
+                                <p class="text-lg mb-4">Diberikan kepada:</p>
+                                <h4 class="text-2xl font-bold text-emerald-800 mb-2">${currentStudent.name}</h4>
+                                <p class="text-emerald-600 mb-4">Kelas ${currentStudent.class}</p>
+                                
+                                <p class="text-gray-700 mb-4">
+                                    Telah menyelesaikan pembelajaran dan evaluasi materi
+                                </p>
+                                <h5 class="text-xl font-semibold text-emerald-800 mb-4">SURAH AL-ASR</h5>
+                                
+                                <div class="flex justify-center items-center space-x-8 mb-4">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-emerald-600">${this.score}</div>
+                                        <div class="text-sm text-gray-600">Skor</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-emerald-600">${((this.score/100)*100).toFixed(0)}%</div>
+                                        <div class="text-sm text-gray-600">Persentase</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between items-end">
+                                <div class="text-left">
+                                    <p class="text-sm text-gray-600">Tanggal:</p>
+                                    <p class="font-semibold">${dateStr}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-gray-600">Guru Pembimbing</p>
+                                    <p class="font-semibold">MAHFUD SIDIK, S.Pd.I</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('certificateModal').classList.remove('hidden');
+            }
+            
+            bindEvents() {
+                document.getElementById('startEvaluationBtn').addEventListener('click', () => {
+                    this.startEvaluation();
+                });
+                
+                document.getElementById('nextEvalBtn').addEventListener('click', () => {
+                    this.nextQuestion();
+                });
+                
+                document.getElementById('finishEvalBtn').addEventListener('click', () => {
+                    this.endEvaluation();
+                });
+                
+                document.getElementById('downloadCertBtn').addEventListener('click', () => {
+                    this.downloadCertificate();
+                });
+            }
+            
+            formatTime(seconds) {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+            }
+            
+            showSavingIndicator() {
+                // Create loading overlay
+                const overlay = document.createElement('div');
+                overlay.id = 'savingOverlay';
+                overlay.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+                overlay.innerHTML = `
+                    <div class="bg-white rounded-lg p-6 text-center">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600 mx-auto mb-4"></div>
+                        <p class="text-gray-700">Menyimpan hasil evaluasi...</p>
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+            }
+            
+            hideSavingIndicator() {
+                const overlay = document.getElementById('savingOverlay');
+                if (overlay) {
+                    overlay.remove();
+                }
+            }
+            
+            showDemoNotification() {
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 fade-in';
+                notification.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="mr-2">ℹ️</span>
+                        <span>Mode Demo: Data ditampilkan di console browser</span>
+                    </div>
+                `;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 4000);
+            }
+            
+            showSaveError() {
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-4 rounded-lg shadow-lg z-50 fade-in';
+                notification.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="mr-2">⚠️</span>
+                        <span>Gagal menyimpan data. Hasil tetap ditampilkan.</span>
+                    </div>
+                `;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 4000);
+            }
+            
+            downloadCertificate() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Set canvas size
+                canvas.width = 800;
+                canvas.height = 600;
+                
+                // Background gradient
+                const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+                gradient.addColorStop(0, '#ecfdf5');
+                gradient.addColorStop(1, '#f0fdfa');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Border
+                ctx.strokeStyle = '#059669';
+                ctx.lineWidth = 8;
+                ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+                
+                // Inner border
+                ctx.strokeStyle = '#10b981';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
+                
+                // Title
+                ctx.fillStyle = '#065f46';
+                ctx.font = 'bold 36px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('SERTIFIKAT KETUNTASAN', canvas.width / 2, 120);
+                
+                // Subtitle
+                ctx.font = '24px Arial';
+                ctx.fillStyle = '#047857';
+                ctx.fillText('Media Pembelajaran Al-Quran Hadits', canvas.width / 2, 160);
+                
+                // Certificate text
+                ctx.font = '20px Arial';
+                ctx.fillStyle = '#374151';
+                ctx.fillText('Diberikan kepada:', canvas.width / 2, 220);
+                
+                // Student name
+                ctx.font = 'bold 32px Arial';
+                ctx.fillStyle = '#065f46';
+                ctx.fillText(currentStudent.name, canvas.width / 2, 270);
+                
+                // Class
+                ctx.font = '18px Arial';
+                ctx.fillStyle = '#047857';
+                ctx.fillText(`Kelas ${currentStudent.class}`, canvas.width / 2, 300);
+                
+                // Achievement text
+                ctx.font = '18px Arial';
+                ctx.fillStyle = '#374151';
+                ctx.fillText('Telah menyelesaikan pembelajaran dan evaluasi materi', canvas.width / 2, 350);
+                
+                // Subject
+                ctx.font = 'bold 24px Arial';
+                ctx.fillStyle = '#065f46';
+                ctx.fillText('SURAH AL-ASR', canvas.width / 2, 390);
+                
+                // Score
+                ctx.font = '20px Arial';
+                ctx.fillStyle = '#047857';
+                ctx.fillText(`Skor: ${this.score}/100 (${((this.score/100)*100).toFixed(0)}%)`, canvas.width / 2, 430);
+                
+                // Date
+                const today = new Date();
+                const dateStr = today.toLocaleDateString('id-ID', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+                ctx.font = '16px Arial';
+                ctx.fillStyle = '#6b7280';
+                ctx.textAlign = 'left';
+                ctx.fillText(`Tanggal: ${dateStr}`, 60, 520);
+                
+                // Institution
+                ctx.textAlign = 'right';
+                ctx.fillText('Media Pembelajaran', canvas.width - 60, 520);
+                ctx.fillText('Al-Quran Hadits Kelas 4 MI', canvas.width - 60, 540);
+                
+                // Trophy emoji (simplified as text)
+                ctx.font = '48px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('🏆', canvas.width / 2, 480);
+                
+                // Convert to blob and download
+                canvas.toBlob((blob) => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `Sertifikat_${currentStudent.name.replace(/\s+/g, '_')}_Al-Asr.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 'image/png');
+            }
+        }
+
+        // Initialize game instances
+        function initializeMemoryGame() {
+            memoryGameInstance = new MemoryGame();
+        }
+
+        function initializePuzzleGame() {
+            puzzleGameInstance = new PuzzleGame();
+        }
+
+        function initializeQuizGame() {
+            quizGameInstance = new QuizGame();
+            quizGameInstance.bindEvents();
+        }
+
+        function initializeEvaluation() {
+            evaluationInstance = new Evaluation();
+            evaluationInstance.bindEvents();
+        }
+
+        // Modal functions
+        function closeCertificateModal() {
+            document.getElementById('certificateModal').classList.add('hidden');
+            showSection('menu');
+        }
+
+        function closeResultsModal() {
+            document.getElementById('resultsModal').classList.add('hidden');
+            showSection('menu');
+        }
+
+        // Close modals when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('fixed') && e.target.classList.contains('inset-0')) {
+                e.target.classList.add('hidden');
+            }
+        });
+    </script>
+
+  </body>
+</html>
