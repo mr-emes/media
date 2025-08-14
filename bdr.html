@@ -2,168 +2,36 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>BDR Attendance</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- SweetAlert2 -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Lembar Jawaban Online</title>
   <style>
-    body {
-      background: #f8f9fa;
-      font-family: 'Segoe UI', Tahoma, sans-serif;
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
     }
-    .card {
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    .iframe-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: auto;
     }
-    .btn-primary {
-      background: linear-gradient(45deg, #4e73df, #224abe);
+    iframe {
       border: none;
-    }
-    .btn-primary:hover {
-      background: linear-gradient(45deg, #224abe, #1e3c9b);
-    }
-    footer {
-      text-align: center;
-      font-size: 0.85rem;
-      color: #6c757d;
-      margin-top: 2rem;
+      width: 100%;
+      height: 100%;
+      min-height: 100vh;
     }
   </style>
 </head>
 <body>
-
-<div class="container py-4">
-  <h2 class="mb-4 text-center fw-bold">📚 BDR Attendance System</h2>
-
-  <!-- Form Cek Siswa -->
-  <div class="card mb-4">
-    <div class="card-body">
-      <h5 class="card-title">Cek Data Siswa</h5>
-      <div class="input-group">
-        <input type="text" id="nisInput" class="form-control" placeholder="Masukkan NIS">
-        <button class="btn btn-primary" id="btnCek">Cek</button>
-      </div>
-    </div>
+  <div class="iframe-container">
+    <iframe src="https://script.google.com/macros/s/AKfycbzJ2kKr9vfRpsPwoWYiojWxe5s7eNpkONqIeseepiPqGg5371GoKuRGa1P2-wOv8QOt_Q/exec" 
+            allowfullscreen
+            sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
   </div>
-
-  <!-- Data Siswa -->
-  <div id="studentCard" class="card mb-4 d-none">
-    <div class="card-body">
-      <h5 class="card-title">Data Siswa</h5>
-      <p><strong>Nama:</strong> <span id="namaSiswa"></span></p>
-      <p><strong>Kelas:</strong> <span id="kelasSiswa"></span></p>
-      <p><strong>Mapel:</strong> <span id="mapelSiswa"></span></p>
-      <p><strong>Tugas Hari Ini:</strong> <span id="tugasSiswa"></span></p>
-      <button class="btn btn-success" id="btnAbsen">Absen Sekarang</button>
-    </div>
-  </div>
-
-  <!-- Upload Tugas -->
-  <div id="uploadCard" class="card mb-4 d-none">
-    <div class="card-body">
-      <h5 class="card-title">Upload Tugas</h5>
-      <input type="file" id="taskFile" class="form-control mb-3">
-      <button class="btn btn-primary" id="btnUpload">Upload</button>
-    </div>
-  </div>
-
-</div>
-
-<footer>
-  &copy; 2025 BDR Attendance by AI 🤖
-</footer>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw9tu2V5f7cd1FuSMl8aVbkhgzuBAi__Jde7eprld47aYvfo3Rgg6U1BMY1JBqNHZGqCQ/exec';
-  let currentStudent = null;
-
-  // Cek Data Siswa
-  document.getElementById('btnCek').addEventListener('click', async () => {
-    const nis = document.getElementById('nisInput').value.trim();
-    if (!nis) {
-      Swal.fire('Peringatan', 'Masukkan NIS terlebih dahulu', 'warning');
-      return;
-    }
-    try {
-      const res = await fetch(`${WEB_APP_URL}?action=getStudent&nis=${encodeURIComponent(nis)}`);
-      const data = await res.json();
-      if (!data.success) {
-        Swal.fire('Gagal', data.error || 'Siswa tidak ditemukan', 'error');
-        return;
-      }
-      currentStudent = data.data;
-      document.getElementById('namaSiswa').textContent = currentStudent.nama;
-      document.getElementById('kelasSiswa').textContent = currentStudent.kelas;
-      document.getElementById('mapelSiswa').textContent = currentStudent.mapel;
-      document.getElementById('tugasSiswa').textContent = currentStudent.tugas;
-      document.getElementById('studentCard').classList.remove('d-none');
-      document.getElementById('uploadCard').classList.remove('d-none');
-    } catch (err) {
-      Swal.fire('Error', err.message, 'error');
-    }
-  });
-
-  // Absen
-  document.getElementById('btnAbsen').addEventListener('click', async () => {
-    if (!currentStudent) return;
-    try {
-      const res = await fetch(`${WEB_APP_URL}?action=saveAttendance&nis=${encodeURIComponent(currentStudent.nis)}&nama=${encodeURIComponent(currentStudent.nama)}&kelas=${encodeURIComponent(currentStudent.kelas)}&mapel=${encodeURIComponent(currentStudent.mapel)}`);
-      const data = await res.json();
-      if (!data.success) {
-        Swal.fire('Gagal', data.error || 'Gagal absen', 'error');
-        return;
-      }
-      Swal.fire('Sukses', 'Absen berhasil', 'success');
-    } catch (err) {
-      Swal.fire('Error', err.message, 'error');
-    }
-  });
-
-  // Upload Tugas
-  document.getElementById('btnUpload').addEventListener('click', async () => {
-    if (!currentStudent) return;
-    const file = document.getElementById('taskFile').files[0];
-    if (!file) {
-      Swal.fire('Peringatan', 'Pilih file terlebih dahulu', 'warning');
-      return;
-    }
-    try {
-      const base64 = await toBase64(file);
-      const payload = {
-        action: 'uploadFile',
-        fileData: base64,
-        fileName: file.name,
-        mimeType: file.type,
-        studentData: currentStudent
-      };
-      const res = await fetch(WEB_APP_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json();
-      if (!data.success) {
-        Swal.fire('Gagal', data.error || 'Gagal upload', 'error');
-        return;
-      }
-      Swal.fire('Sukses', 'Tugas berhasil diupload', 'success');
-    } catch (err) {
-      Swal.fire('Error', err.message, 'error');
-    }
-  });
-
-  function toBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = err => reject(err);
-    });
-  }
-</script>
 </body>
 </html>
