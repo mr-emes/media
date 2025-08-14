@@ -1,281 +1,169 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8">
   <title>BDR Attendance</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- SweetAlert2 untuk notifikasi yang rapi (opsional, tapi saya pakai) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
-    :root { --brand:#2563eb; --bg:#0b1220; --card:#0f172a; --muted:#94a3b8; --ok:#16a34a; --warn:#f59e0b; --err:#dc2626; }
-    html,body { margin:0; background:#0b1220; color:#e5e7eb; font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial; }
-    .wrap { max-width:900px; margin:40px auto; padding:0 16px; }
-    .card { background:linear-gradient(180deg,#0f172a, #0b1220); border:1px solid rgba(148,163,184,.2); border-radius:16px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,.35);}
-    h1 { font-size:22px; margin:0 0 12px; }
-    p.muted { color:var(--muted); margin:0 0 20px; }
-    .grid { display:grid; gap:14px; grid-template-columns:repeat(12,1fr); }
-    .row { grid-column:span 12; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    label { font-size:14px; color:#cbd5e1; display:block; margin-bottom:6px; }
-    input[type="text"], input[type="file"] { width:100%; background:#0b1220; border:1px solid rgba(148,163,184,.35); color:#e5e7eb; border-radius:10px; padding:10px 12px; outline:none; }
-    .col-4 { grid-column:span 12; } .col-6{grid-column:span 12;} .col-8{grid-column:span 12;}
-    @media (min-width:720px){ .col-4{grid-column:span 4} .col-6{grid-column:span 6} .col-8{grid-column:span 8} }
-    .btn { background:var(--brand); border:none; color:white; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:600; }
-    .btn.secondary { background:#1f2937; }
-    .btn.warn { background:var(--warn); }
-    .btn.ok { background:var(--ok); }
-    .btn:disabled { opacity:.6; cursor:not-allowed; }
-    .badge { display:inline-block; padding:4px 10px; border-radius:999px; font-size:12px; border:1px solid rgba(148,163,184,.35); color:#cbd5e1; }
-    .status { font-weight:700; }
-    .hidden{ display:none !important; }
-    .kv { display:grid; grid-template-columns:130px 1fr; gap:8px 14px; }
-    .foot { color:#64748b; font-size:12px; margin-top:16px; }
-    .hr { height:1px; background:rgba(148,163,184,.16); margin:14px 0; }
+    body {
+      background: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+    .card {
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .btn-primary {
+      background: linear-gradient(45deg, #4e73df, #224abe);
+      border: none;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(45deg, #224abe, #1e3c9b);
+    }
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #6c757d;
+      margin-top: 2rem;
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <h1>📚 BDR Attendance</h1>
-      <p class="muted">Masukkan NIS, cek data siswa, absen, lalu unggah bukti tugas. File akan otomatis dinamai <code>NIS_Nama_YYYY-MM-DD.ext</code> di Google Drive.</p>
 
-      <div class="grid">
-        <div class="col-6">
-          <label for="nisInput">NIS</label>
-          <input id="nisInput" type="text" placeholder="contoh: 20231001" />
-        </div>
-        <div class="col-6" style="display:flex;align-items:flex-end;gap:10px;">
-          <button class="btn" id="btnCek">Cek Data</button>
-          <span id="cekLoading" class="badge hidden">memeriksa...</span>
-        </div>
+<div class="container py-4">
+  <h2 class="mb-4 text-center fw-bold">📚 BDR Attendance System</h2>
 
-        <div class="col-12 hr"></div>
-
-        <div class="col-6">
-          <div class="kv">
-            <div>Nama</div><div id="infoNama" class="status">-</div>
-            <div>Kelas</div><div id="infoKelas">-</div>
-            <div>Mapel</div><div id="infoMapel">-</div>
-            <div>Tugas</div><div id="infoTugas">-</div>
-            <div>Absen Hari Ini</div><div id="infoAbsen"><span class="badge">-</span></div>
-            <div>Kelengkapan</div><div id="infoLengkap"><span class="badge">-</span></div>
-          </div>
-        </div>
-
-        <div class="col-6">
-          <label for="taskFile">Unggah Tugas (foto/pdf/doc)</label>
-          <input id="taskFile" type="file" />
-          <div class="row" style="margin-top:10px;">
-            <button id="btnAbsen" class="btn ok" disabled>Absen</button>
-            <button id="btnUpload" class="btn" disabled>Upload Tugas</button>
-            <span id="loadingState" class="badge hidden">proses...</span>
-          </div>
-          <div class="foot">Pastikan ukuran file wajar &amp; koneksi stabil.</div>
-        </div>
+  <!-- Form Cek Siswa -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Cek Data Siswa</h5>
+      <div class="input-group">
+        <input type="text" id="nisInput" class="form-control" placeholder="Masukkan NIS">
+        <button class="btn btn-primary" id="btnCek">Cek</button>
       </div>
     </div>
   </div>
 
-  <script>
-    // === KONFIGURASI ===
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwtmEZaCmxgK9XYVNDNUz8uxiQBdSrwG9Zax8bcrh-v6EYvT5PLS6izdgvkZmqAC5UPrg/exec";
+  <!-- Data Siswa -->
+  <div id="studentCard" class="card mb-4 d-none">
+    <div class="card-body">
+      <h5 class="card-title">Data Siswa</h5>
+      <p><strong>Nama:</strong> <span id="namaSiswa"></span></p>
+      <p><strong>Kelas:</strong> <span id="kelasSiswa"></span></p>
+      <p><strong>Mapel:</strong> <span id="mapelSiswa"></span></p>
+      <p><strong>Tugas Hari Ini:</strong> <span id="tugasSiswa"></span></p>
+      <button class="btn btn-success" id="btnAbsen">Absen Sekarang</button>
+    </div>
+  </div>
 
-    // === STATE ===
-    let currentStudent = null; // { nis, name, class, subject, assignment }
-    let todayStatus = { attended:false, assignmentUploaded:false };
+  <!-- Upload Tugas -->
+  <div id="uploadCard" class="card mb-4 d-none">
+    <div class="card-body">
+      <h5 class="card-title">Upload Tugas</h5>
+      <input type="file" id="taskFile" class="form-control mb-3">
+      <button class="btn btn-primary" id="btnUpload">Upload</button>
+    </div>
+  </div>
 
-    // === UTIL ALERT ===
-    function toast(icon, title, text){
-      return Swal.fire({ icon, title, text, confirmButtonText:'OK' });
+</div>
+
+<footer>
+  &copy; 2025 BDR Attendance by AI 🤖
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw9tu2V5f7cd1FuSMl8aVbkhgzuBAi__Jde7eprld47aYvfo3Rgg6U1BMY1JBqNHZGqCQ/exec';
+  let currentStudent = null;
+
+  // Cek Data Siswa
+  document.getElementById('btnCek').addEventListener('click', async () => {
+    const nis = document.getElementById('nisInput').value.trim();
+    if (!nis) {
+      Swal.fire('Peringatan', 'Masukkan NIS terlebih dahulu', 'warning');
+      return;
     }
-    const showSuccessAlert = (t, m)=>toast('success', t, m);
-    const showErrorAlert = (t, m)=>toast('error', t, m);
-    const showInfoAlert = (t, m)=>toast('info', t, m);
-
-    // === HELPER: GET & POST ===
-    async function gasGet(params){
-      const url = new URL(WEB_APP_URL);
-      Object.entries(params).forEach(([k,v])=>url.searchParams.set(k, v));
-      const res = await fetch(url.toString(), { method:'GET' });
-      if(!res.ok) throw new Error('HTTP '+res.status);
-      return res.json();
+    try {
+      const res = await fetch(`${WEB_APP_URL}?action=getStudent&nis=${encodeURIComponent(nis)}`);
+      const data = await res.json();
+      if (!data.success) {
+        Swal.fire('Gagal', data.error || 'Siswa tidak ditemukan', 'error');
+        return;
+      }
+      currentStudent = data.data;
+      document.getElementById('namaSiswa').textContent = currentStudent.nama;
+      document.getElementById('kelasSiswa').textContent = currentStudent.kelas;
+      document.getElementById('mapelSiswa').textContent = currentStudent.mapel;
+      document.getElementById('tugasSiswa').textContent = currentStudent.tugas;
+      document.getElementById('studentCard').classList.remove('d-none');
+      document.getElementById('uploadCard').classList.remove('d-none');
+    } catch (err) {
+      Swal.fire('Error', err.message, 'error');
     }
-    async function gasPost(payload){
+  });
+
+  // Absen
+  document.getElementById('btnAbsen').addEventListener('click', async () => {
+    if (!currentStudent) return;
+    try {
+      const res = await fetch(`${WEB_APP_URL}?action=saveAttendance&nis=${encodeURIComponent(currentStudent.nis)}&nama=${encodeURIComponent(currentStudent.nama)}&kelas=${encodeURIComponent(currentStudent.kelas)}&mapel=${encodeURIComponent(currentStudent.mapel)}`);
+      const data = await res.json();
+      if (!data.success) {
+        Swal.fire('Gagal', data.error || 'Gagal absen', 'error');
+        return;
+      }
+      Swal.fire('Sukses', 'Absen berhasil', 'success');
+    } catch (err) {
+      Swal.fire('Error', err.message, 'error');
+    }
+  });
+
+  // Upload Tugas
+  document.getElementById('btnUpload').addEventListener('click', async () => {
+    if (!currentStudent) return;
+    const file = document.getElementById('taskFile').files[0];
+    if (!file) {
+      Swal.fire('Peringatan', 'Pilih file terlebih dahulu', 'warning');
+      return;
+    }
+    try {
+      const base64 = await toBase64(file);
+      const payload = {
+        action: 'uploadFile',
+        fileData: base64,
+        fileName: file.name,
+        mimeType: file.type,
+        studentData: currentStudent
+      };
       const res = await fetch(WEB_APP_URL, {
-        method:'POST',
-        headers:{ 'Content-Type':'application/json' },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-      if(!res.ok) throw new Error('HTTP '+res.status);
-      return res.json();
-    }
-
-    // === READ FILE AS BASE64 (data URL) ===
-    function readFileAsBase64(file){
-      return new Promise((resolve,reject)=>{
-        const r = new FileReader();
-        r.onload = () => resolve(r.result);     // includes data:...;base64,
-        r.onerror = () => reject(new Error('Gagal membaca file'));
-        r.readAsDataURL(file);
-      });
-    }
-
-    // === RENDER INFO SISWA & STATUS ===
-    function renderStudentInfo(stu){
-      document.getElementById('infoNama').textContent   = stu?.nama || '-';
-      document.getElementById('infoKelas').textContent  = stu?.kelas || '-';
-      document.getElementById('infoMapel').textContent  = stu?.mapel || '-';
-      document.getElementById('infoTugas').textContent  = stu?.tugas || '-';
-    }
-    function renderAttendanceStatus(st){
-      const absenEl = document.getElementById('infoAbsen');
-      const lengEl  = document.getElementById('infoLengkap');
-      absenEl.innerHTML = `<span class="badge">${st.attended ? 'SUDAH' : 'BELUM'}</span>`;
-      lengEl.innerHTML  = `<span class="badge">${st.assignmentUploaded ? 'LENGKAP' : 'BELUM LENGKAP'}</span>`;
-
-      // tombol aktif bila ada student
-      const hasStu = !!currentStudent;
-      document.getElementById('btnAbsen').disabled  = !hasStu || st.attended;
-      document.getElementById('btnUpload').disabled = !hasStu;
-    }
-
-    // === AKSI: CEK SISWA ===
-    async function handleCek(){
-      const nis = document.getElementById('nisInput').value.trim();
-      if(!nis) return showInfoAlert('Perlu NIS','Masukkan NIS terlebih dahulu.');
-      const cekLoad = document.getElementById('cekLoading');
-      cekLoad.classList.remove('hidden');
-      try{
-        // 1) getStudent
-        const s = await gasGet({ action:'getStudent', nis });
-        if(!s.success || !s.data) throw new Error(s.error || 'Siswa tidak ditemukan');
-        currentStudent = {
-          nis: s.data.nis,
-          nama: s.data.nama,
-          kelas: s.data.kelas,
-          mapel: s.data.mapel,
-          subject: s.data.mapel,
-          assignment: s.data.tugas || 'Tidak ada tugas untuk hari ini'
-        };
-        renderStudentInfo(currentStudent);
-
-        // 2) checkAttendance
-        const c = await gasGet({ action:'checkAttendance', nis });
-        if(!c.success) throw new Error(c.error || 'Gagal cek kehadiran');
-        todayStatus = c.data || { attended:false, assignmentUploaded:false };
-        renderAttendanceStatus(todayStatus);
-
-        await showSuccessAlert('Siap!','Data siswa berhasil dimuat.');
-      }catch(err){
-        console.error(err);
-        await showErrorAlert('Gagal', err.message || 'Gagal memeriksa data siswa.');
-      }finally{
-        cekLoad.classList.add('hidden');
+      const data = await res.json();
+      if (!data.success) {
+        Swal.fire('Gagal', data.error || 'Gagal upload', 'error');
+        return;
       }
+      Swal.fire('Sukses', 'Tugas berhasil diupload', 'success');
+    } catch (err) {
+      Swal.fire('Error', err.message, 'error');
     }
+  });
 
-    // === AKSI: ABSEN ===
-    async function handleAbsen(){
-      if(!currentStudent) return showInfoAlert('Belum pilih siswa','Cek data siswa dulu.');
-      const load = document.getElementById('loadingState');
-      load.textContent = 'menyimpan absen...';
-      load.classList.remove('hidden');
-      try{
-        const payload = {
-          action:'saveAttendance', // untuk konsistensi tapi server pakai doGet
-        };
-        // Apps Script Anda untuk absen menggunakan doGet(saveAttendance),
-        // jadi kita panggil GET:
-        const res = await gasGet({
-          action:'saveAttendance',
-          nis: currentStudent.nis,
-          nama: currentStudent.nama,
-          kelas: currentStudent.kelas,
-          mapel: currentStudent.mapel,
-          assignmentUploaded: todayStatus.assignmentUploaded ? 'true' : 'false'
-        });
-        if(!res.success) throw new Error(res.error || 'Gagal menyimpan absen');
-
-        todayStatus.attended = true;
-        // jika di server mendeteksi sudah upload, status akan LENGKAP
-        // untuk tampil cepat, refresh dari server:
-        const c = await gasGet({ action:'checkAttendance', nis: currentStudent.nis });
-        if(c.success && c.data) todayStatus = c.data;
-        renderAttendanceStatus(todayStatus);
-
-        await showSuccessAlert('Berhasil','Absen tersimpan.');
-      }catch(err){
-        console.error(err);
-        await showErrorAlert('Gagal', err.message || 'Gagal menyimpan absen.');
-      }finally{
-        load.classList.add('hidden');
-      }
-    }
-
-    // === AKSI: UPLOAD TUGAS ===
-    async function handleUpload(){
-      if(!currentStudent) return showInfoAlert('Belum pilih siswa','Cek data siswa dulu.');
-      const fileEl = document.getElementById('taskFile');
-      if(!fileEl.files[0]) return showInfoAlert('Pilih File','Silakan pilih file tugas.');
-      const load = document.getElementById('loadingState');
-      load.textContent = 'mengirim tugas...';
-      load.classList.remove('hidden');
-      const btnU = document.getElementById('btnUpload'); btnU.disabled = true;
-
-      try{
-        const f = fileEl.files[0];
-        const base64 = await readFileAsBase64(f);
-
-        // Kirim ke doPost -> uploadFile
-        const result = await gasPost({
-          action: 'uploadFile',
-          fileData: base64,      // sudah termasuk prefix data:mime;base64,
-          fileName: f.name,
-          mimeType: f.type || 'application/octet-stream',
-          studentData: {
-            nis: currentStudent.nis,
-            nama: currentStudent.nama,
-            kelas: currentStudent.kelas,
-            mapel: currentStudent.mapel
-          }
-        });
-
-        if(!result.success) throw new Error(result.error || 'Upload gagal');
-
-        // Refresh status kehadiran (server mungkin set LENGKAP)
-        const c = await gasGet({ action:'checkAttendance', nis: currentStudent.nis });
-        if(c.success && c.data) todayStatus = c.data;
-        renderAttendanceStatus(todayStatus);
-
-        await showSuccessAlert('Terkirim!',
-          'Tugas berhasil diunggah ke Google Drive.\n' +
-          (result.data?.fileName ? `Nama file: ${result.data.fileName}` : '')
-        );
-        fileEl.value = '';
-
-      }catch(err){
-        console.error(err);
-        await showErrorAlert('Gagal Upload', err.message || 'Terjadi kesalahan saat upload.');
-      }finally{
-        load.classList.add('hidden');
-        btnU.disabled = false;
-      }
-    }
-
-    // === EVENT LISTENER ===
-    document.getElementById('btnCek').addEventListener('click', handleCek);
-    document.getElementById('btnAbsen').addEventListener('click', handleAbsen);
-    document.getElementById('btnUpload').addEventListener('click', handleUpload);
-
-    // enable tombol jika siswa sudah ada
-    const btns = ['btnAbsen','btnUpload'];
-    setInterval(()=>{
-      const hasStu = !!currentStudent;
-      btns.forEach(id=>{
-        const el = document.getElementById(id);
-        if(id==='btnAbsen') el.disabled = !hasStu || (todayStatus?.attended ?? false);
-        if(id==='btnUpload') el.disabled = !hasStu;
-      });
-    }, 500);
-  </script>
+  function toBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = err => reject(err);
+    });
+  }
+</script>
 </body>
 </html>
