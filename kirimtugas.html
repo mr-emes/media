@@ -276,7 +276,7 @@
 
     <script>
         // Google Apps Script Web App URL
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwl5Akw3zZuIAny3Ti9Ff6lfl--M61H2Pd6aCMrMKhumz74bhnPEWQ5nbopa8DiIGg/exec';
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby7GGXp49ZAGB3vHycwk5Bjdpa4SHyg8-Htj3FcYF_xnU-0EIuGHzwSUkmUI2P1cdfn/exec';
         const DRIVE_FOLDER_ID = '19_gDP_ePMBtgv3QRjt76Uzdp82xz5k7U';
 
         // API Functions for Google Sheets Integration
@@ -308,14 +308,17 @@
             }
         }
 
+// Fungsi submitAssignment yang sudah diperbaiki
 async function submitAssignment(assignmentData) {
     try {
         const fileInput = document.getElementById('fileInput');
-        const file = fileInput.files[0];
-        
-        if (!file) {
+        if (!fileInput || fileInput.files.length === 0) {
+            console.error('File input tidak ditemukan atau tidak ada file dipilih');
             return { success: false, message: 'File tugas tidak ditemukan' };
         }
+
+        const file = fileInput.files[0];
+        console.log('File yang akan diupload:', file.name, file.size, file.type); // Debugging
 
         const formData = new FormData();
         formData.append('action', 'submitAssignment');
@@ -324,27 +327,40 @@ async function submitAssignment(assignmentData) {
         formData.append('kelas', assignmentData.kelas);
         formData.append('nis', assignmentData.nis);
         formData.append('nama', assignmentData.nama);
-        formData.append('file', file);  // Pastikan file ditambahkan
+        formData.append('file', file, file.name); // Parameter ketiga untuk nama file
         formData.append('fileName', file.name);
         formData.append('fileType', file.type || 'application/octet-stream');
+
+        // Debug isi FormData
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
 
         const response = await fetch(WEB_APP_URL, {
             method: 'POST',
             body: formData,
-            redirect: 'follow'
+            headers: {
+                // JANGAN tambahkan Content-Type secara manual
+                // Biarkan browser set otomatis dengan boundary
+            }
         });
 
         if (!response.ok) {
             const errorText = await response.text();
-            throw new Error(`HTTP error! status: ${response.status}, details: ${errorText}`);
+            console.error('Response error:', errorText);
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         return await response.json();
     } catch (error) {
-        console.error('Error submitting assignment:', error);
+        console.error('Error detail:', {
+            message: error.message,
+            stack: error.stack,
+            name: error.name
+        });
         return {
             success: false, 
-            message: error.message || 'Gagal mengirim tugas',
+            message: 'Gagal mengirim tugas: ' + error.message,
             details: error.stack
         };
     }
@@ -766,12 +782,23 @@ async function submitAssignment(assignmentData) {
         // File handling
         dropZone.addEventListener('click', () => fileInput.click());
         
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                handleFileUpload(file);
-            }
-        });
+// Di dalam fungsi handleFileUpload
+fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) {
+        console.error('Tidak ada file yang dipilih');
+        return;
+    }
+    
+    console.log('File details:', {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        lastModified: file.lastModified
+    });
+    
+    handleFileUpload(file);
+});
 
         function handleFileUpload(file) {
             // Validate file size (max 50MB)
@@ -868,64 +895,69 @@ async function submitAssignment(assignmentData) {
         });
 
         // Form submission
-        assignmentForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const assignmentValue = document.getElementById('assignmentSelect').value;
-            const file = fileInput.files[0];
-            
-            if (!assignmentValue) {
-                showNotification('Mohon pilih tugas!', 'red');
-                return;
-            }
-            
-            if (!file) {
-                showNotification('Mohon upload file tugas!', 'red');
-                return;
-            }
+assignmentForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const fileInput = document.getElementById('fileInput');
+    if (!fileInput || fileInput.files.length === 0) {
+        showNotification('Mohon pilih file tugas terlebih dahulu!', 'red');
+        return;
+    }
 
-            const submitBtn = assignmentForm.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            submitBtn.disabled = true;
-            submitBtn.classList.add('button-loading');
-            submitBtn.innerHTML = '<span class="opacity-0">🚀 Kirim ke Google Sheets</span>';
+    const file = fileInput.files[0];
+    console.log('File yang dipilih:', file); // Debugging
 
-            try {
-                const [mapel, tugas] = assignmentValue.split('|');
-                
-                const assignmentData = {
-                    tugas: tugas,
-                    mapel: mapel,
-                    kelas: currentStudent.KELAS,
-                    nis: currentStudent.NIS,
-                    nama: currentStudent.NAMA,
-                    fileName: file.name,
-                    fileType: file.type
-                };
-                
-                const result = await submitAssignment(assignmentData);
-                
-                if (result.success) {
-                    successModal.classList.remove('hidden');
-                    assignmentForm.reset();
-                    fileInfo.classList.add('hidden');
-                    dropZone.classList.remove('hidden');
-                    await renderAvailableAssignments();
-                    await renderStudentGrades();
-                    await populateAssignmentSelect();
-                } else {
-                    showNotification(`Gagal mengirim tugas: ${result.message}`, 'red');
-                }
-            } catch (error) {
-                console.error('Submission error:', error);
-                showNotification('Gagal mengirim tugas. Silakan coba lagi.', 'red');
-            }
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    try {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+            <span class="flex items-center justify-center gap-2">
+                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Mengirim...
+            </span>
+        `;
 
-            submitBtn.disabled = false;
-            submitBtn.classList.remove('button-loading');
-            submitBtn.textContent = originalText;
+        const assignmentValue = document.getElementById('assignmentSelect').value;
+        if (!assignmentValue) {
+            throw new Error('Pilih tugas terlebih dahulu');
+        }
+
+        const [mapel, tugas] = assignmentValue.split('|');
+        
+        const result = await submitAssignment({
+            tugas: tugas,
+            mapel: mapel,
+            kelas: currentStudent.KELAS,
+            nis: currentStudent.NIS,
+            nama: currentStudent.NAMA
         });
 
+        if (result.success) {
+            showNotification('Tugas berhasil dikirim!', 'green');
+            assignmentForm.reset();
+            fileInfo.classList.add('hidden');
+            dropZone.classList.remove('hidden');
+            await Promise.all([
+                renderAvailableAssignments(),
+                renderStudentGrades(),
+                populateAssignmentSelect()
+            ]);
+        } else {
+            throw new Error(result.message || 'Gagal mengirim tugas');
+        }
+    } catch (error) {
+        console.error('Error pada form submission:', error);
+        showNotification(error.message, 'red');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+    }
+});
         // Close modal
         closeModal.addEventListener('click', () => {
             successModal.classList.add('hidden');
