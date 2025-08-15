@@ -276,7 +276,7 @@
 
     <script>
         // Google Apps Script Web App URL
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwl5Akw3zZuIAny3Ti9Ff6lfl--M61H2Pd6aCMrMKhumz74bhnPEWQ5nbopa8DiIGg/exec';
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwNxVnsxMg-3n_18yLsZqJAvRfSLPfoI4vmM1mWi3qb7DWEp4_-cy7BUSOFUigfp6KC/exec';
         const DRIVE_FOLDER_ID = '19_gDP_ePMBtgv3QRjt76Uzdp82xz5k7U';
 
         // API Functions for Google Sheets Integration
@@ -308,46 +308,47 @@
             }
         }
 
-        async function submitAssignment(assignmentData) {
-            try {
-                const formData = new FormData();
-                formData.append('action', 'submitAssignment');
-                formData.append('tugas', assignmentData.tugas);
-                formData.append('mapel', assignmentData.mapel);
-                formData.append('kelas', assignmentData.kelas);
-                formData.append('nis', assignmentData.nis);
-                formData.append('nama', assignmentData.nama);
-                
-                // Get the file from input
-                const fileInput = document.getElementById('fileInput');
-                if (fileInput.files.length > 0) {
-                    const file = fileInput.files[0];
-                    formData.append('file', file);
-                    formData.append('fileName', file.name);
-                    formData.append('fileType', file.type);
-                }
-
-                const response = await fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    body: formData,
-                    redirect: 'follow'
-                });
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`HTTP error! status: ${response.status}, details: ${errorText}`);
-                }
-
-                return await response.json();
-            } catch (error) {
-                console.error('Error submitting assignment:', error);
-                return {
-                    success: false, 
-                    message: error.message || 'Connection error',
-                    details: error.stack
-                };
-            }
+async function submitAssignment(assignmentData) {
+    try {
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+        
+        if (!file) {
+            return { success: false, message: 'File tugas tidak ditemukan' };
         }
+
+        const formData = new FormData();
+        formData.append('action', 'submitAssignment');
+        formData.append('tugas', assignmentData.tugas);
+        formData.append('mapel', assignmentData.mapel);
+        formData.append('kelas', assignmentData.kelas);
+        formData.append('nis', assignmentData.nis);
+        formData.append('nama', assignmentData.nama);
+        formData.append('file', file);  // Pastikan file ditambahkan
+        formData.append('fileName', file.name);
+        formData.append('fileType', file.type || 'application/octet-stream');
+
+        const response = await fetch(WEB_APP_URL, {
+            method: 'POST',
+            body: formData,
+            redirect: 'follow'
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! status: ${response.status}, details: ${errorText}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error submitting assignment:', error);
+        return {
+            success: false, 
+            message: error.message || 'Gagal mengirim tugas',
+            details: error.stack
+        };
+    }
+}
 
         async function getSubmissions(filters = {}) {
             try {
