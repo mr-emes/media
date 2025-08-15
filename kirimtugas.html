@@ -1,746 +1,1258 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>TugasKu — Sistem Pengumpulan Tugas</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-    *{box-sizing:border-box}
-    body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%);min-height:100vh}
-    .card{background:#fff;border-radius:1rem;box-shadow:0 10px 30px rgba(2,6,23,.06);border:1px solid rgba(2,6,23,.06)}
-    .btn{transition:.2s}
-    .btn:disabled{opacity:.6;cursor:not-allowed}
-    .spin{width:1rem;height:1rem;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .drop{border:2px dashed #cbd5e1;border-radius:.75rem;padding:1.25rem;text-align:center;background:#f8fafc}
-    .drop.drag{border-color:#3b82f6;background:#eff6ff}
-    .chip{display:inline-block;padding:.25rem .5rem;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-weight:600;font-size:.75rem}
-    dialog::backdrop{background:rgba(15,23,42,.45)}
-    .table-wrap{overflow:auto;border:1px solid #e2e8f0;border-radius:.75rem}
-    .table{width:100%;border-collapse:separate;border-spacing:0}
-    .table th,.table td{padding:.65rem .75rem;vertical-align:top}
-    .table thead th{position:sticky;top:0;background:#f8fafc;border-bottom:1px solid #e2e8f0;text-align:left;font-weight:700}
-    .table tbody tr+tr td{border-top:1px solid #f1f5f9}
-    .qr{font-feature-settings:"tnum"; font-variant-numeric: tabular-nums;}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Pengumpulan Tugas - MIN SINGKAWANG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .demo-badge {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #ef4444;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+    </style>
 </head>
-<body class="text-slate-800">
-  <header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
-    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">TugasKu <span class="text-blue-600">MIN Singkawang</span></h1>
-    <div class="flex items-center gap-3">
-      <button id="goHomeBtn" class="hidden md:inline-flex btn px-4 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-800">Beranda</button>
-    </div>
-  </header>
-
-  <main class="max-w-6xl mx-auto px-4 pb-16">
-    <!-- PILIH MODE -->
-    <section id="modeSection" class="card p-6 md:p-10">
-      <div class="grid md:grid-cols-2 gap-6 items-center">
-        <div>
-          <h2 class="text-2xl md:text-3xl font-bold mb-2">Pilih Mode</h2>
-          <p class="text-slate-600">Masuk sebagai <span class="font-semibold">Siswa</span> untuk mengumpulkan tugas, atau <span class="font-semibold">Guru</span> untuk memeriksa dan memberi nilai.</p>
-          <div class="mt-6 flex flex-wrap gap-3">
-            <button id="studentModeBtn" class="btn px-5 py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700">👨‍🎓 Mode Siswa</button>
-            <button id="teacherModeBtn" class="btn px-5 py-3 rounded-lg bg-slate-700 text-white hover:bg-slate-800">👩‍🏫 Mode Guru</button>
-          </div>
-        </div>
-        <div class="hidden md:block">
-          <img src="https://illustrations.popsy.co/gray/student-studying.svg" alt="illustration" class="w-full max-w-md mx-auto">
-        </div>
-      </div>
-    </section>
-
-    <!-- SISWA: LOGIN NIS -->
-    <section id="studentLoginSection" class="card p-6 md:p-8 mt-6 hidden">
-      <div class="md:flex items-end gap-4">
-        <div class="flex-1">
-          <label class="block text-sm font-medium mb-1">Masukkan NIS</label>
-          <input id="nisInput" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Contoh: 20230123" class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent qr">
-        </div>
-        <button id="nisSubmitBtn" class="btn px-5 py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700">Masuk Siswa</button>
-        <button id="studentBackBtn" class="btn px-5 py-3 rounded-lg bg-slate-100 hover:bg-slate-200">Kembali</button>
-      </div>
-      <p class="text-slate-500 text-sm mt-3">Gunakan NIS yang terdaftar pada sheet <span class="font-semibold">SISWA</span>.</p>
-    </section>
-
-    <!-- SISWA: DASHBOARD -->
-    <section id="studentSection" class="mt-6 hidden">
-      <!-- Biodata -->
-      <div class="card p-6 md:p-8">
-        <div class="flex items-start justify-between gap-4">
-          <div>
-            <h3 class="text-xl font-bold">Biodata Siswa</h3>
-            <p class="text-slate-500">Data diambil dari sheet <span class="font-semibold">SISWA</span>.</p>
-          </div>
-          <span id="studentClassChip" class="chip"></span>
-        </div>
-        <div id="studentInfo" class="grid md:grid-cols-3 gap-4 mt-4 text-sm"></div>
-      </div>
-
-      <!-- Daftar Tugas -->
-      <div class="card p-6 md:p-8 mt-6">
-        <div class="flex items-center justify-between gap-4">
-          <div>
-            <h3 class="text-xl font-bold">Daftar Tugas</h3>
-            <p class="text-slate-500 text-sm">Hanya tugas untuk kelas siswa.</p>
-          </div>
-          <button id="refreshAssignmentsBtn" class="btn px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">Muat Ulang</button>
-        </div>
-        <div id="assignmentsList" class="grid md:grid-cols-2 gap-4 mt-4"></div>
-      </div>
-
-      <!-- Form Pengumpulan -->
-      <div class="card p-6 md:p-8 mt-6">
-        <h3 class="text-xl font-bold">Kumpulkan Tugas</h3>
-        <form id="assignmentForm" class="mt-4 space-y-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">Pilih Tugas</label>
-            <select id="assignmentSelect" class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-              <option value="">— pilih tugas —</option>
-            </select>
-          </div>
-          <div id="dropZone" class="drop">
-            <p id="dropZoneContent" class="text-slate-600">Seret & jatuhkan file ke sini, atau klik untuk memilih</p>
-            <input id="fileInput" type="file" class="hidden" />
-            <div id="fileInfo" class="hidden mt-3 text-sm">
-              <div class="flex items-center justify-between gap-3">
-                <div>
-                  <div class="font-semibold" id="fileName"></div>
-                  <div class="text-slate-500 text-xs" id="fileMeta"></div>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="flex items-center justify-center gap-6 mb-2">
+                <img src="https://i.imgur.com/0Laf7Zu.png" alt="Logo Sekolah" class="w-20 h-20 object-contain">
+                <div class="text-left">
+                    <p class="text-lg text-gray-600 mb-1">Sistem Pengiriman Tugas Siswa</p>
+                    <h1 class="text-4xl font-bold text-gray-800 mb-1">MIN SINGKAWANG</h1>
+                    <p class="text-gray-600">Madrasah Maju, Bermutu, Mendunia</p>
                 </div>
-                <button id="removeFileBtn" type="button" class="btn px-3 py-2 rounded-md bg-rose-50 text-rose-700 hover:bg-rose-100">Hapus</button>
-              </div>
-              <div id="filePreview" class="mt-3 text-xs text-slate-500"></div>
             </div>
-          </div>
-          <div class="flex items-center gap-3">
-            <button id="submitAssignmentBtn" class="btn px-5 py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700" type="submit">Kumpulkan</button>
-            <span class="text-slate-500 text-sm">Pastikan tugas sudah benar sebelum mengirim.</span>
-          </div>
-        </form>
-      </div>
-
-      <!-- Riwayat Pengumpulan -->
-      <div class="card p-6 md:p-8 mt-6">
-        <div class="flex items-center justify-between">
-          <h3 class="text-xl font-bold">Riwayat Pengumpulan</h3>
-          <button id="refreshStudentSubmissionsBtn" class="btn px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">Muat Ulang</button>
-        </div>
-        <div class="table-wrap mt-4">
-          <table class="table text-sm">
-            <thead>
-              <tr>
-                <th>Tanggal</th>
-                <th>Mapel</th>
-                <th>Tugas</th>
-                <th>File</th>
-                <th>Status</th>
-                <th>Nilai</th>
-                <th>Feedback</th>
-              </tr>
-            </thead>
-            <tbody id="studentSubmissionsTbody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- GURU: LOGIN -->
-    <section id="teacherLoginSection" class="card p-6 md:p-8 mt-6 hidden">
-      <h3 class="text-xl font-bold mb-4">🔐 Login Guru</h3>
-      <div class="md:flex items-end gap-4">
-        <div class="flex-1">
-          <label class="block text-sm font-medium mb-1">Password Guru</label>
-          <input id="teacherPasswordInput" type="password" placeholder="Masukkan password" class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-        </div>
-        <button id="teacherLoginBtn" class="btn px-5 py-3 rounded-lg bg-slate-900 text-white hover:bg-slate-800">Masuk Guru</button>
-        <button id="teacherBackBtn" class="btn px-5 py-3 rounded-lg bg-slate-100 hover:bg-slate-200">Kembali</button>
-      </div>
-      <p class="text-slate-500 text-sm mt-3">Setelah login, Anda dapat menilai tugas siswa.</p>
-    </section>
-
-    <!-- GURU: PANEL -->
-    <section id="teacherSection" class="mt-6 hidden">
-      <div class="card p-6 md:p-8">
-        <div class="flex items-center justify-between gap-3">
-          <div>
-            <h3 class="text-xl font-bold">Panel Guru</h3>
-            <p class="text-slate-500 text-sm">Filter dan nilai pengumpulan tugas.</p>
-          </div>
-          <div class="flex gap-2">
-            <button id="reloadFiltersBtn" class="btn px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">Muat Data</button>
-            <button id="reloadTeacherListBtn" class="btn px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">Muat Ulang Daftar</button>
-          </div>
         </div>
 
-        <div class="grid md:grid-cols-4 gap-4 mt-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">Kelas</label>
-            <select id="filterClass" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-              <option value="">Semua</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Mapel</label>
-            <select id="filterSubject" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-              <option value="">Semua</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Tugas</label>
-            <input id="filterTask" type="text" placeholder="Judul Tugas (opsional)" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-          </div>
-          <div class="flex items-end">
-            <button id="applyFilterBtn" class="btn w-full px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">Terapkan Filter</button>
-          </div>
+        <!-- Role Selector -->
+        <div class="flex justify-center mb-8">
+            <div class="bg-white rounded-lg p-2 shadow-lg">
+                <button id="studentBtn" class="px-6 py-3 rounded-lg font-semibold transition-all duration-300 bg-blue-500 text-white">
+                    👨‍🎓 Siswa
+                </button>
+                <button id="teacherBtn" class="px-6 py-3 rounded-lg font-semibold transition-all duration-300 text-gray-600 hover:bg-gray-100">
+                    👩‍🏫 Guru
+                </button>
+            </div>
         </div>
 
-        <div class="table-wrap mt-6">
-          <table class="table text-sm">
-            <thead>
-              <tr>
-                <th>Tanggal</th>
-                <th>NIS</th>
-                <th>Nama</th>
-                <th>Kelas</th>
-                <th>Mapel</th>
-                <th>Tugas</th>
-                <th>File</th>
-                <th>Status</th>
-                <th>Nilai</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody id="teacherSubmissionsTbody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- MODAL: Sukses -->
-  <dialog id="successDialog" class="p-0 rounded-2xl w-full max-w-md">
-    <div class="p-6">
-      <h4 class="text-lg font-bold">✅ Berhasil</h4>
-      <p id="successDialogMsg" class="text-slate-600 mt-2">Tugas berhasil dikirim.</p>
-      <div class="mt-5 flex justify-end gap-2">
-        <button class="btn px-4 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-800" onclick="document.getElementById('successDialog').close()">Tutup</button>
-      </div>
-    </div>
-  </dialog>
-
-  <!-- MODAL: Penilaian -->
-  <dialog id="gradeDialog" class="p-0 rounded-2xl w-full max-w-md">
-    <form id="gradeForm" class="p-6 space-y-3">
-      <h4 class="text-lg font-bold">📝 Penilaian</h4>
-      <p id="gradeMeta" class="text-slate-600 text-sm"></p>
-      <div>
-        <label class="block text-sm font-medium mb-1">Nilai</label>
-        <input id="gradeScore" type="number" step="1" min="0" max="100" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-1">Feedback (opsional)</label>
-        <textarea id="gradeFeedback" rows="3" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
-      </div>
-      <div class="flex justify-end gap-2 pt-2">
-        <button type="button" class="btn px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200" onclick="document.getElementById('gradeDialog').close()">Batal</button>
-        <button id="gradeSaveBtn" class="btn px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700" type="submit">Simpan</button>
-      </div>
-    </form>
-  </dialog>
-
-  <!-- TOAST -->
-  <div id="toast" class="fixed top-4 right-4 hidden px-4 py-2 rounded-lg text-white shadow-lg"></div>
-
-  <script>
-    // ==========================
-    // KONFIGURASI CLIENT
-    // ==========================
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwhq9UYVTVcWkAX-F3zaxkzh2qPjVyW4i9ljsqcDTv61L2CvNsG6whY9TZPWNihXr-b/exec';
-
-    // ==========================
-    // STATE
-    // ==========================
-    let currentStudent = null;    // {NIS,NAMA,KELAS,...}
-    let currentAssignments = [];  // array tugas utk kelas
-    let teacherLoggedIn = false;
-    let gradeTarget = null;       // record yang sedang dinilai
-
-    // ==========================
-    // ELEMEN
-    // ==========================
-    const modeSection = document.getElementById('modeSection');
-    const goHomeBtn = document.getElementById('goHomeBtn');
-
-    // student login & section
-    const studentLoginSection = document.getElementById('studentLoginSection');
-    const nisInput = document.getElementById('nisInput');
-    const nisSubmitBtn = document.getElementById('nisSubmitBtn');
-    const studentBackBtn = document.getElementById('studentBackBtn');
-
-    const studentSection = document.getElementById('studentSection');
-    const studentInfo = document.getElementById('studentInfo');
-    const studentClassChip = document.getElementById('studentClassChip');
-
-    // assignments
-    const refreshAssignmentsBtn = document.getElementById('refreshAssignmentsBtn');
-    const assignmentsList = document.getElementById('assignmentsList');
-    const assignmentForm = document.getElementById('assignmentForm');
-    const assignmentSelect = document.getElementById('assignmentSelect');
-
-    // file input / drop
-    const dropZone = document.getElementById('dropZone');
-    const fileInput = document.getElementById('fileInput');
-    const dropZoneContent = document.getElementById('dropZoneContent');
-    const fileInfo = document.getElementById('fileInfo');
-    const fileNameEl = document.getElementById('fileName');
-    const fileMetaEl = document.getElementById('fileMeta');
-    const filePreview = document.getElementById('filePreview');
-    const removeFileBtn = document.getElementById('removeFileBtn');
-    const submitAssignmentBtn = document.getElementById('submitAssignmentBtn');
-
-    // student submissions
-    const refreshStudentSubmissionsBtn = document.getElementById('refreshStudentSubmissionsBtn');
-    const studentSubmissionsTbody = document.getElementById('studentSubmissionsTbody');
-
-    // teacher
-    const teacherModeBtn = document.getElementById('teacherModeBtn');
-    const studentModeBtn = document.getElementById('studentModeBtn');
-    const teacherLoginSection = document.getElementById('teacherLoginSection');
-    const teacherBackBtn = document.getElementById('teacherBackBtn');
-    const teacherPasswordInput = document.getElementById('teacherPasswordInput');
-    const teacherLoginBtn = document.getElementById('teacherLoginBtn');
-    const teacherSection = document.getElementById('teacherSection');
-    const reloadFiltersBtn = document.getElementById('reloadFiltersBtn');
-    const reloadTeacherListBtn = document.getElementById('reloadTeacherListBtn');
-    const applyFilterBtn = document.getElementById('applyFilterBtn');
-    const filterClass = document.getElementById('filterClass');
-    const filterSubject = document.getElementById('filterSubject');
-    const filterTask = document.getElementById('filterTask');
-    const teacherSubmissionsTbody = document.getElementById('teacherSubmissionsTbody');
-
-    // modal
-    const successDialog = document.getElementById('successDialog');
-    const successDialogMsg = document.getElementById('successDialogMsg');
-    const gradeDialog = document.getElementById('gradeDialog');
-    const gradeForm = document.getElementById('gradeForm');
-    const gradeMeta = document.getElementById('gradeMeta');
-    const gradeScore = document.getElementById('gradeScore');
-    const gradeFeedback = document.getElementById('gradeFeedback');
-    const gradeSaveBtn = document.getElementById('gradeSaveBtn');
-
-    // toast
-    const toast = document.getElementById('toast');
-
-    // ==========================
-    // UTIL
-    // ==========================
-    function showToast(msg, type='info'){
-      toast.textContent = msg;
-      toast.className = 'fixed top-4 right-4 px-4 py-2 rounded-lg text-white shadow-lg';
-      toast.classList.add(type==='error'?'bg-rose-600': type==='success'?'bg-emerald-600':'bg-slate-900');
-      toast.classList.remove('hidden');
-      setTimeout(()=>toast.classList.add('hidden'), 2600);
-    }
-
-    function formatDate(v){
-      try{
-        const d = (v instanceof Date)? v : new Date(v);
-        if (Number.isNaN(d.getTime())) return '-';
-        return d.toLocaleString('id-ID',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
-      }catch{ return '-'; }
-    }
-
-    function clearChildren(el){ while(el.firstChild) el.removeChild(el.firstChild); }
-
-    function fileIconByType(type=''){
-      if(type.includes('pdf')) return '📄';
-      if(type.includes('image')) return '🖼️';
-      if(type.includes('video')) return '🎞️';
-      if(type.includes('audio')) return '🎵';
-      if(type.includes('sheet')||type.includes('excel')) return '📊';
-      if(type.includes('presentation')||type.includes('powerpoint')) return '📽️';
-      return '🗂️';
-    }
-
-    async function readFileAsBase64(file){
-      return new Promise((res,rej)=>{
-        const r = new FileReader();
-        r.onload = () => {
-          const base64 = String(r.result).split(',')[1] || '';
-          res(base64);
-        };
-        r.onerror = () => rej(r.error||new Error('Gagal membaca file'));
-        r.readAsDataURL(file);
-      });
-    }
-
-    function setSection(id){
-      // sembunyikan semua
-      [modeSection, studentLoginSection, studentSection, teacherLoginSection, teacherSection].forEach(s=>s.classList.add('hidden'));
-      // tampilkan
-      document.getElementById(id).classList.remove('hidden');
-      // tombol beranda
-      goHomeBtn.classList.toggle('hidden', id==='modeSection');
-    }
-
-    function buildKV(label, value){
-      const div = document.createElement('div');
-      div.className = 'p-4 rounded-lg border border-slate-200 bg-slate-50';
-      div.innerHTML = `<div class="text-xs text-slate-500">${label}</div><div class="font-semibold">${value??'-'}</div>`;
-      return div;
-    }
-
-    function opt(v,t){ const o=document.createElement('option'); o.value=v; o.textContent=t; return o; }
-
-    // ==========================
-    // EVENT: NAVIGASI
-    // ==========================
-    goHomeBtn.addEventListener('click', ()=> setSection('modeSection'));
-    studentModeBtn.addEventListener('click', ()=> setSection('studentLoginSection'));
-    teacherModeBtn.addEventListener('click', ()=> setSection('teacherLoginSection'));
-    studentBackBtn.addEventListener('click', ()=> setSection('modeSection'));
-    teacherBackBtn.addEventListener('click', ()=> setSection('modeSection'));
-
-    // ==========================
-    // SISWA: LOGIN NIS
-    // ==========================
-    nisSubmitBtn.addEventListener('click', async()=>{
-      const nis = (nisInput.value||'').trim();
-      if(!nis){ showToast('NIS wajib diisi','error'); return; }
-      nisSubmitBtn.disabled = true; nisSubmitBtn.innerHTML = '<span class="spin inline-block mr-2"></span>Memeriksa...';
-      try{
-        const response = await fetch(`${WEB_APP_URL}?action=getStudentData&nis=${encodeURIComponent(nis)}`);
-        const json = await response.json();
-        if(!json || json.error || json.success===false){ throw new Error(json?.error||'Siswa tidak ditemukan'); }
-        currentStudent = json.data;
-        // tampil
-        setSection('studentSection');
-        // biodata
-        clearChildren(studentInfo);
-        studentInfo.appendChild(buildKV('NIS', currentStudent.NIS));
-        studentInfo.appendChild(buildKV('Nama', currentStudent.NAMA));
-        studentInfo.appendChild(buildKV('Kelas', currentStudent.KELAS));
-        studentInfo.appendChild(buildKV('Email', currentStudent.EMAIL||'-'));
-        studentInfo.appendChild(buildKV('Jenis Kelamin', currentStudent.JENIS_KELAMIN||'-'));
-        studentInfo.appendChild(buildKV('Tanggal Lahir', currentStudent.TANGGAL_LAHIR||'-'));
-        studentClassChip.textContent = `Kelas ${currentStudent.KELAS}`;
-        // muat tugas & pengumpulan siswa
-        await Promise.all([loadAssignments(), loadStudentSubmissions()]);
-      }catch(err){
-        console.error(err);
-        showToast(err.message||'Gagal memuat data siswa','error');
-      }finally{
-        nisSubmitBtn.disabled = false; nisSubmitBtn.textContent = 'Masuk Siswa';
-      }
-    });
-
-    // ==========================
-    // SISWA: LIST TUGAS
-    // ==========================
-    async function loadAssignments(){
-      if(!currentStudent) return;
-      refreshAssignmentsBtn.disabled=true;
-      try{
-        const response = await fetch(`${WEB_APP_URL}?action=getAssignments&kelas=${encodeURIComponent(currentStudent.KELAS)}`);
-        const json = await response.json();
-        currentAssignments = json?.data||[];
-        // render pilihan select
-        clearChildren(assignmentSelect);
-        assignmentSelect.appendChild(opt('','— pilih tugas —'));
-        currentAssignments.forEach(a=>{
-          assignmentSelect.appendChild(opt(JSON.stringify(a), `${a.MAPEL} — ${a.TUGAS}`));
-        });
-        // render kartu tugas
-        clearChildren(assignmentsList);
-        if(!currentAssignments.length){
-          assignmentsList.innerHTML = `<div class="text-slate-500">Belum ada tugas untuk kelas ${currentStudent.KELAS}.</div>`;
-        }else{
-          currentAssignments.forEach(a=>{
-            const card = document.createElement('div');
-            card.className = 'p-4 rounded-lg border border-slate-200 bg-white';
-            card.innerHTML = `
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <div class="font-bold">${a.TUGAS}</div>
-                  <div class="text-slate-600 text-sm">${a.MAPEL} • Kelas ${a.KELAS}</div>
+        <!-- Student View -->
+        <div id="studentView" class="max-w-6xl mx-auto">
+            <!-- Student Login -->
+            <div id="studentLogin" class="max-w-md mx-auto mb-8">
+                <div class="bg-white rounded-xl shadow-lg p-8 text-center">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">🔐 Login Siswa</h2>
+                    <div class="space-y-4">
+                        <input type="text" id="nisInput" placeholder="Masukkan NIS Anda" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-lg">
+                        <button id="loginBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                            🚀 Masuk
+                        </button>
+                    </div>
+                    <div class="mt-4 text-sm text-gray-500">
+                        <p>Masukkan NIS yang terdaftar di Google Sheets</p>
+                    </div>
                 </div>
-                <span class="chip">${a.STATUS||'Aktif'}</span>
-              </div>
-              <div class="mt-2 text-sm text-slate-600">${a.DETAIL_TUGAS||''}</div>
-              <div class="mt-2 text-xs text-slate-500">Tanggal: ${a.TANGGAL||'-'} | Deadline: ${a.DEADLINE||'-'}</div>
-              <div class="mt-3">
-                <button class="btn px-3 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 selectForUpload">Pilih untuk dikumpulkan</button>
-              </div>`;
-            card.querySelector('.selectForUpload').addEventListener('click',()=>{
-              assignmentSelect.value = JSON.stringify(a);
-              assignmentSelect.dispatchEvent(new Event('change'));
-              window.scrollTo({top: assignmentForm.offsetTop-80, behavior:'smooth'});
+            </div>
+
+            <!-- Student Dashboard -->
+            <div id="studentDashboard" class="hidden">
+                <!-- Student Info -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-800" id="studentNameDisplay"></h2>
+                            <p class="text-gray-600">NIS: <span id="studentNisDisplay"></span> | Kelas: <span id="studentClassDisplay"></span></p>
+                        </div>
+                        <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            🚪 Logout
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Available Assignments -->
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-6">📋 Tugas Tersedia</h3>
+                        <div id="availableAssignments" class="space-y-4">
+                            <!-- Available assignments will be populated here -->
+                        </div>
+                    </div>
+
+                    <!-- Submit Assignment -->
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-6">📝 Kirim Tugas</h3>
+                        
+                        <form id="assignmentForm" class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Pilih Tugas</label>
+                                <select id="assignmentSelect" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="">Pilih tugas yang akan dikumpulkan</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">File Tugas</label>
+                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+                                    <input type="file" id="fileInput" class="hidden" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.mp4,.mov,.avi,.mp3,.wav,.m4a">
+                                    <div id="dropZone" class="cursor-pointer">
+                                        <div class="text-4xl mb-2">📎</div>
+                                        <p class="text-gray-600 mb-2">Klik untuk memilih file atau drag & drop</p>
+                                        <p class="text-sm text-gray-500">📄 Dokumen: PDF, DOC, DOCX<br>🖼️ Gambar: JPG, PNG, GIF<br>🎥 Video: MP4, MOV, AVI<br>🎵 Audio: MP3, WAV, M4A<br>(Max 50MB)</p>
+                                    </div>
+                                    <div id="fileInfo" class="hidden">
+                                        <div class="text-2xl mb-2">✅</div>
+                                        <p id="fileName" class="text-green-600 font-semibold"></p>
+                                        <div id="filePreview" class="mt-4"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 transform hover:scale-105">
+                                🚀 Kirim ke Google Sheets
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Student Grades -->
+                <div class="bg-white rounded-xl shadow-lg p-8 mt-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">📊 Nilai Tugas Saya</h3>
+                    <div id="studentGrades" class="space-y-4">
+                        <!-- Student grades will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Teacher View -->
+        <div id="teacherView" class="hidden max-w-6xl mx-auto">
+            <!-- Teacher Login -->
+            <div id="teacherLogin" class="max-w-md mx-auto mb-8">
+                <div class="bg-white rounded-xl shadow-lg p-8 text-center">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">🔐 Login Guru</h2>
+                    <div class="space-y-4">
+                        <input type="password" id="teacherPasswordInput" placeholder="Masukkan password guru" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-lg">
+                        <button id="teacherLoginBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                            🚀 Masuk
+                        </button>
+                    </div>
+                    <div class="mt-4 text-sm text-gray-500">
+                        <p>Akses khusus untuk guru</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teacher Dashboard -->
+            <div id="teacherDashboard" class="hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Stats Cards -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                        <div class="text-3xl mb-2">👨‍🎓</div>
+                        <div class="text-2xl font-bold text-blue-600" id="totalStudents">0</div>
+                        <div class="text-gray-600">Total Siswa</div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                        <div class="text-3xl mb-2">📋</div>
+                        <div class="text-2xl font-bold text-green-600" id="totalAssignments">0</div>
+                        <div class="text-gray-600">Total Tugas</div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                        <div class="text-3xl mb-2">📊</div>
+                        <div class="text-2xl font-bold text-purple-600" id="totalSubmissions">0</div>
+                        <div class="text-gray-600">Tugas Terkumpul</div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">📋 Manajemen Tugas & Nilai</h2>
+                        <div class="flex gap-4">
+                            <select id="filterClass" class="px-4 py-2 border border-gray-300 rounded-lg">
+                                <option value="">🔄 Memuat kelas...</option>
+                            </select>
+                            <select id="filterSubject" class="px-4 py-2 border border-gray-300 rounded-lg">
+                                <option value="">🔄 Memuat mata pelajaran...</option>
+                            </select>
+                            <button id="refreshBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                🔄 Refresh
+                            </button>
+                            <button id="teacherLogoutBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                🚪 Logout
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Submissions List -->
+                    <div id="submissionsList" class="space-y-4">
+                        <!-- Submissions will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-xl p-8 max-w-md mx-4 text-center">
+                <div class="text-6xl mb-4">🎉</div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Tugas Berhasil Dikirim!</h3>
+                <p class="text-gray-600 mb-6">Tugas Anda telah tersimpan di Google Sheets dan siap untuk dinilai guru.</p>
+                <button id="closeModal" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors">
+                    Tutup
+                </button>
+            </div>
+        </div>
+
+        <!-- Grading Modal -->
+        <div id="gradingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-xl p-8 max-w-2xl mx-4 w-full">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">📊 Beri Nilai</h3>
+                <div id="gradingContent">
+                    <!-- Grading content will be populated here -->
+                </div>
+                <div class="flex gap-4 mt-6">
+                    <button id="saveGrade" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg transition-colors flex-1">
+                        💾 Simpan ke Google Sheets
+                    </button>
+                    <button id="closeGrading" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-colors">
+                        Batal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Google Apps Script Web App URL
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz5PaeuOdhJDWG7dTqSbXhhfl9c2w6waOMpaR2bYcNDFsg4iS8_HiuSZ6RNWI1TWd4U/exec';
+        const DRIVE_FOLDER_ID = '19_gDP_ePMBtgv3QRjt76Uzdp82xz5k7U';
+
+        // API Functions for Google Sheets Integration
+        async function getStudentData(nis) {
+            try {
+                const url = `${WEB_APP_URL}?action=getStudentData&nis=${encodeURIComponent(nis)}`;
+                const response = await fetch(url, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                return await response.json();
+            } catch (error) {
+                console.error('Error getting student data:', error);
+                return {success: false, message: 'Connection error'};
+            }
+        }
+
+        async function getAssignments(kelas) {
+            try {
+                const url = `${WEB_APP_URL}?action=getAssignments&kelas=${encodeURIComponent(kelas)}`;
+                const response = await fetch(url, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                return await response.json();
+            } catch (error) {
+                console.error('Error getting assignments:', error);
+                return {success: false, message: 'Connection error'};
+            }
+        }
+
+        async function submitAssignment(assignmentData) {
+            try {
+                const formData = new FormData();
+                formData.append('action', 'submitAssignment');
+                formData.append('tugas', assignmentData.tugas);
+                formData.append('mapel', assignmentData.mapel);
+                formData.append('kelas', assignmentData.kelas);
+                formData.append('nis', assignmentData.nis);
+                formData.append('nama', assignmentData.nama);
+                
+                // Get the file from input
+                const fileInput = document.getElementById('fileInput');
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    formData.append('file', file);
+                    formData.append('fileName', file.name);
+                    formData.append('fileType', file.type);
+                }
+
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    body: formData,
+                    redirect: 'follow'
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP error! status: ${response.status}, details: ${errorText}`);
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('Error submitting assignment:', error);
+                return {
+                    success: false, 
+                    message: error.message || 'Connection error',
+                    details: error.stack
+                };
+            }
+        }
+
+        async function getSubmissions(filters = {}) {
+            try {
+                const params = new URLSearchParams({
+                    action: 'getSubmissions',
+                    ...filters
+                });
+                
+                const url = `${WEB_APP_URL}?${params.toString()}`;
+                const response = await fetch(url, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                return await response.json();
+            } catch (error) {
+                console.error('Error getting submissions:', error);
+                return {success: false, message: 'Connection error'};
+            }
+        }
+
+        async function saveGradeToSheets(gradeData) {
+            try {
+                const params = new URLSearchParams({
+                    action: 'saveGrade',
+                    nis: gradeData.nis,
+                    tugas: gradeData.tugas,
+                    mapel: gradeData.mapel,
+                    nilai: gradeData.nilai,
+                    feedback: gradeData.feedback || ''
+                });
+                
+                const url = `${WEB_APP_URL}?${params.toString()}`;
+                const response = await fetch(url, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                return await response.json();
+            } catch (error) {
+                console.error('Error saving grade:', error);
+                return {success: false, message: 'Connection error'};
+            }
+        }
+
+        // Helper function to convert file to base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const base64String = reader.result.split(',')[1];
+                    resolve(base64String);
+                };
+                reader.onerror = error => {
+                    console.error('Error reading file:', error);
+                    reject(new Error('Failed to read file'));
+                };
+                reader.readAsDataURL(file);
             });
-            assignmentsList.appendChild(card);
-          });
         }
-      }catch(e){
-        console.error(e); showToast('Gagal memuat daftar tugas','error');
-      }finally{ refreshAssignmentsBtn.disabled=false; }
-    }
-    refreshAssignmentsBtn.addEventListener('click', loadAssignments);
 
-    // ==========================
-    // SISWA: DROPZONE
-    // ==========================
-    function openPicker(){ fileInput.click(); }
-    dropZone.addEventListener('click', openPicker);
-    dropZone.addEventListener('dragover', (e)=>{ e.preventDefault(); dropZone.classList.add('drag'); });
-    dropZone.addEventListener('dragleave', ()=> dropZone.classList.remove('drag'));
-    dropZone.addEventListener('drop', (e)=>{
-      e.preventDefault();
-      dropZone.classList.remove('drag');
-      if(e.dataTransfer.files && e.dataTransfer.files[0]){
-        fileInput.files = e.dataTransfer.files;
-        updateFileUI();
-      }
-    });
-    fileInput.addEventListener('change', updateFileUI);
-    removeFileBtn.addEventListener('click', ()=>{
-      fileInput.value = '';
-      fileInfo.classList.add('hidden');
-      dropZoneContent.classList.remove('hidden');
-    });
-
-    function updateFileUI(){
-      const file = fileInput.files?.[0];
-      if(!file){ return; }
-      fileNameEl.textContent = `${fileIconByType(file.type)} ${file.name}`;
-      fileMetaEl.textContent = `${(file.size/1024/1024).toFixed(2)} MB • ${file.type||'unknown'}`;
-      filePreview.textContent = (file.type||'').includes('image') ? 'Preview: (gambar akan dikirim penuh saat submit)' : 'File siap dikirim.';
-      dropZoneContent.classList.add('hidden');
-      fileInfo.classList.remove('hidden');
-    }
-
-    // ==========================
-    // SISWA: KIRIM TUGAS
-    // ==========================
-    assignmentForm.addEventListener('submit', async(e)=>{
-      e.preventDefault();
-      if(!currentStudent){ showToast('Login siswa dulu','error'); return; }
-      const aStr = assignmentSelect.value;
-      if(!aStr){ showToast('Pilih tugas terlebih dahulu','error'); return; }
-      const a = JSON.parse(aStr);
-      const file = fileInput.files?.[0];
-      if(!file){ showToast('Pilih file tugas terlebih dahulu','error'); return; }
-
-      submitAssignmentBtn.disabled = true; submitAssignmentBtn.innerHTML = '<span class="spin inline-block mr-2"></span>Mengirim...';
-      try{
-        const base64 = await readFileAsBase64(file);
-        const payload = {
-          action: 'submitAssignment',
-          nis: currentStudent.NIS,
-          nama: currentStudent.NAMA,
-          kelas: currentStudent.KELAS,
-          mapel: a.MAPEL,
-          tugas: a.TUGAS,
-          file: { name: file.name, type: file.type || 'application/octet-stream', data: base64 }
-        };
-        const response = await fetch(WEB_APP_URL, {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify(payload)
-        });
-        const json = await response.json();
-        if(!response.ok || json?.success!==true){
-          throw new Error(json?.error || 'Gagal mengirim tugas');
+        // Helper function to make links clickable
+        function renderClickableLinks(text) {
+            if (!text) return text;
+            
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            return text.replace(urlRegex, url => {
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:underline">${url}</a>`;
+            });
         }
-        successDialogMsg.textContent = 'Tugas berhasil dikirim. Cek status pada daftar pengumpulan.';
-        successDialog.showModal();
-        // reset form
-        fileInput.value = '';
-        fileInfo.classList.add('hidden'); dropZoneContent.classList.remove('hidden');
-        assignmentSelect.value = '';
-        // refresh riwayat
-        await loadStudentSubmissions();
-      }catch(err){
-        console.error(err); showToast(err.message||'Gagal mengirim tugas','error');
-      }finally{
-        submitAssignmentBtn.disabled = false; submitAssignmentBtn.textContent = 'Kumpulkan';
-      }
-    });
 
-    async function loadStudentSubmissions(){
-      if(!currentStudent) return;
-      try{
-        const response = await fetch(`${WEB_APP_URL}?action=getSubmissions&nis=${encodeURIComponent(currentStudent.NIS)}`);
-        const json = await response.json();
-        const rows = json?.data||[];
-        clearChildren(studentSubmissionsTbody);
-        if(!rows.length){
-          const tr = document.createElement('tr');
-          tr.innerHTML = `<td colspan="7" class="text-center text-slate-500 py-6">Belum ada pengumpulan.</td>`;
-          studentSubmissionsTbody.appendChild(tr);
-          return;
+        // Current logged in student and teacher
+        let currentStudent = null;
+        let currentGradingSubmission = null;
+        let isTeacherLoggedIn = false;
+        const TEACHER_PASSWORD = '197681';
+
+        // DOM Elements
+        const studentBtn = document.getElementById('studentBtn');
+        const teacherBtn = document.getElementById('teacherBtn');
+        const studentView = document.getElementById('studentView');
+        const teacherView = document.getElementById('teacherView');
+        const studentLogin = document.getElementById('studentLogin');
+        const studentDashboard = document.getElementById('studentDashboard');
+        const teacherLogin = document.getElementById('teacherLogin');
+        const teacherDashboard = document.getElementById('teacherDashboard');
+        const nisInput = document.getElementById('nisInput');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const teacherPasswordInput = document.getElementById('teacherPasswordInput');
+        const teacherLoginBtn = document.getElementById('teacherLoginBtn');
+        const teacherLogoutBtn = document.getElementById('teacherLogoutBtn');
+        const assignmentForm = document.getElementById('assignmentForm');
+        const fileInput = document.getElementById('fileInput');
+        const dropZone = document.getElementById('dropZone');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const successModal = document.getElementById('successModal');
+        const closeModal = document.getElementById('closeModal');
+        const gradingModal = document.getElementById('gradingModal');
+        const gradingContent = document.getElementById('gradingContent');
+        const saveGrade = document.getElementById('saveGrade');
+        const closeGrading = document.getElementById('closeGrading');
+
+        // Role switching
+        studentBtn.addEventListener('click', () => {
+            studentBtn.className = 'px-6 py-3 rounded-lg font-semibold transition-all duration-300 bg-blue-500 text-white';
+            teacherBtn.className = 'px-6 py-3 rounded-lg font-semibold transition-all duration-300 text-gray-600 hover:bg-gray-100';
+            studentView.classList.remove('hidden');
+            teacherView.classList.add('hidden');
+            showStudentLogin();
+        });
+
+        teacherBtn.addEventListener('click', () => {
+            teacherBtn.className = 'px-6 py-3 rounded-lg font-semibold transition-all duration-300 bg-blue-500 text-white';
+            studentBtn.className = 'px-6 py-3 rounded-lg font-semibold transition-all duration-300 text-gray-600 hover:bg-gray-100';
+            teacherView.classList.remove('hidden');
+            studentView.classList.add('hidden');
+            showTeacherLogin();
+        });
+
+        // Student login
+        loginBtn.addEventListener('click', async () => {
+            const nis = nisInput.value.trim();
+            if (!nis) {
+                showNotification('Mohon masukkan NIS!', 'red');
+                return;
+            }
+
+            loginBtn.disabled = true;
+            loginBtn.textContent = '🔄 Memuat...';
+
+            try {
+                const result = await getStudentData(nis);
+                
+                if (result.success) {
+                    currentStudent = result.data;
+                    showStudentDashboard();
+                    showNotification(`Login berhasil! Selamat datang ${currentStudent.NAMA}`, 'green');
+                } else {
+                    showNotification(result.message || 'NIS tidak ditemukan!', 'red');
+                }
+            } catch (error) {
+                showNotification('Gagal menghubungi server', 'red');
+                console.error('Login error:', error);
+            }
+
+            loginBtn.disabled = false;
+            loginBtn.textContent = '🚀 Masuk';
+        });
+
+        // Teacher login
+        teacherLoginBtn.addEventListener('click', () => {
+            const password = teacherPasswordInput.value.trim();
+            if (!password) {
+                showNotification('Mohon masukkan password!', 'red');
+                return;
+            }
+
+            if (password === TEACHER_PASSWORD) {
+                isTeacherLoggedIn = true;
+                showTeacherDashboard();
+                showNotification('Login guru berhasil!', 'green');
+            } else {
+                showNotification('Password salah!', 'red');
+                teacherPasswordInput.value = '';
+            }
+        });
+
+        // Teacher password input enter key
+        teacherPasswordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                teacherLoginBtn.click();
+            }
+        });
+
+        // Teacher logout
+        teacherLogoutBtn.addEventListener('click', () => {
+            isTeacherLoggedIn = false;
+            showTeacherLogin();
+            showNotification('Anda telah logout', 'blue');
+        });
+
+        // Student logout
+        logoutBtn.addEventListener('click', () => {
+            currentStudent = null;
+            showStudentLogin();
+            showNotification('Anda telah logout', 'blue');
+        });
+
+        // Show student login
+        function showStudentLogin() {
+            studentLogin.classList.remove('hidden');
+            studentDashboard.classList.add('hidden');
+            nisInput.value = '';
         }
-        rows.forEach(r=>{
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td class="whitespace-nowrap">${formatDate(r.TIMESTAMP||r.TANGGAL_UPLOAD)}</td>
-            <td>${r.MAPEL||'-'}</td>
-            <td>${r.TUGAS||'-'}</td>
-            <td><a class="text-blue-600 hover:underline" href="${r.FILE_URL}" target="_blank" rel="noopener">Buka File</a></td>
-            <td><span class="chip ${r.STATUS==='Dinilai'?'bg-emerald-50 text-emerald-700':'bg-amber-50 text-amber-700'}">${r.STATUS||'Pending'}</span></td>
-            <td>${(r.NILAI??'')===''?'-':r.NILAI}</td>
-            <td>${r.FEEDBACK||'-'}</td>`;
-          studentSubmissionsTbody.appendChild(tr);
-        });
-      }catch(err){
-        console.error(err); showToast('Gagal memuat pengumpulan','error');
-      }
-    }
-    refreshStudentSubmissionsBtn.addEventListener('click', loadStudentSubmissions);
 
-    // ==========================
-    // GURU: LOGIN
-    // ==========================
-    teacherLoginBtn.addEventListener('click', async()=>{
-      const pass = (teacherPasswordInput.value||'').trim();
-      if(!pass){ showToast('Password wajib diisi','error'); return; }
-      teacherLoginBtn.disabled = true; teacherLoginBtn.innerHTML = '<span class="spin inline-block mr-2"></span>Memeriksa...';
-      try{
-        // kirim ke Apps Script
-        const response = await fetch(WEB_APP_URL, {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ action:'teacherLogin', password: pass })
-        });
-        const json = await response.json();
-        if(!response.ok || json?.success!==true){ throw new Error(json?.error||'Login gagal'); }
-        teacherLoggedIn = true;
-        setSection('teacherSection');
-        await loadFilters();
-        await loadTeacherSubmissions();
-      }catch(err){
-        console.error(err); showToast(err.message||'Login gagal','error');
-      }finally{
-        teacherLoginBtn.disabled = false; teacherLoginBtn.textContent = 'Masuk Guru';
-      }
-    });
-
-    // ==========================
-    // GURU: FILTER & LIST
-    // ==========================
-    async function loadFilters(){
-      try{
-        const response = await fetch(`${WEB_APP_URL}?action=getInitialData`);
-        const json = await response.json();
-        const classes = json?.data?.classes||[];
-        const subjects = json?.data?.subjects||[];
-        clearChildren(filterClass);
-        clearChildren(filterSubject);
-        filterClass.appendChild(opt('','Semua'));
-        filterSubject.appendChild(opt('','Semua'));
-        classes.forEach(c=> filterClass.appendChild(opt(c, c)));
-        subjects.forEach(s=> filterSubject.appendChild(opt(s, s)));
-      }catch(e){
-        console.error(e); showToast('Gagal memuat data filter','error');
-      }
-    }
-    reloadFiltersBtn.addEventListener('click', loadFilters);
-    reloadTeacherListBtn.addEventListener('click', loadTeacherSubmissions);
-    applyFilterBtn.addEventListener('click', loadTeacherSubmissions);
-
-    async function loadTeacherSubmissions(){
-      try{
-        teacherSubmissionsTbody.innerHTML = `<tr><td colspan="10" class="py-6 text-center text-slate-500">Memuat...</td></tr>`;
-        const params = new URLSearchParams({ action:'getSubmissions' });
-        if(filterClass.value) params.set('kelas', filterClass.value);
-        if(filterSubject.value) params.set('mapel', filterSubject.value);
-        if(filterTask.value.trim()) params.set('tugas', filterTask.value.trim());
-        const url = `${WEB_APP_URL}?${params.toString()}`;
-        const response = await fetch(url);
-        const json = await response.json();
-        const rows = json?.data||[];
-        clearChildren(teacherSubmissionsTbody);
-        if(!rows.length){
-          teacherSubmissionsTbody.innerHTML = `<tr><td colspan="10" class="py-6 text-center text-slate-500">Tidak ada data.</td></tr>`;
-          return;
+        // Show teacher login
+        function showTeacherLogin() {
+            teacherLogin.classList.remove('hidden');
+            teacherDashboard.classList.add('hidden');
+            teacherPasswordInput.value = '';
+            isTeacherLoggedIn = false;
         }
-        rows.forEach(r=>{
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td class="whitespace-nowrap">${formatDate(r.TIMESTAMP||r.TANGGAL_UPLOAD)}</td>
-            <td class="qr">${r.NIS||'-'}</td>
-            <td>${r.NAMA||'-'}</td>
-            <td>${r.KELAS||'-'}</td>
-            <td>${r.MAPEL||'-'}</td>
-            <td>${r.TUGAS||'-'}</td>
-            <td><a class="text-blue-600 hover:underline" href="${r.FILE_URL}" target="_blank" rel="noopener">Buka</a></td>
-            <td><span class="chip ${r.STATUS==='Dinilai'?'bg-emerald-50 text-emerald-700':'bg-amber-50 text-amber-700'}">${r.STATUS||'Pending'}</span></td>
-            <td>${(r.NILAI??'')===''?'-':r.NILAI}</td>
-            <td>
-              <button class="btn px-3 py-1.5 rounded-md bg-blue-600 text-white hover:bg-blue-700 gradeBtn">Nilai</button>
-            </td>`;
-          const btn = tr.querySelector('.gradeBtn');
-          btn.addEventListener('click', ()=>{
-            gradeTarget = r;
-            gradeMeta.textContent = `${r.NAMA||'-'} • ${r.NIS||'-'} • ${r.KELAS||'-'} | ${r.MAPEL||'-'} — ${r.TUGAS||'-'}`;
-            gradeScore.value = (r.NILAI??'')===''?'' : r.NILAI;
-            gradeFeedback.value = r.FEEDBACK||'';
-            gradeDialog.showModal();
-            gradeScore.focus();
-          });
-          teacherSubmissionsTbody.appendChild(tr);
-        });
-      }catch(err){
-        console.error(err); showToast('Gagal memuat daftar pengumpulan','error');
-      }
-    }
 
-    // ==========================
-    // GURU: SIMPAN NILAI
-    // ==========================
-    gradeForm.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      if(!gradeTarget){ gradeDialog.close(); return; }
-      const nilai = Number(gradeScore.value);
-      if(Number.isNaN(nilai)){ showToast('Nilai tidak valid','error'); return; }
-      gradeSaveBtn.disabled = true; gradeSaveBtn.innerHTML = '<span class="spin inline-block mr-2"></span>Menyimpan...';
-      try{
-        const payload = {
-          action:'saveGrade',
-          nis: gradeTarget.NIS,
-          mapel: gradeTarget.MAPEL,
-          tugas: gradeTarget.TUGAS,
-          nilai: nilai,
-          feedback: gradeFeedback.value||''
-        };
-        const response = await fetch(WEB_APP_URL, {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify(payload)
-        });
-        const json = await response.json();
-        if(!response.ok || json?.success!==true){
-          throw new Error(json?.error||'Gagal menyimpan nilai');
+        // Show teacher dashboard
+        function showTeacherDashboard() {
+            teacherLogin.classList.add('hidden');
+            teacherDashboard.classList.remove('hidden');
+            renderTeacherView();
         }
-        gradeDialog.close();
-        showToast('Nilai berhasil disimpan','success');
-        await loadTeacherSubmissions();
-      }catch(err){
-        console.error(err); showToast(err.message||'Gagal menyimpan nilai','error');
-      }finally{
-        gradeSaveBtn.disabled = false; gradeSaveBtn.textContent = 'Simpan';
-      }
-    });
 
-    // ==========================
-    // START
-    // ==========================
-    // tombol mode
-    document.getElementById('studentModeBtn').addEventListener('click', ()=> setSection('studentLoginSection'));
-    document.getElementById('teacherModeBtn').addEventListener('click', ()=> setSection('teacherLoginSection'));
-    // default
-    setSection('modeSection');
-  </script>
+        // Show student dashboard
+        function showStudentDashboard() {
+            studentLogin.classList.add('hidden');
+            studentDashboard.classList.remove('hidden');
+            
+            // Update student info
+            document.getElementById('studentNameDisplay').textContent = currentStudent.NAMA;
+            document.getElementById('studentNisDisplay').textContent = currentStudent.NIS;
+            document.getElementById('studentClassDisplay').textContent = currentStudent.KELAS;
+            
+            renderAvailableAssignments();
+            renderStudentGrades();
+            populateAssignmentSelect();
+        }
+
+        // Render available assignments
+        async function renderAvailableAssignments() {
+            const availableAssignments = document.getElementById('availableAssignments');
+            availableAssignments.innerHTML = '<div class="text-center py-4">🔄 Memuat tugas...</div>';
+
+            try {
+                const assignmentsResult = await getAssignments(currentStudent.KELAS);
+                const submissionsResult = await getSubmissions({nis: currentStudent.NIS});
+                
+                if (!assignmentsResult.success) {
+                    availableAssignments.innerHTML = `
+                        <div class="text-center text-red-500 py-8">
+                            <div class="text-4xl mb-2">❌</div>
+                            <p>Error: ${assignmentsResult.message}</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const assignments = assignmentsResult.data || [];
+                const submissions = submissionsResult.success ? submissionsResult.data || [] : [];
+                
+                if (assignments.length === 0) {
+                    availableAssignments.innerHTML = `
+                        <div class="text-center text-gray-500 py-8">
+                            <div class="text-4xl mb-2">📚</div>
+                            <p>Tidak ada tugas tersedia untuk kelas ${currentStudent.KELAS}</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                availableAssignments.innerHTML = assignments.map(assignment => {
+                    const isSubmitted = submissions.some(s => 
+                        s.NIS === currentStudent.NIS && 
+                        s.TUGAS === assignment.TUGAS && 
+                        s.MAPEL === assignment.MAPEL
+                    );
+
+                    return `
+                        <div class="border border-gray-200 rounded-lg p-4 ${isSubmitted ? 'bg-green-50 border-green-200' : ''}">
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-gray-800">${renderClickableLinks(assignment.TUGAS)}</h4>
+                                    <p class="text-sm text-gray-600">📚 ${assignment.MAPEL}</p>
+                                    <p class="text-sm text-gray-500">📅 Deadline: ${assignment.TANGGAL}</p>
+                                </div>
+                                <div class="text-right">
+                                    ${isSubmitted ? 
+                                        '<div class="text-green-600 font-semibold">✅ Sudah Dikumpulkan</div>' :
+                                        '<div class="text-orange-600 font-semibold">⏳ Belum Dikumpulkan</div>'
+                                    }
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-600 bg-gray-50 p-2 rounded">${renderClickableLinks(assignment.DETAIL_TUGAS)}</div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error rendering assignments:', error);
+                availableAssignments.innerHTML = `
+                    <div class="text-center text-red-500 py-8">
+                        <div class="text-4xl mb-2">❌</div>
+                        <p>Gagal memuat daftar tugas</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Populate assignment select
+        async function populateAssignmentSelect() {
+            const assignmentSelect = document.getElementById('assignmentSelect');
+            assignmentSelect.innerHTML = '<option value="">🔄 Memuat tugas...</option>';
+
+            try {
+                const assignmentsResult = await getAssignments(currentStudent.KELAS);
+                const submissionsResult = await getSubmissions({nis: currentStudent.NIS});
+                
+                assignmentSelect.innerHTML = '<option value="">Pilih tugas yang akan dikumpulkan</option>';
+                
+                if (assignmentsResult.success) {
+                    const assignments = assignmentsResult.data || [];
+                    const submissions = submissionsResult.success ? submissionsResult.data || [] : [];
+                    
+                    assignments.forEach(assignment => {
+                        const isSubmitted = submissions.some(s => 
+                            s.NIS === currentStudent.NIS && 
+                            s.TUGAS === assignment.TUGAS && 
+                            s.MAPEL === assignment.MAPEL
+                        );
+                        
+                        if (!isSubmitted) {
+                            assignmentSelect.innerHTML += `
+                                <option value="${assignment.MAPEL}|${assignment.TUGAS}">
+                                    ${assignment.MAPEL} - ${assignment.TUGAS}
+                                </option>
+                            `;
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error populating assignments:', error);
+                assignmentSelect.innerHTML = '<option value="">Gagal memuat daftar tugas</option>';
+            }
+        }
+
+        // Render student grades
+        async function renderStudentGrades() {
+            const studentGrades = document.getElementById('studentGrades');
+            studentGrades.innerHTML = '<div class="text-center py-4">🔄 Memuat nilai...</div>';
+
+            try {
+                const result = await getSubmissions({nis: currentStudent.NIS});
+                
+                if (!result.success) {
+                    studentGrades.innerHTML = `
+                        <div class="text-center text-red-500 py-8">
+                            <div class="text-4xl mb-2">❌</div>
+                            <p>Error: ${result.message}</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const grades = result.data || [];
+                
+                if (grades.length === 0) {
+                    studentGrades.innerHTML = `
+                        <div class="text-center text-gray-500 py-8">
+                            <div class="text-4xl mb-2">📊</div>
+                            <p>Belum ada nilai yang tersedia</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                studentGrades.innerHTML = grades.map(grade => `
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-gray-800">${grade.TUGAS}</h4>
+                                <p class="text-sm text-gray-600">📚 ${grade.MAPEL}</p>
+                                <p class="text-sm text-gray-500">📅 ${grade.TANGGAL}</p>
+                                ${grade.FILE_NAME ? `<p class="text-sm text-gray-500">${getFileIcon(grade.FILE_TYPE)} ${grade.FILE_NAME}</p>` : ''}
+                            </div>
+                            <div class="text-right">
+                                ${grade.NILAI ? 
+                                    `<div class="text-2xl font-bold ${grade.NILAI >= 80 ? 'text-green-600' : grade.NILAI >= 70 ? 'text-yellow-600' : 'text-red-600'}">${grade.NILAI}</div>
+                                     <div class="text-xs text-gray-500">
+                                        ${grade.NILAI >= 80 ? '🌟 Excellent' : grade.NILAI >= 70 ? '👍 Good' : '📚 Need Improvement'}
+                                     </div>` :
+                                    `<div class="text-yellow-600 font-semibold">⏳ Menunggu</div>
+                                     <div class="text-xs text-gray-500">Belum dinilai</div>`
+                                }
+                            </div>
+                        </div>
+                        
+                        ${grade.FEEDBACK ? 
+                            `<div class="mt-3 p-3 bg-blue-50 border-l-4 border-blue-400 rounded">
+                                <p class="text-sm text-gray-700"><strong>💬 Feedback Guru:</strong></p>
+                                <p class="text-sm text-gray-600 mt-1">${grade.FEEDBACK}</p>
+                            </div>` : ''
+                        }
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error rendering grades:', error);
+                studentGrades.innerHTML = `
+                    <div class="text-center text-red-500 py-8">
+                        <div class="text-4xl mb-2">❌</div>
+                        <p>Gagal memuat nilai</p>
+                    </div>
+                `;
+            }
+        }
+
+        // File handling
+        dropZone.addEventListener('click', () => fileInput.click());
+        
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                handleFileUpload(file);
+            }
+        });
+
+        function handleFileUpload(file) {
+            // Validate file size (max 50MB)
+            if (file.size > 50 * 1024 * 1024) {
+                showNotification('File terlalu besar (maks 50MB)', 'red');
+                fileInput.value = '';
+                return;
+            }
+
+            fileName.textContent = file.name;
+            dropZone.classList.add('hidden');
+            fileInfo.classList.remove('hidden');
+            
+            // Create preview based on file type
+            const filePreview = document.getElementById('filePreview');
+            const fileType = getFileType(file.name);
+            const fileUrl = URL.createObjectURL(file);
+            
+            switch(fileType) {
+                case 'image':
+                    filePreview.innerHTML = `
+                        <div class="max-w-xs mx-auto">
+                            <img src="${fileUrl}" alt="Preview" class="w-full h-32 object-cover rounded-lg border">
+                        </div>
+                    `;
+                    break;
+                case 'video':
+                    filePreview.innerHTML = `
+                        <div class="max-w-xs mx-auto">
+                            <video controls class="w-full h-32 rounded-lg border">
+                                <source src="${fileUrl}" type="${file.type}">
+                                Browser tidak mendukung video.
+                            </video>
+                        </div>
+                    `;
+                    break;
+                case 'audio':
+                    filePreview.innerHTML = `
+                        <div class="max-w-xs mx-auto">
+                            <audio controls class="w-full">
+                                <source src="${fileUrl}" type="${file.type}">
+                                Browser tidak mendukung audio.
+                            </audio>
+                        </div>
+                    `;
+                    break;
+                default:
+                    filePreview.innerHTML = `
+                        <div class="text-4xl mb-2">${getFileIcon(fileType)}</div>
+                        <p class="text-sm text-gray-600">File ${fileType} siap diupload</p>
+                    `;
+            }
+        }
+
+        function getFileType(fileName) {
+            if (!fileName || typeof fileName !== 'string') return 'document';
+            const extension = fileName.split('.').pop().toLowerCase();
+            if (['jpg', 'jpeg', 'png', 'gif'].includes(extension)) return 'image';
+            if (['mp4', 'mov', 'avi', 'mkv'].includes(extension)) return 'video';
+            if (['mp3', 'wav', 'm4a', 'aac'].includes(extension)) return 'audio';
+            if (['pdf'].includes(extension)) return 'pdf';
+            if (['doc', 'docx'].includes(extension)) return 'document';
+            return 'document';
+        }
+
+        function getFileIcon(fileType) {
+            const icons = {
+                'image': '🖼️',
+                'video': '🎥',
+                'audio': '🎵',
+                'pdf': '📄',
+                'document': '📝'
+            };
+            return icons[fileType] || '📎';
+        }
+
+        // Drag and drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-blue-400', 'bg-blue-50');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('border-blue-400', 'bg-blue-50');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-blue-400', 'bg-blue-50');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                handleFileUpload(file);
+            }
+        });
+
+        // Form submission
+        assignmentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const assignmentValue = document.getElementById('assignmentSelect').value;
+            const file = fileInput.files[0];
+            
+            if (!assignmentValue) {
+                showNotification('Mohon pilih tugas!', 'red');
+                return;
+            }
+            
+            if (!file) {
+                showNotification('Mohon upload file tugas!', 'red');
+                return;
+            }
+
+            const submitBtn = assignmentForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = '🔄 Mengirim ke Google Sheets...';
+
+            try {
+                const [mapel, tugas] = assignmentValue.split('|');
+                
+                const assignmentData = {
+                    tugas: tugas,
+                    mapel: mapel,
+                    kelas: currentStudent.KELAS,
+                    nis: currentStudent.NIS,
+                    nama: currentStudent.NAMA,
+                    fileName: file.name,
+                    fileType: file.type
+                };
+                
+                const result = await submitAssignment(assignmentData);
+                
+                if (result.success) {
+                    successModal.classList.remove('hidden');
+                    assignmentForm.reset();
+                    fileInfo.classList.add('hidden');
+                    dropZone.classList.remove('hidden');
+                    await renderAvailableAssignments();
+                    await renderStudentGrades();
+                    await populateAssignmentSelect();
+                } else {
+                    showNotification(`Gagal mengirim tugas: ${result.message}`, 'red');
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+                showNotification('Gagal mengirim tugas. Silakan coba lagi.', 'red');
+            }
+
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        });
+
+        // Close modal
+        closeModal.addEventListener('click', () => {
+            successModal.classList.add('hidden');
+        });
+
+        // Teacher view functions
+        async function renderTeacherView() {
+            await updateTeacherStats();
+            await populateFilters();
+            await renderSubmissions();
+        }
+
+        async function updateTeacherStats() {
+            document.getElementById('totalStudents').textContent = '...';
+            document.getElementById('totalAssignments').textContent = '...';
+            document.getElementById('totalSubmissions').textContent = '...';
+            
+            try {
+                const result = await getSubmissions();
+                
+                if (result.success) {
+                    const submissions = result.data || [];
+                    document.getElementById('totalSubmissions').textContent = submissions.length;
+                    
+                    // Count unique students and assignments
+                    const uniqueStudents = new Set(submissions.map(s => s.NIS)).size;
+                    const uniqueAssignments = new Set(submissions.map(s => `${s.MAPEL}-${s.TUGAS}`)).size;
+                    
+                    document.getElementById('totalStudents').textContent = uniqueStudents;
+                    document.getElementById('totalAssignments').textContent = uniqueAssignments;
+                } else {
+                    showNotification('Gagal memuat statistik', 'red');
+                }
+            } catch (error) {
+                console.error('Error updating stats:', error);
+                showNotification('Error memuat statistik', 'red');
+            }
+        }
+
+        async function populateFilters() {
+            const classFilter = document.getElementById('filterClass');
+            const subjectFilter = document.getElementById('filterSubject');
+            
+            classFilter.innerHTML = '<option value="">🔄 Memuat kelas...</option>';
+            subjectFilter.innerHTML = '<option value="">🔄 Memuat mata pelajaran...</option>';
+            
+            try {
+                const result = await getSubmissions();
+                
+                if (result.success) {
+                    const submissions = result.data || [];
+                    
+                    // Get unique classes
+                    const uniqueClasses = [...new Set(submissions.map(s => s.KELAS).filter(Boolean))];
+                    classFilter.innerHTML = '<option value="">Semua Kelas</option>';
+                    uniqueClasses.sort().forEach(kelas => {
+                        classFilter.innerHTML += `<option value="${kelas}">${kelas}</option>`;
+                    });
+                    
+                    // Get unique subjects
+                    const uniqueSubjects = [...new Set(submissions.map(s => s.MAPEL).filter(Boolean))];
+                    subjectFilter.innerHTML = '<option value="">Semua Mata Pelajaran</option>';
+                    uniqueSubjects.sort().forEach(mapel => {
+                        subjectFilter.innerHTML += `<option value="${mapel}">${mapel}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error('Error populating filters:', error);
+                showNotification('Gagal memuat filter', 'red');
+            }
+        }
+
+        async function renderSubmissions() {
+            const classFilter = document.getElementById('filterClass')?.value || '';
+            const subjectFilter = document.getElementById('filterSubject')?.value || '';
+            const submissionsList = document.getElementById('submissionsList');
+            
+            submissionsList.innerHTML = '<div class="text-center py-8">🔄 Memuat data tugas...</div>';
+            
+            try {
+                const filters = {};
+                if (classFilter) filters.kelas = classFilter;
+                if (subjectFilter) filters.mapel = subjectFilter;
+                
+                const result = await getSubmissions(filters);
+                
+                if (!result.success) {
+                    submissionsList.innerHTML = `
+                        <div class="text-center text-red-500 py-8">
+                            <div class="text-4xl mb-2">❌</div>
+                            <p>Error: ${result.message || 'Gagal memuat data'}</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const submissions = result.data || [];
+                
+                if (submissions.length === 0) {
+                    submissionsList.innerHTML = `
+                        <div class="text-center text-gray-500 py-8">
+                            <div class="text-4xl mb-2">📋</div>
+                            <p>Tidak ada tugas yang dikumpulkan</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                submissionsList.innerHTML = submissions.map((submission, index) => `
+                    <div class="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex-1">
+                                <h3 class="text-lg font-semibold text-gray-800">${submission.TUGAS || 'Tugas Tidak Diketahui'}</h3>
+                                <p class="text-gray-600">👨‍🎓 ${submission.NAMA || 'Nama Tidak Diketahui'} (${submission.NIS || 'NIS Tidak Diketahui'})</p>
+                                <p class="text-sm text-gray-500">📚 ${submission.MAPEL || 'Mata Pelajaran Tidak Diketahui'} | 🏫 ${submission.KELAS || 'Kelas Tidak Diketahui'}</p>
+                                <p class="text-sm text-gray-500">📅 ${submission.TANGGAL || 'Tanggal Tidak Diketahui'}</p>
+                                ${submission.FILE_NAME ? `<p class="text-sm text-gray-500">${getFileIcon(submission.FILE_TYPE)} ${submission.FILE_NAME}</p>` : ''}
+                            </div>
+                            <div class="flex items-center gap-4">
+                                ${submission.NILAI ? 
+                                    `<div class="text-center">
+                                        <div class="text-2xl font-bold text-green-600">${submission.NILAI}</div>
+                                        <div class="text-xs text-gray-500">Sudah Dinilai</div>
+                                    </div>` :
+                                    `<div class="text-center">
+                                        <div class="text-2xl">⏳</div>
+                                        <div class="text-xs text-gray-500">Belum Dinilai</div>
+                                    </div>`
+                                }
+                            </div>
+                        </div>
+                        
+                        ${submission.FILE_URL ? renderFilePreview(submission) : ''}
+                        
+                        <div class="flex gap-3 mt-4">
+                            <button onclick="downloadFile('${submission.FILE_URL || '#'}', '${submission.FILE_NAME || submission.NAMA + '_' + submission.TUGAS}')" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm ${!submission.FILE_URL ? 'opacity-50 cursor-not-allowed' : ''}">
+                                📥 Download
+                            </button>
+                            <button onclick="openGrading(${index})" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm">
+                                📊 ${submission.NILAI ? 'Edit Nilai' : 'Beri Nilai'}
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Store current submissions for grading
+                currentSubmissions = submissions;
+                
+            } catch (error) {
+                console.error('Error rendering submissions:', error);
+                submissionsList.innerHTML = `
+                    <div class="text-center text-red-500 py-8">
+                        <div class="text-4xl mb-2">❌</div>
+                        <p>Error: Gagal memuat data tugas</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderFilePreview(submission) {
+            if (!submission || !submission.FILE_NAME || !submission.FILE_TYPE) {
+                return '';
+            }
+            const fileType = getFileType(submission.FILE_NAME);
+            switch(fileType) {
+                case 'image':
+                    return `
+                        <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="text-sm font-semibold text-gray-700 mb-2">🖼️ Preview Gambar:</h4>
+                            <div class="max-w-md mx-auto">
+                                <img src="${submission.FILE_URL}" alt="Tugas ${submission.NAMA || ''}" 
+                                     class="w-full max-h-64 object-contain rounded-lg border shadow-sm">
+                            </div>
+                        </div>
+                    `;
+                case 'video':
+                    return `
+                        <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="text-sm font-semibold text-gray-700 mb-2">🎥 Preview Video:</h4>
+                            <div class="max-w-md mx-auto">
+                                <video controls class="w-full max-h-64 rounded-lg border shadow-sm">
+                                    <source src="${submission.FILE_URL}" type="${submission.FILE_TYPE}">
+                                    Browser tidak mendukung video.
+                                </video>
+                            </div>
+                        </div>
+                    `;
+                case 'audio':
+                    return `
+                        <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="text-sm font-semibold text-gray-700 mb-2">🎵 Preview Audio:</h4>
+                            <div class="max-w-md mx-auto">
+                                <audio controls class="w-full">
+                                    <source src="${submission.FILE_URL}" type="${submission.FILE_TYPE}">
+                                    Browser tidak mendukung audio.
+                                </audio>
+                            </div>
+                        </div>
+                    `;
+                case 'pdf':
+                    return `
+                        <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="text-sm font-semibold text-gray-700 mb-2">📄 File PDF:</h4>
+                            <div class="text-center">
+                                <div class="text-4xl mb-2">📄</div>
+                                <p class="text-sm text-gray-600">File PDF siap untuk diunduh dan dilihat</p>
+                                <button onclick="viewPDF('${submission.FILE_URL}')" class="mt-2 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
+                                    👁️ Lihat PDF
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                default:
+                    return `
+                        <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="text-sm font-semibold text-gray-700 mb-2">📝 File Dokumen:</h4>
+                            <div class="text-center">
+                                <div class="text-4xl mb-2">${getFileIcon(fileType)}</div>
+                                <p class="text-sm text-gray-600">File dokumen siap untuk diunduh</p>
+                            </div>
+                        </div>
+                    `;
+            }
+        }
+        }
+
+        // Global variable to store current submissions for grading
+        let currentSubmissions = [];
+
+        // Download file from Google Drive
+        function downloadFile(fileUrl, fileName) {
+            if (fileUrl && fileUrl.startsWith('http')) {
+                const link = document.createElement('a');
+                link.href = fileUrl;
+                link.download = fileName;
+                link.target = '_blank';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                showNotification('File URL tidak valid', 'red');
+            }
+        }
+
+        // View PDF (demo)
+        function viewPDF(url) {
+            window.open(url, '_blank');
+        }
+
+        // Open grading modal
+        function openGrading(submissionIndex) {
+            if (!currentSubmissions || !currentSubmissions[submissionIndex]) {
+                showNotification('Error: Data tugas tidak ditemukan', 'red');
+                return;
+            }
+            
+            currentGradingSubmission = currentSubmissions[submissionIndex];
+            
+            gradingContent.innerHTML = `
+                <div class="space-y-4">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold">${currentGradingSubmission.TUGAS || 'Tugas Tidak Diketahui'}</h4>
+                        <p class="text-gray-600">Siswa: ${currentGradingSubmission.NAMA || 'Nama Tidak Diketahui'} (${currentGradingSubmission.NIS || 'NIS Tidak Diketahui'})</p>
+                        <p class="text-gray-600">Kelas: ${currentGradingSubmission.KELAS || 'Kelas Tidak Diketahui'} | Mapel: ${currentGradingSubmission.MAPEL || 'Mata Pelajaran Tidak Diketahui'}</p>
+                        <p class="text-gray-600">Tanggal: ${currentGradingSubmission.TANGGAL || 'Tanggal Tidak Diketahui'}</p>
+                        ${currentGradingSubmission.FILE_NAME ? `<p class="text-gray-600">File: ${getFileIcon(currentGradingSubmission.FILE_TYPE)} ${currentGradingSubmission.FILE_NAME}</p>` : ''}
+                    </div>
+                    
+                    ${currentGradingSubmission.FILE_URL ? renderFilePreview(currentGradingSubmission) : ''}
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Nilai (0-100)</label>
+                        <input type="number" id="gradeInput" min="0" max="100" value="${currentGradingSubmission.NILAI || ''}" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Catatan untuk Siswa</label>
+                        <textarea id="feedbackInput" rows="3" 
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                                  placeholder="Berikan feedback untuk siswa...">${currentGradingSubmission.FEEDBACK || ''}</textarea>
+                    </div>
+                </div>
+            `;
+            
+            gradingModal.classList.remove('hidden');
+        }
+
+        // Save grade
+        saveGrade.addEventListener('click', async () => {
+            const grade = document.getElementById('gradeInput').value;
+            const feedback = document.getElementById('feedbackInput')?.value || '';
+            
+            if (!grade) {
+                showNotification('Mohon masukkan nilai!', 'red');
+                return;
+            }
+            
+            saveGrade.disabled = true;
+            saveGrade.textContent = '🔄 Menyimpan ke Google Sheets...';
+            
+            try {
+                const gradeData = {
+                    nis: currentGradingSubmission.NIS,
+                    tugas: currentGradingSubmission.TUGAS,
+                    mapel: currentGradingSubmission.MAPEL,
+                    nilai: parseInt(grade),
+                    feedback: feedback
+                };
+                
+                const result = await saveGradeToSheets(gradeData);
+                
+                if (result.success) {
+                    gradingModal.classList.add('hidden');
+                    await renderSubmissions();
+                    
+                    // Update student view if currently logged in
+                    if (currentStudent) {
+                        await renderStudentGrades();
+                    }
+                    
+                    showNotification('Nilai berhasil disimpan!', 'green');
+                } else {
+                    showNotification('Gagal menyimpan nilai: ' + result.message, 'red');
+                }
+            } catch (error) {
+                console.error('Save grade error:', error);
+                showNotification('Gagal menyimpan nilai. Silakan coba lagi.', 'red');
+            }
+            
+            saveGrade.disabled = false;
+            saveGrade.textContent = '💾 Simpan ke Google Sheets';
+        });
+
+        // Close grading modal
+        closeGrading.addEventListener('click', () => {
+            gradingModal.classList.add('hidden');
+        });
+
+        // Filter handlers
+        document.getElementById('filterClass')?.addEventListener('change', renderSubmissions);
+        document.getElementById('filterSubject')?.addEventListener('change', renderSubmissions);
+        document.getElementById('refreshBtn')?.addEventListener('click', renderSubmissions);
+
+        // Notification function
+        function showNotification(message, type = 'blue') {
+            const colors = {
+                'red': 'bg-red-500',
+                'green': 'bg-green-500',
+                'blue': 'bg-blue-500',
+                'yellow': 'bg-yellow-500'
+            };
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${colors[type] || 'bg-blue-500'}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        // Initialize
+        showStudentLogin();
+    </script>
 </body>
 </html>
