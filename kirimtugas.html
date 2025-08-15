@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Pengumpulan Tugas - MIN SINGKAWANG</title>
+    <title>Sistem Pengumpulan Tugas Siswa</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -312,56 +312,34 @@
 async function submitAssignment(assignmentData) {
     try {
         const fileInput = document.getElementById('fileInput');
-        if (!fileInput || fileInput.files.length === 0) {
-            console.error('File input tidak ditemukan atau tidak ada file dipilih');
-            return { success: false, message: 'File tugas tidak ditemukan' };
-        }
-
         const file = fileInput.files[0];
-        console.log('File yang akan diupload:', file.name, file.size, file.type); // Debugging
+        
+        if (!file) {
+            throw new Error('File tugas tidak ditemukan');
+        }
 
         const formData = new FormData();
         formData.append('action', 'submitAssignment');
-        formData.append('tugas', assignmentData.tugas);
-        formData.append('mapel', assignmentData.mapel);
-        formData.append('kelas', assignmentData.kelas);
-        formData.append('nis', assignmentData.nis);
-        formData.append('nama', assignmentData.nama);
-        formData.append('file', file, file.name); // Parameter ketiga untuk nama file
         formData.append('fileName', file.name);
-        formData.append('fileType', file.type || 'application/octet-stream');
-
-        // Debug isi FormData
-        for (let [key, value] of formData.entries()) {
-            console.log(key, value);
-        }
+        formData.append('fileType', file.type);
+        formData.append('file', file);
+        formData.append('data', JSON.stringify(assignmentData));
 
         const response = await fetch(WEB_APP_URL, {
             method: 'POST',
-            body: formData,
-            headers: {
-                // JANGAN tambahkan Content-Type secara manual
-                // Biarkan browser set otomatis dengan boundary
-            }
+            body: formData
         });
 
         if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Response error:', errorText);
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         return await response.json();
     } catch (error) {
-        console.error('Error detail:', {
-            message: error.message,
-            stack: error.stack,
-            name: error.name
-        });
+        console.error('Submit error:', error);
         return {
-            success: false, 
-            message: 'Gagal mengirim tugas: ' + error.message,
-            details: error.stack
+            success: false,
+            message: error.message
         };
     }
 }
