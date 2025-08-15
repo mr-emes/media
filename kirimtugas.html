@@ -4,41 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Pengumpulan Tugas - MIN SINGKAWANG</title>
-    <script src="https://cdn.tailwindcss.com">
-async function submitAssignment(assignmentData) {
-    try {
-        const fileInput = document.getElementById('fileInput');
-        if (!fileInput || fileInput.files.length === 0) {
-            return { success: false, message: 'File tugas tidak ditemukan' };
-        }
-        const file = fileInput.files[0];
-        const base64 = await fileToBase64(file);
-
-        const payload = {
-            action: 'submitAssignment',
-            tugas: assignmentData.tugas,
-            mapel: assignmentData.mapel,
-            kelas: assignmentData.kelas,
-            nis: assignmentData.nis,
-            nama: assignmentData.nama,
-            fileName: file.name,
-            fileType: file.type || 'application/octet-stream',
-            fileData: base64
-        };
-
-        const res = await fetch(WEB_APP_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        const json = await res.json().catch(() => ({ success: false, message: 'Respon tidak valid' }));
-        return json;
-    } catch (err) {
-        return { success: false, message: err && err.message ? err.message : String(err) };
-    }
-}
-
-</script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
@@ -70,6 +36,28 @@ async function submitAssignment(assignmentData) {
         @keyframes slideIn {
             from { transform: translateX(100%); }
             to { transform: translateX(0); }
+        }
+        .button-loading {
+            position: relative;
+        }
+        .button-loading::after {
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            border: 4px solid transparent;
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: button-loading-spinner 1s ease infinite;
+        }
+        @keyframes button-loading-spinner {
+            from { transform: rotate(0turn); }
+            to { transform: rotate(1turn); }
         }
     </style>
 </head>
@@ -288,7 +276,7 @@ async function submitAssignment(assignmentData) {
 
     <script>
         // Google Apps Script Web App URL
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwNxVnsxMg-3n_18yLsZqJAvRfSLPfoI4vmM1mWi3qb7DWEp4_-cy7BUSOFUigfp6KC/exec';
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwl5Akw3zZuIAny3Ti9Ff6lfl--M61H2Pd6aCMrMKhumz74bhnPEWQ5nbopa8DiIGg/exec';
         const DRIVE_FOLDER_ID = '19_gDP_ePMBtgv3QRjt76Uzdp82xz5k7U';
 
         // API Functions for Google Sheets Integration
@@ -432,6 +420,7 @@ async function submitAssignment(assignmentData) {
         // Current logged in student and teacher
         let currentStudent = null;
         let currentGradingSubmission = null;
+        let currentSubmissions = [];
         let isTeacherLoggedIn = false;
         const TEACHER_PASSWORD = '197681';
 
@@ -488,7 +477,8 @@ async function submitAssignment(assignmentData) {
             }
 
             loginBtn.disabled = true;
-            loginBtn.textContent = '🔄 Memuat...';
+            loginBtn.classList.add('button-loading');
+            loginBtn.innerHTML = '<span class="opacity-0">🚀 Masuk</span>';
 
             try {
                 const result = await getStudentData(nis);
@@ -506,7 +496,8 @@ async function submitAssignment(assignmentData) {
             }
 
             loginBtn.disabled = false;
-            loginBtn.textContent = '🚀 Masuk';
+            loginBtn.classList.remove('button-loading');
+            loginBtn.innerHTML = '🚀 Masuk';
         });
 
         // Teacher login
@@ -517,14 +508,24 @@ async function submitAssignment(assignmentData) {
                 return;
             }
 
-            if (password === TEACHER_PASSWORD) {
-                isTeacherLoggedIn = true;
-                showTeacherDashboard();
-                showNotification('Login guru berhasil!', 'green');
-            } else {
-                showNotification('Password salah!', 'red');
-                teacherPasswordInput.value = '';
-            }
+            teacherLoginBtn.disabled = true;
+            teacherLoginBtn.classList.add('button-loading');
+            teacherLoginBtn.innerHTML = '<span class="opacity-0">🚀 Masuk</span>';
+
+            setTimeout(() => {
+                if (password === TEACHER_PASSWORD) {
+                    isTeacherLoggedIn = true;
+                    showTeacherDashboard();
+                    showNotification('Login guru berhasil!', 'green');
+                } else {
+                    showNotification('Password salah!', 'red');
+                    teacherPasswordInput.value = '';
+                }
+
+                teacherLoginBtn.disabled = false;
+                teacherLoginBtn.classList.remove('button-loading');
+                teacherLoginBtn.innerHTML = '🚀 Masuk';
+            }, 800);
         });
 
         // Teacher password input enter key
@@ -825,15 +826,15 @@ async function submitAssignment(assignmentData) {
         }
 
         function getFileType(fileName) {
-    if (!fileName || typeof fileName !== 'string') return 'document';
-    const extension = fileName.split('.').pop().toLowerCase();
-    if (['jpg', 'jpeg', 'png', 'gif'].includes(extension)) return 'image';
-    if (['mp4', 'mov', 'avi', 'mkv'].includes(extension)) return 'video';
-    if (['mp3', 'wav', 'm4a', 'aac'].includes(extension)) return 'audio';
-    if (['pdf'].includes(extension)) return 'pdf';
-    if (['doc', 'docx'].includes(extension)) return 'document';
-    return 'document';
-}
+            if (!fileName || typeof fileName !== 'string') return 'document';
+            const extension = fileName.split('.').pop().toLowerCase();
+            if (['jpg', 'jpeg', 'png', 'gif'].includes(extension)) return 'image';
+            if (['mp4', 'mov', 'avi', 'mkv'].includes(extension)) return 'video';
+            if (['mp3', 'wav', 'm4a', 'aac'].includes(extension)) return 'audio';
+            if (['pdf'].includes(extension)) return 'pdf';
+            if (['doc', 'docx'].includes(extension)) return 'document';
+            return 'document';
+        }
 
         function getFileIcon(fileType) {
             const icons = {
@@ -885,7 +886,8 @@ async function submitAssignment(assignmentData) {
             const submitBtn = assignmentForm.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
             submitBtn.disabled = true;
-            submitBtn.textContent = '🔄 Mengirim ke Google Sheets...';
+            submitBtn.classList.add('button-loading');
+            submitBtn.innerHTML = '<span class="opacity-0">🚀 Kirim ke Google Sheets</span>';
 
             try {
                 const [mapel, tugas] = assignmentValue.split('|');
@@ -919,6 +921,7 @@ async function submitAssignment(assignmentData) {
             }
 
             submitBtn.disabled = false;
+            submitBtn.classList.remove('button-loading');
             submitBtn.textContent = originalText;
         });
 
@@ -1082,70 +1085,17 @@ async function submitAssignment(assignmentData) {
         }
 
         function renderFilePreview(submission) {
-    if (!submission || !submission.FILE_NAME || !submission.FILE_TYPE) {
-        return '';
-    }
-    const fileType = getFileType(submission.FILE_NAME || '');
-    switch(fileType) {
-        case 'image':
-            return `
-                <div class="mt-4 p-4 bg-gray-50 rounded-lg">
-                    <h4 class="text-sm font-semibold text-gray-700 mb-2">🖼️ Preview Gambar:</h4>
-                    <div class="max-w-md mx-auto">
-                        <img src="${submission.FILE_URL}" alt="Tugas ${submission.NAMA || ''}" 
-                             class="w-full max-h-64 object-contain rounded-lg border shadow-sm">
-                    </div>
-                </div>
-            `;
-        case 'video':
-            return `
-                <div class="mt-4 p-4 bg-gray-50 rounded-lg">
-                    <h4 class="text-sm font-semibold text-gray-700 mb-2">🎥 Preview Video:</h4>
-                    <div class="max-w-md mx-auto">
-                        <video controls class="w-full max-h-64 rounded-lg border shadow-sm">
-                            <source src="${submission.FILE_URL}" type="${submission.FILE_TYPE}">
-                            Browser tidak mendukung video.
-                        </video>
-                    </div>
-                </div>
-            `;
-        case 'audio':
-            return `
-                <div class="mt-4 p-4 bg-gray-50 rounded-lg">
-                    <h4 class="text-sm font-semibold text-gray-700 mb-2">🎵 Preview Audio:</h4>
-                    <div class="max-w-md mx-auto">
-                        <audio controls class="w-full">
-                            <source src="${submission.FILE_URL}" type="${submission.FILE_TYPE}">
-                            Browser tidak mendukung audio.
-                        </audio>
-                    </div>
-                </div>
-            `;
-        case 'pdf':
-            return `
-                <div class="mt-4 p-4 bg-gray-50 rounded-lg">
-                    <h4 class="text-sm font-semibold text-gray-700 mb-2">📄 File PDF:</h4>
-                    <div class="text-center">
-                        <div class="text-4xl mb-2">📄</div>
-                        <p class="text-sm text-gray-600">File PDF siap untuk diunduh dan dilihat</p>
-                        <button onclick="viewPDF('${submission.FILE_URL}')" class="mt-2 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
-                            👁️ Lihat PDF
-                        </button>
-                    </div>
-                </div>
-            `;
-        default:
-            return `
-                <div class="mt-4 p-4 bg-gray-50 rounded-lg">
-                    <h4 class="text-sm font-semibold text-gray-700 mb-2">📝 File Dokumen:</h4>
-                    <div class="text-center">
-                        <div class="text-4xl mb-2">📎</div>
-                        <p class="text-sm text-gray-600">File dokumen siap untuk diunduh</p>
-                    </div>
-                </div>
-            `;
-    }
-}" alt="Tugas ${submission.NAMA}" 
+            if (!submission || !submission.FILE_NAME || !submission.FILE_TYPE) {
+                return '';
+            }
+            const fileType = getFileType(submission.FILE_NAME || '');
+            switch(fileType) {
+                case 'image':
+                    return `
+                        <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="text-sm font-semibold text-gray-700 mb-2">🖼️ Preview Gambar:</h4>
+                            <div class="max-w-md mx-auto">
+                                <img src="${submission.FILE_URL}" alt="Tugas ${submission.NAMA || ''}" 
                                      class="w-full max-h-64 object-contain rounded-lg border shadow-sm">
                             </div>
                         </div>
@@ -1156,7 +1106,7 @@ async function submitAssignment(assignmentData) {
                             <h4 class="text-sm font-semibold text-gray-700 mb-2">🎥 Preview Video:</h4>
                             <div class="max-w-md mx-auto">
                                 <video controls class="w-full max-h-64 rounded-lg border shadow-sm">
-                                    <source src="${submission.FILE_URL}" type="video/mp4">
+                                    <source src="${submission.FILE_URL}" type="${submission.FILE_TYPE}">
                                     Browser tidak mendukung video.
                                 </video>
                             </div>
@@ -1168,7 +1118,7 @@ async function submitAssignment(assignmentData) {
                             <h4 class="text-sm font-semibold text-gray-700 mb-2">🎵 Preview Audio:</h4>
                             <div class="max-w-md mx-auto">
                                 <audio controls class="w-full">
-                                    <source src="${submission.FILE_URL}" type="audio/mpeg">
+                                    <source src="${submission.FILE_URL}" type="${submission.FILE_TYPE}">
                                     Browser tidak mendukung audio.
                                 </audio>
                             </div>
@@ -1192,16 +1142,13 @@ async function submitAssignment(assignmentData) {
                         <div class="mt-4 p-4 bg-gray-50 rounded-lg">
                             <h4 class="text-sm font-semibold text-gray-700 mb-2">📝 File Dokumen:</h4>
                             <div class="text-center">
-                                <div class="text-4xl mb-2">${getFileIcon(fileType)}</div>
+                                <div class="text-4xl mb-2">📎</div>
                                 <p class="text-sm text-gray-600">File dokumen siap untuk diunduh</p>
                             </div>
                         </div>
                     `;
             }
         }
-
-        // Global variable to store current submissions for grading
-        let currentSubmissions = [];
 
         // Download file from Google Drive
         function downloadFile(fileUrl, fileName) {
@@ -1273,7 +1220,8 @@ async function submitAssignment(assignmentData) {
             }
             
             saveGrade.disabled = true;
-            saveGrade.textContent = '🔄 Menyimpan ke Google Sheets...';
+            saveGrade.classList.add('button-loading');
+            saveGrade.innerHTML = '<span class="opacity-0">💾 Simpan ke Google Sheets</span>';
             
             try {
                 const gradeData = {
@@ -1305,7 +1253,8 @@ async function submitAssignment(assignmentData) {
             }
             
             saveGrade.disabled = false;
-            saveGrade.textContent = '💾 Simpan ke Google Sheets';
+            saveGrade.classList.remove('button-loading');
+            saveGrade.innerHTML = '💾 Simpan ke Google Sheets';
         });
 
         // Close grading modal
