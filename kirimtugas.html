@@ -276,7 +276,7 @@
 
     <script>
         // Google Apps Script Web App URL
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby7GGXp49ZAGB3vHycwk5Bjdpa4SHyg8-Htj3FcYF_xnU-0EIuGHzwSUkmUI2P1cdfn/exec';
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbynS_-NcIX_4KBYdq3RTgTBJiSlLNQTqQNSwEC-kG1DKx1tB8PxMkO8KVdZhvu_SZD-/exec';
         const DRIVE_FOLDER_ID = '19_gDP_ePMBtgv3QRjt76Uzdp82xz5k7U';
 
         // API Functions for Google Sheets Integration
@@ -310,38 +310,54 @@
 
 // Fungsi submitAssignment yang sudah diperbaiki
 async function submitAssignment(assignmentData) {
-    try {
-        const fileInput = document.getElementById('fileInput');
-        const file = fileInput.files[0];
-        
-        if (!file) {
-            throw new Error('File tugas tidak ditemukan');
-        }
-
-        const formData = new FormData();
-        formData.append('action', 'submitAssignment');
-        formData.append('fileName', file.name);
-        formData.append('fileType', file.type);
-        formData.append('file', file);
-        formData.append('data', JSON.stringify(assignmentData));
-
-        const response = await fetch(WEB_APP_URL, {
-            method: 'POST',
-            body: formData
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error('Submit error:', error);
-        return {
-            success: false,
-            message: error.message
-        };
+  try {
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+      throw new Error('File tugas tidak ditemukan');
     }
+
+    // Baca file sebagai ArrayBuffer
+    const fileBuffer = await readFileAsBuffer(file);
+    
+    const formData = new FormData();
+    formData.append('file', new Blob([fileBuffer], { type: file.type }), file.name);
+    formData.append('fileName', file.name);
+    formData.append('fileType', file.type);
+    formData.append('data', JSON.stringify(assignmentData));
+
+    const response = await fetch(WEB_APP_URL, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Server error: ${response.status} - ${errorText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Upload error:', error);
+    return {
+      success: false,
+      message: error.message
+    };
+  }
+}
+
+// Helper function untuk membaca file
+function readFileAsBuffer(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsArrayBuffer(file);
+  });
 }
 
         async function getSubmissions(filters = {}) {
