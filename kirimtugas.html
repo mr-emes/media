@@ -1,304 +1,37 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kirim Tugas ke Pak Mahfud Sidik</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Lembar Jawaban Online</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    body { font-family: 'Inter', sans-serif; }
-    .file-drop-area { border: 2px dashed #e5e7eb; transition: all .3s ease; }
-    .file-drop-area:hover { border-color:#3b82f6; background:#f8fafc; }
-    .file-drop-area.dragover { border-color:#3b82f6; background:#eff6ff; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .iframe-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: auto;
+    }
+    iframe {
+      border: none;
+      width: 100%;
+      height: 100%;
+      min-height: 100vh;
+    }
   </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen py-8">
-  <div class="max-w-2xl mx-auto px-4">
-    <!-- Header -->
-    <div class="text-center mb-8">
-      <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-4">
-        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-        </svg>
-      </div>
-      <h1 class="text-3xl font-bold text-gray-900 mb-2">Kirim Tugas Siswa</h1>
-      <p class="text-gray-600">Masukkan nama, kelas, dan pilih file untuk diupload</p>
-    </div>
-
-    <!-- Main Form -->
-    <div class="bg-white rounded-xl shadow-lg p-8">
-      <form id="uploadForm" class="space-y-6">
-        <!-- Nama -->
-        <div>
-          <label for="nama" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
-          <input type="text" id="nama" name="nama" required
-                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                 placeholder="Masukkan nama lengkap Anda">
-        </div>
-
-        <!-- Kelas -->
-        <div>
-          <label for="kelas" class="block text-sm font-medium text-gray-700 mb-2">Kelas</label>
-          <select id="kelas" name="kelas" required
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
-            <option value="">Pilih Kelas</option>
-            <option value="4A">4A</option>
-            <option value="4B">4B</option>
-            <option value="5A">5A</option>
-            <option value="5B">5B</option>
-            <option value="6A">6A</option>
-            <option value="6B">6B</option>
-          </select>
-        </div>
-
-        <!-- File Upload -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">File Upload</label>
-          <div id="dropArea" class="file-drop-area relative border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer">
-            <input type="file" id="fileInput" name="file"
-       class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-       required>
-
-            <div id="dropContent">
-              <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              <p class="text-lg font-medium text-gray-900 mb-2">Drag & drop file di sini</p>
-              <p class="text-sm text-gray-500 mb-4">atau klik untuk memilih file</p>
-              <p class="text-xs text-gray-400">Mendukung: PDF, DOC, DOCX, JPG, PNG, TXT (Max ~10MB)</p>
-            </div>
-            <div id="fileInfo" class="hidden">
-              <div class="flex items-center justify-center">
-                <svg class="w-8 h-8 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                <div>
-                  <p id="fileName" class="font-medium text-gray-900"></p>
-                  <p id="fileSize" class="text-sm text-gray-500"></p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Preview Nama File -->
-        <div id="filePreview" class="hidden bg-gray-50 rounded-lg p-4">
-          <h4 class="text-sm font-medium text-gray-700 mb-2">Preview Nama File:</h4>
-          <p id="previewName" class="text-lg font-mono bg-white px-3 py-2 rounded border"></p>
-        </div>
-
-        <!-- Tombol Submit -->
-        <button type="submit" id="submitBtn"
-                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
-          <span id="submitText">Upload File</span>
-          <span id="uploadingText" class="hidden">
-            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
-            </svg>
-            Mengupload...
-          </span>
-        </button>
-      </form>
-    </div>
-
-    <!-- Notifikasi -->
-    <div id="successMessage" class="hidden mt-6 bg-green-50 border border-green-200 rounded-lg p-4">
-      <div class="flex items-start">
-        <svg class="w-5 h-5 text-green-600 mt-0.5 mr-3" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                clip-rule="evenodd"></path>
-        </svg>
-        <div>
-          <h3 class="text-sm font-medium text-green-800">Upload Berhasil!</h3>
-          <p class="text-sm text-green-700 mt-1">
-            File tersimpan sebagai: <span id="uploadedFileName" class="font-mono"></span>
-            <a id="uploadedFileLink" href="#" target="_blank" class="ml-2 underline text-green-700 hidden">Buka</a>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div id="errorMessage" class="hidden mt-6 bg-red-50 border border-red-200 rounded-lg p-4">
-      <div class="flex items-start">
-        <svg class="w-5 h-5 text-red-600 mt-0.5 mr-3" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd"
-                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                clip-rule="evenodd"></path>
-        </svg>
-        <div>
-          <h3 class="text-sm font-medium text-red-800">Upload Gagal</h3>
-          <p class="text-sm text-red-700 mt-1" id="errorText">Silakan coba lagi.</p>
-        </div>
-      </div>
-    </div>
+<body>
+  <div class="iframe-container">
+    <iframe src="https://script.google.com/macros/s/AKfycbxc-G5x7Cg1KK4OBhwFgP0MtNlFU_gMYaL9DCFNrjGRrhpRz0nJvINUXGdV87rM0PWKig/exec" 
+            allowfullscreen
+            sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
   </div>
-
-  <script>
-    // ====== KONFIGURASI ======
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_0yrdAwNfOaXq2GyHdmkoWxUWwGhJqZGT-atrUFIJsAiws-gIo2SAMKjTH06yHczp3Q/exec"; // <-- GANTI dengan URL Web App Anda
-
-    // ====== Elemen ======
-    const dropArea = document.getElementById('dropArea');
-    const fileInput = document.getElementById('fileInput');
-    const dropContent = document.getElementById('dropContent');
-    const fileInfo = document.getElementById('fileInfo');
-    const fileNameEl = document.getElementById('fileName');
-    const fileSizeEl = document.getElementById('fileSize');
-    const filePreview = document.getElementById('filePreview');
-    const previewName = document.getElementById('previewName');
-
-    const form = document.getElementById('uploadForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const submitText = document.getElementById('submitText');
-    const uploadingText = document.getElementById('uploadingText');
-
-    const successMessage = document.getElementById('successMessage');
-    const errorMessage = document.getElementById('errorMessage');
-    const errorText = document.getElementById('errorText');
-    const uploadedFileName = document.getElementById('uploadedFileName');
-    const uploadedFileLink = document.getElementById('uploadedFileLink');
-
-    // ====== Drag & Drop ======
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev =>
-      dropArea.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); }, false)
-    );
-    ['dragenter', 'dragover'].forEach(ev =>
-      dropArea.addEventListener(ev, () => dropArea.classList.add('dragover'), false)
-    );
-    ['dragleave', 'drop'].forEach(ev =>
-      dropArea.addEventListener(ev, () => dropArea.classList.remove('dragover'), false)
-    );
-
-    dropArea.addEventListener('drop', e => {
-      const dt = e.dataTransfer;
-      const files = dt.files;
-      fileInput.files = files;
-      handleFiles(files);
-    });
-
-    fileInput.addEventListener('change', e => handleFiles(e.target.files));
-
-    function handleFiles(files) {
-      if (!files || !files.length) return;
-      const file = files[0];
-      fileNameEl.textContent = file.name;
-      fileSizeEl.textContent = formatFileSize(file.size);
-      dropContent.classList.add('hidden');
-      fileInfo.classList.remove('hidden');
-      updatePreview();
-    }
-
-    function formatFileSize(bytes) {
-      if (bytes === 0) return '0 Bytes';
-      const k = 1024;
-      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-      const i = Math.floor(Math.log(bytes) / Math.log(k));
-      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    }
-
-    document.getElementById('nama').addEventListener('input', updatePreview);
-    document.getElementById('kelas').addEventListener('change', updatePreview);
-
-    function updatePreview() {
-      const nama = document.getElementById('nama').value.trim();
-      const kelas = document.getElementById('kelas').value;
-      const file = fileInput.files[0];
-      if (nama && kelas && file) {
-        const ext = file.name.split('.').pop();
-        const newFileName = `${nama}_${kelas}.${ext}`;
-        previewName.textContent = newFileName;
-        filePreview.classList.remove('hidden');
-      } else {
-        filePreview.classList.add('hidden');
-      }
-    }
-
-    // ====== Submit dengan fetch (tanpa alert) ======
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const nama = document.getElementById('nama').value.trim();
-      const kelas = document.getElementById('kelas').value;
-      const file = fileInput.files[0];
-
-      // Validasi cepat
-      if (!nama || !kelas || !file) {
-        showError("Mohon lengkapi semua field dan pilih file.");
-        return;
-      }
-
-      // UI: mulai loading
-      submitBtn.disabled = true;
-      submitText.classList.add('hidden');
-      uploadingText.classList.remove('hidden');
-      successMessage.classList.add('hidden');
-      errorMessage.classList.add('hidden');
-
-      try {
-        const fd = new FormData();
-        fd.append('nama', nama);
-        fd.append('kelas', kelas);
-        fd.append('file', file, file.name);
-
-        const res = await fetch(WEB_APP_URL, { method: 'POST', body: fd });
-        // Bisa saja Web App mengembalikan text/plain; tangani keduanya
-        const text = await res.text();
-        let data;
-        try { data = JSON.parse(text); } catch { data = { status: res.ok ? "success" : "error", raw:text }; }
-
-        if (data.status === "success") {
-          uploadedFileName.textContent = data.fileName || file.name;
-          if (data.url) {
-            uploadedFileLink.href = data.url;
-            uploadedFileLink.classList.remove('hidden');
-          } else {
-            uploadedFileLink.classList.add('hidden');
-          }
-          successMessage.classList.remove('hidden');
-
-          // Reset form ringan (biar user bisa upload lagi)
-          form.reset();
-          dropContent.classList.remove('hidden');
-          fileInfo.classList.add('hidden');
-          filePreview.classList.add('hidden');
-        } else {
-          showError(data.message ? `Upload gagal: ${data.message}` : "Upload gagal. Coba lagi.");
-        }
-      } catch (err) {
-        showError(`Error jaringan: ${err.message}`);
-      } finally {
-        // UI: stop loading
-        submitBtn.disabled = false;
-        submitText.classList.remove('hidden');
-        uploadingText.classList.add('hidden');
-        // Scroll ke notifikasi
-        (successMessage.classList.contains('hidden') ? errorMessage : successMessage)
-          .scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-
-    function showError(msg) {
-      errorText.textContent = msg || "Terjadi kesalahan.";
-      errorMessage.classList.remove('hidden');
-      successMessage.classList.add('hidden');
-    }
-
-    // Klik ulang area untuk ganti file
-    dropArea.addEventListener('click', () => {
-      if (!fileInfo.classList.contains('hidden')) {
-        fileInput.value = '';
-        dropContent.classList.remove('hidden');
-        fileInfo.classList.add('hidden');
-        filePreview.classList.add('hidden');
-      }
-    });
-  </script>
 </body>
 </html>
