@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 FIKIH ITU MUDAH - Learning Fikih with Fun</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            font-size: 1.5em;
+            line-height: 1.8;
+            direction: rtl;
+            text-align: center;
+        }
+        
+        /* Background Animations */
+        .gradient-bg {
+            background: linear-gradient(-45deg, #14b8a6, #0d9488, #06b6d4, #0891b2);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Card Animations */
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        
+        .card-hover:hover::before {
+            left: 100%;
+        }
+        
+        /* Progress Bar Animations */
+        .progress-bar {
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-image: linear-gradient(
+                -45deg,
+                rgba(255, 255, 255, .2) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255, 255, 255, .2) 50%,
+                rgba(255, 255, 255, .2) 75%,
+                transparent 75%,
+                transparent
+            );
+            background-size: 50px 50px;
+            animation: move 2s linear infinite;
+        }
+        
+        @keyframes move {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+        
+        /* Navigation */
+        .nav-item {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .nav-item:hover {
+            transform: translateY(-2px);
+        }
+        
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Page Transitions */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Avatar Selection */
+        .avatar-option {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .avatar-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .avatar-option.selected {
+            border: 4px solid #3b82f6;
+            transform: scale(1.1);
+        }
+        
+        /* Calculator Styles */
+        .calculator-input {
+            transition: all 0.3s ease;
+        }
+        
+        .calculator-input:focus {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Payment Simulation */
+        .payment-method {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .payment-method:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .payment-method.selected {
+            border: 2px solid #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Certificate Styles */
+        .certificate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 8px solid #ffd700;
+            position: relative;
+        }
+        
+        .certificate::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 2px solid #ffd700;
+            pointer-events: none;
+        }
+        
+        /* Animation for explanation */
+        .animate-fadeIn {
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .card-hover:hover {
+                transform: translateY(-5px) scale(1.01);
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <!-- Welcome Form -->
+    <div id="welcomeForm" class="fixed inset-0 bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center z-50">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl">
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4">🎓</div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Selamat Datang!</h2>
+                <p class="text-gray-600">Mari berkenalan sebelum memulai pembelajaran</p>
+            </div>
+            
+            <form id="profileForm" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                        <i class="fas fa-user mr-2"></i>Nama Lengkap
+                    </label>
+                    <input type="text" id="userName" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none transition-all" placeholder="Masukkan nama lengkap" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                        <i class="fas fa-graduation-cap mr-2"></i>Kelas
+                    </label>
+                    <select id="userClass" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none transition-all" required>
+                        <option value="">Pilih Kelas</option>
+                        <option value="5A">5A (Lima A)</option>
+                        <option value="5B">5B (Lima B)</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-4">
+                        <i class="fas fa-camera mr-2"></i>Upload Foto Siswa
+                    </label>
+                    
+                    <!-- Photo Upload Area -->
+                    <div class="text-center mb-4">
+                        <div id="photoPreview" class="w-32 h-32 mx-auto bg-gray-100 rounded-full border-4 border-dashed border-gray-300 flex items-center justify-center overflow-hidden cursor-pointer hover:border-blue-400 transition-all" onclick="document.getElementById('photoInput').click()">
+                            <div id="photoPlaceholder" class="text-center">
+                                <i class="fas fa-camera text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-500">Klik untuk upload foto</p>
+                            </div>
+                        </div>
+                        <input type="file" id="photoInput" accept="image/*" class="hidden">
+                        <p class="text-xs text-gray-500 mt-2">Format: JPG, PNG (Max 5MB)</p>
+                    </div>
+                    
+                    <!-- Default Avatar Options (if no photo uploaded) -->
+                    <div class="text-center mb-4">
+                        <p class="text-sm text-gray-600 mb-3">Atau pilih avatar default:</p>
+                        <div class="flex justify-center gap-3">
+                            <div class="avatar-option w-12 h-12 bg-blue-100 rounded-full border-2 border-gray-300 cursor-pointer hover:border-blue-400 flex items-center justify-center" data-avatar="default1">
+                                <i class="fas fa-user text-blue-500"></i>
+                            </div>
+                            <div class="avatar-option w-12 h-12 bg-pink-100 rounded-full border-2 border-gray-300 cursor-pointer hover:border-pink-400 flex items-center justify-center" data-avatar="default2">
+                                <i class="fas fa-user-graduate text-pink-500"></i>
+                            </div>
+                            <div class="avatar-option w-12 h-12 bg-green-100 rounded-full border-2 border-gray-300 cursor-pointer hover:border-green-400 flex items-center justify-center" data-avatar="default3">
+                                <i class="fas fa-child text-green-500"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:from-blue-600 hover:to-purple-700 transition-all hover:scale-105">
+                    <i class="fas fa-rocket mr-2"></i>Mulai Belajar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="gradient-bg text-white py-6 relative overflow-hidden">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <div class="mr-4">
+                        <div class="w-16 h-16 bg-white rounded-xl p-2 shadow-lg border-2 border-white/30">
+                            <img src="https://i.imgur.com/0Laf7Zu.png" alt="Logo MIN Singkawang" class="w-full h-full object-contain" onerror="this.src=''; this.alt='Logo failed to load'; this.style.display='none';">
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold">Let's Learn with Fun!</h1>
+                        <p class="text-xs opacity-75">Fikih Kelas 5 MIN SINGKAWANG</p>
+                        <p class="text-xs opacity-75">Ide kreatif: Mahfud Sidik, S.Pd.I</p>
+                    </div>
+                </div>
+                
+                <!-- User Profile -->
+                <div id="userProfile" class="flex items-center bg-white rounded-2xl px-4 py-3 shadow-lg border-2 border-white/30">
+                    <div id="userAvatar" class="w-14 h-14 bg-gray-100 rounded-full overflow-hidden mr-4 shadow-md">
+                        <svg viewBox="0 0 100 100" class="w-full h-full">
+                            <circle cx="50" cy="50" r="50" fill="#e3f2fd"/>
+                            <circle cx="50" cy="35" r="15" fill="#ffdbcb"/>
+                            <path d="M35 45 Q50 30 65 45 Q65 60 50 65 Q35 60 35 45" fill="#ffdbcb"/>
+                            <circle cx="43" cy="38" r="2" fill="#333"/>
+                            <circle cx="57" cy="38" r="2" fill="#333"/>
+                            <path d="M45 45 Q50 48 55 45" stroke="#333" stroke-width="1" fill="none"/>
+                            <path d="M30 25 Q50 15 70 25 Q70 35 50 40 Q30 35 30 25" fill="#8b4513"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <div id="userNameDisplay" class="font-bold text-lg text-gray-800">Siswa</div>
+                        <div id="userClassDisplay" class="text-sm text-gray-600 mb-2">Kelas -</div>
+                        <!-- Progress Bar -->
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div id="userProgressBar" class="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <div class="flex justify-between text-xs text-gray-600 mt-1">
+                            <span>Progress Belajar</span>
+                            <span id="userProgressText">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navigation -->
+            <div class="mt-6">
+                <div class="flex flex-wrap gap-2 md:gap-4">
+                    <div class="nav-item active px-4 py-2 rounded-xl text-sm font-medium" onclick="showPage('dashboard')">
+                        <i class="fas fa-home mr-2"></i>Dashboard
+                    </div>
+                    <div class="nav-item px-4 py-2 rounded-xl text-sm font-medium" onclick="showPage('zakatFitrah')">
+                        <i class="fas fa-coins mr-2"></i>Zakat Fitrah
+                    </div>
+                    <div class="nav-item px-4 py-2 rounded-xl text-sm font-medium opacity-50 cursor-not-allowed">
+                        <i class="fas fa-hand-holding-heart mr-2"></i>Infak
+                    </div>
+                    <div class="nav-item px-4 py-2 rounded-xl text-sm font-medium opacity-50 cursor-not-allowed">
+                        <i class="fas fa-heart mr-2"></i>Sedekah
+                    </div>
+                    <div class="nav-item px-4 py-2 rounded-xl text-sm font-medium opacity-50 cursor-not-allowed">
+                        <i class="fas fa-cow mr-2"></i>Qurban
+                    </div>
+                    <div class="nav-item px-4 py-2 rounded-xl text-sm font-medium" onclick="showPage('calculator')">
+                        <i class="fas fa-calculator mr-2"></i>Kalkulator
+                    </div>
+                    <div class="nav-item px-4 py-2 rounded-xl text-sm font-medium" onclick="showPage('certificate')">
+                        <i class="fas fa-certificate mr-2"></i>Sertifikat
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Dashboard Page -->
+        <div id="dashboard" class="page active">
+            <!-- Progress Overview -->
+            <div class="bg-white rounded-3xl shadow-xl p-8 mb-8 card-hover">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-chart-line text-3xl text-blue-500 mr-4"></i>
+                    <h2 class="text-3xl font-bold text-gray-800">Ringkasan Pembelajaran</h2>
+                </div>
+                
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl card-hover">
+                        <div class="text-5xl mb-4">
+                            <i class="fas fa-coins text-blue-500"></i>
+                        </div>
+                        <div class="font-bold text-gray-800 text-lg mb-2">Zakat Fitrah</div>
+                        <div class="text-sm text-gray-600 mb-3">Progress: <span class="font-bold" id="zakatProgress">0%</span></div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-3 rounded-full progress-bar" id="zakatProgressBar" style="width: 0%"></div>
+                        </div>
+                        <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition-all" onclick="showPage('zakatFitrah')">
+                            <i class="fas fa-play mr-1"></i>Mulai
+                        </button>
+                    </div>
+                    
+                    <div class="text-center p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl opacity-50">
+                        <div class="text-5xl mb-4">
+                            <i class="fas fa-hand-holding-heart text-green-500"></i>
+                        </div>
+                        <div class="font-bold text-gray-800 text-lg mb-2">Infak</div>
+                        <div class="text-sm text-gray-600 mb-3">Progress: <span class="font-bold">🔒</span></div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-gradient-to-r from-green-400 to-green-600 h-3 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <div class="mt-4 text-xs text-gray-500">Selesaikan Zakat Fitrah</div>
+                    </div>
+                    
+                    <div class="text-center p-6 bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl opacity-50">
+                        <div class="text-5xl mb-4">
+                            <i class="fas fa-heart text-pink-500"></i>
+                        </div>
+                        <div class="font-bold text-gray-800 text-lg mb-2">Sedekah</div>
+                        <div class="text-sm text-gray-600 mb-3">Progress: <span class="font-bold">🔒</span></div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-gradient-to-r from-pink-400 to-pink-600 h-3 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <div class="mt-4 text-xs text-gray-500">Selesaikan Infak</div>
+                    </div>
+                    
+                    <div class="text-center p-6 bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl opacity-50">
+                        <div class="text-5xl mb-4">
+                            <i class="fas fa-cow text-purple-500"></i>
+                        </div>
+                        <div class="font-bold text-gray-800 text-lg mb-2">Qurban</div>
+                        <div class="text-sm text-gray-600 mb-3">Progress: <span class="font-bold">🔒</span></div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-gradient-to-r from-purple-400 to-purple-600 h-3 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <div class="mt-4 text-xs text-gray-500">Selesaikan Sedekah</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl shadow-lg p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-trophy text-blue-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-gray-800" id="totalBadges">0</div>
+                            <div class="text-sm text-gray-600">Badge Diraih</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-lg p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-green-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-gray-800" id="completedModules">0/4</div>
+                            <div class="text-sm text-gray-600">Modul Selesai</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-lg p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-purple-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-clock text-purple-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-gray-800" id="studyTime">0 menit</div>
+                            <div class="text-sm text-gray-600">Waktu Belajar</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zakat Fitrah Page -->
+        <div id="zakatFitrah" class="page">
+            <div class="bg-white rounded-3xl shadow-xl p-8 mb-8">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-coins text-3xl text-blue-500 mr-4"></i>
+                    <h2 class="text-3xl font-bold text-gray-800">Pembelajaran Zakat Fitrah</h2>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-6" id="learningModules">
+                    <!-- Modules will be dynamically generated -->
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="mt-8 grid md:grid-cols-2 gap-4">
+                    <button class="flex items-center justify-center px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all hover:scale-105" onclick="showPage('calculator')">
+                        <i class="fas fa-calculator mr-3 text-xl"></i>
+                        <div class="text-left">
+                            <div class="font-bold">Kalkulator Zakat</div>
+                            <div class="text-sm opacity-90">Hitung jumlah zakat fitrah</div>
+                        </div>
+                    </button>
+                    
+                    <button class="flex items-center justify-center px-6 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition-all hover:scale-105" onclick="showPaymentSimulation()">
+                        <i class="fas fa-credit-card mr-3 text-xl"></i>
+                        <div class="text-left">
+                            <div class="font-bold">Simulasi Pembayaran</div>
+                            <div class="text-sm opacity-90">Praktik bayar zakat fitrah</div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calculator Page -->
+        <div id="calculator" class="page">
+            <div class="bg-white rounded-3xl shadow-xl p-8">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-calculator text-3xl text-green-500 mr-4"></i>
+                    <h2 class="text-3xl font-bold text-gray-800">Kalkulator Zakat Fitrah</h2>
+                </div>
+                
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <!-- Input Form -->
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl">
+                            <h3 class="text-xl font-bold text-green-800 mb-4">
+                                <i class="fas fa-users mr-2"></i>Data Keluarga
+                            </h3>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Jumlah Anggota Keluarga</label>
+                                    <input type="number" id="familyMembers" class="calculator-input w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none" placeholder="Masukkan jumlah anggota" min="1" value="4">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Harga Beras per Kg</label>
+                                    <input type="number" id="ricePrice" class="calculator-input w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none" placeholder="Harga beras (Rp)" value="15000">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">Jenis Pembayaran</label>
+                                    <select id="paymentType" class="calculator-input w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:outline-none">
+                                        <option value="beras">Beras (2.5 kg/orang)</option>
+                                        <option value="uang">Uang (setara harga beras)</option>
+                                        <option value="campuran">Campuran</option>
+                                    </select>
+                                </div>
+                                
+                                <button onclick="calculateZakat()" class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 rounded-xl font-bold text-lg hover:from-green-600 hover:to-green-700 transition-all hover:scale-105">
+                                    <i class="fas fa-calculator mr-2"></i>Hitung Zakat
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Result -->
+                    <div class="space-y-6">
+                        <div id="calculatorResult" class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl">
+                            <h3 class="text-xl font-bold text-blue-800 mb-4">
+                                <i class="fas fa-chart-pie mr-2"></i>Hasil Perhitungan
+                            </h3>
+                            <div class="text-center py-8">
+                                <i class="fas fa-calculator text-6xl text-blue-300 mb-4"></i>
+                                <p class="text-blue-600">Masukkan data untuk melihat hasil perhitungan</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Reference -->
+                        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 rounded-2xl">
+                            <h3 class="text-lg font-bold text-yellow-800 mb-4">
+                                <i class="fas fa-info-circle mr-2"></i>Panduan Cepat
+                            </h3>
+                            <div class="space-y-3 text-sm">
+                                <div class="flex items-center">
+                                    <i class="fas fa-check text-yellow-600 mr-2"></i>
+                                    <span>1 orang = 2.5 kg beras</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check text-yellow-600 mr-2"></i>
+                                    <span>Keluarga 4 orang = 10 kg beras</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check text-yellow-600 mr-2"></i>
+                                    <span>Boleh diganti dengan uang setara</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check text-yellow-600 mr-2"></i>
+                                    <span>Dibayar sebelum shalat Id</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certificate Page -->
+        <div id="certificate" class="page">
+            <div class="bg-white rounded-3xl shadow-xl p-8">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-certificate text-3xl text-purple-500 mr-4"></i>
+                    <h2 class="text-3xl font-bold text-gray-800">Sertifikat Pembelajaran</h2>
+                </div>
+                
+                <div id="certificateContent" class="text-center py-12">
+                    <i class="fas fa-lock text-6xl text-gray-300 mb-6"></i>
+                    <h3 class="text-2xl font-bold text-gray-600 mb-4">Sertifikat Belum Tersedia</h3>
+                    <p class="text-gray-500 mb-8">Selesaikan semua modul pembelajaran untuk mendapatkan sertifikat</p>
+                    
+                    <div class="max-w-md mx-auto">
+                        <div class="bg-gray-100 rounded-full h-4 mb-4">
+                            <div id="overallProgress" class="bg-gradient-to-r from-purple-400 to-purple-600 h-4 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <p class="text-sm text-gray-600">Progress Keseluruhan: <span id="overallProgressText">0%</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Learning Modal -->
+    <div id="learningModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-white rounded-3xl max-w-4xl w-full max-h-90vh overflow-hidden">
+            <div class="gradient-bg text-white p-6">
+                <div class="flex justify-between items-center">
+                    <h3 id="modalTitle" class="text-2xl font-bold">Materi Pembelajaran</h3>
+                    <button class="text-white hover:text-gray-200 text-2xl" onclick="closeLearningModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="modalContent" class="p-6 overflow-y-auto max-h-96">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Simulation Modal -->
+    <div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full">
+            <div class="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-t-3xl">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-2xl font-bold">
+                        <i class="fas fa-credit-card mr-2"></i>Simulasi Pembayaran Zakat
+                    </h3>
+                    <button class="text-white hover:text-gray-200 text-2xl" onclick="closePaymentModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="paymentContent" class="p-6">
+                <!-- Payment content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global Variables
+        let userProfile = {
+            name: '',
+            class: '',
+            avatar: 'default1',
+            avatarSvg: `<div class="w-full h-full bg-blue-100 flex items-center justify-center"><i class="fas fa-user text-blue-500 text-2xl"></i></div>`,
+            photoData: null
+        };
+        
+        let learningProgress = {
+            zakatFitrah: {
+                pengertian: 0,
+                ketentuan: 0,
+                praktik: 0
+            }
+        };
+        
+        let quizResults = {
+            zakatFitrah: {
+                pengertian: [],
+                ketentuan: [],
+                praktik: []
+            }
+        };
+        
+        let studyStartTime = null;
+        let totalStudyTime = 0;
+        let badges = [];
+        let calculatorHistory = [];
+
+        // Learning Content Data
+        const learningContent = {
+            pengertian: {
+                title: 'Pengertian Zakat Fitrah',
+                content: `
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl">
+                            <h4 class="text-xl font-bold text-blue-800 mb-4">
+                                <i class="fas fa-search mr-2"></i>Apa itu Zakat Fitrah?
+                            </h4>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                Zakat fitrah adalah zakat yang wajib dikeluarkan oleh setiap Muslim yang mampu pada bulan Ramadan. 
+                                Kata "fitrah" berasal dari bahasa Arab yang berarti "sifat dasar" atau "kesucian".
+                            </p>
+                            <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500">
+                                <p class="text-blue-800 font-medium">
+                                    <i class="fas fa-lightbulb mr-2"></i>
+                                    Zakat fitrah bertujuan untuk mensucikan jiwa dari sifat kikir dan membantu fakir miskin.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl">
+                            <h4 class="text-xl font-bold text-green-800 mb-4">
+                                <i class="fas fa-book-open mr-2"></i>Dalil Al-Quran dan Hadits
+                            </h4>
+                            <div class="bg-white p-4 rounded-xl mb-4">
+                                <p class="arabic-text text-green-800 font-bold mb-2">قَدْ أَفْلَحَ مَنْ تَزَكَّى</p>
+                                <p class="text-center italic text-gray-700">"Sungguh beruntung orang yang membersihkan diri (dengan zakat)"</p>
+                                <p class="text-center text-sm text-gray-500">(QS. Al-A'la: 14)</p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                quiz: [
+                    {
+                        question: "Apa arti kata 'fitrah' dalam zakat fitrah?",
+                        options: ["Kewajiban", "Sifat dasar/kesucian", "Pemberian", "Ibadah"],
+                        correct: 1,
+                        explanation: "Fitrah berasal dari bahasa Arab yang berarti sifat dasar atau kesucian."
+                    },
+                    {
+                        question: "Kapan zakat fitrah wajib dikeluarkan?",
+                        options: ["Setiap bulan", "Bulan Ramadan", "Setelah Idul Fitri", "Kapan saja"],
+                        correct: 1,
+                        explanation: "Zakat fitrah wajib dikeluarkan pada bulan Ramadan, sebelum shalat Idul Fitri."
+                    },
+                    {
+                        question: "Siapa yang wajib mengeluarkan zakat fitrah?",
+                        options: ["Hanya orang kaya", "Semua Muslim yang mampu", "Hanya kepala keluarga", "Hanya orang dewasa"],
+                        correct: 1,
+                        explanation: "Setiap Muslim yang mampu wajib mengeluarkan zakat fitrah, termasuk untuk anggota keluarganya."
+                    },
+                    {
+                        question: "Apa tujuan utama zakat fitrah?",
+                        options: ["Menambah harta", "Mensucikan jiwa dan membantu fakir miskin", "Mengurangi pajak", "Tradisi keluarga"],
+                        correct: 1,
+                        explanation: "Zakat fitrah bertujuan untuk mensucikan jiwa dari sifat kikir dan membantu fakir miskin."
+                    },
+                    {
+                        question: "Dalam Al-Quran, ayat mana yang menyebutkan tentang kesuksesan orang yang berzakat?",
+                        options: ["Al-Baqarah: 43", "Al-A'la: 14", "At-Taubah: 103", "Al-Mu'minun: 4"],
+                        correct: 1,
+                        explanation: "QS. Al-A'la ayat 14: 'Sungguh beruntung orang yang membersihkan diri (dengan zakat)'"
+                    },
+                    {
+                        question: "Zakat fitrah disebut juga dengan nama?",
+                        options: ["Zakat mal", "Zakat nafs", "Zakat harta", "Zakat emas"],
+                        correct: 1,
+                        explanation: "Zakat fitrah juga disebut zakat nafs (zakat jiwa) karena untuk mensucikan jiwa."
+                    },
+                    {
+                        question: "Apa hikmah zakat fitrah bagi yang mengeluarkannya?",
+                        options: ["Menambah rezeki", "Mensucikan jiwa dari kikir", "Mendapat pujian", "Mengurangi beban"],
+                        correct: 1,
+                        explanation: "Hikmah utama zakat fitrah adalah mensucikan jiwa dari sifat kikir dan bakhil."
+                    },
+                    {
+                        question: "Zakat fitrah berbeda dengan zakat mal dalam hal?",
+                        options: ["Jumlahnya", "Waktunya", "Penerimanya", "Semua benar"],
+                        correct: 3,
+                        explanation: "Zakat fitrah berbeda dari zakat mal dalam jumlah, waktu pembayaran, dan ketentuan penerimanya."
+                    },
+                    {
+                        question: "Apa yang terjadi jika seseorang tidak mengeluarkan zakat fitrah?",
+                        options: ["Tidak apa-apa", "Dosanya ringan", "Berdosa dan puasanya tidak sempurna", "Hanya makruh"],
+                        correct: 2,
+                        explanation: "Tidak mengeluarkan zakat fitrah adalah dosa dan dapat membuat puasa Ramadan tidak sempurna."
+                    },
+                    {
+                        question: "Dalam hadits, Rasulullah SAW mewajibkan zakat fitrah untuk?",
+                        options: ["Mensucikan puasa", "Memberi makan fakir miskin", "Keduanya benar", "Menambah pahala"],
+                        correct: 2,
+                        explanation: "Hadits menyebutkan zakat fitrah untuk mensucikan puasa dari perbuatan sia-sia dan memberi makan fakir miskin."
+                    }
+                ]
+            },
+            ketentuan: {
+                title: 'Ketentuan dan Syarat Zakat Fitrah',
+                content: `
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl">
+                            <h4 class="text-xl font-bold text-purple-800 mb-4">
+                                <i class="fas fa-users mr-2"></i>Siapa yang Wajib Zakat Fitrah?
+                            </h4>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-white p-4 rounded-xl border-l-4 border-green-500">
+                                    <h5 class="font-bold text-green-800 mb-2">Syarat Wajib:</h5>
+                                    <ul class="space-y-2 text-sm">
+                                        <li><i class="fas fa-check text-green-500 mr-2"></i>Beragama Islam</li>
+                                        <li><i class="fas fa-check text-green-500 mr-2"></i>Hidup pada akhir Ramadan</li>
+                                        <li><i class="fas fa-check text-green-500 mr-2"></i>Memiliki kelebihan makanan</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white p-4 rounded-xl border-l-4 border-orange-500">
+                                    <h5 class="font-bold text-orange-800 mb-2">Takaran:</h5>
+                                    <p class="text-lg font-bold text-orange-700">1 Sha' = 2,5 kg beras</p>
+                                    <p class="text-sm text-gray-600">Per orang dalam keluarga</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                quiz: [
+                    {
+                        question: "Berapa takaran zakat fitrah per orang?",
+                        options: ["1 kg", "2 kg", "2,5 kg", "3 kg"],
+                        correct: 2,
+                        explanation: "Takaran zakat fitrah adalah 1 sha' atau sekitar 2,5 kg makanan pokok per orang."
+                    },
+                    {
+                        question: "Apa syarat utama seseorang wajib zakat fitrah?",
+                        options: ["Kaya raya", "Muslim dan mampu", "Dewasa saja", "Punya rumah"],
+                        correct: 1,
+                        explanation: "Syarat utama adalah beragama Islam dan mampu (memiliki kelebihan makanan untuk sehari)."
+                    },
+                    {
+                        question: "Kapan batas akhir pembayaran zakat fitrah?",
+                        options: ["Sebelum shalat Idul Fitri", "Setelah shalat Id", "Akhir Ramadan", "Kapan saja"],
+                        correct: 0,
+                        explanation: "Zakat fitrah harus dibayar sebelum shalat Idul Fitri dimulai."
+                    },
+                    {
+                        question: "Siapa yang berhak menerima zakat fitrah?",
+                        options: ["Semua orang", "8 golongan mustahiq", "Hanya fakir miskin", "Keluarga sendiri"],
+                        correct: 2,
+                        explanation: "Zakat fitrah khusus untuk fakir miskin, berbeda dengan zakat mal yang untuk 8 golongan."
+                    },
+                    {
+                        question: "Jika seseorang meninggal sebelum maghrib akhir Ramadan, apakah wajib zakat fitrah?",
+                        options: ["Tetap wajib", "Tidak wajib", "Terserah keluarga", "Setengah saja"],
+                        correct: 1,
+                        explanation: "Tidak wajib karena syarat wajib adalah hidup pada akhir Ramadan (maghrib terakhir)."
+                    },
+                    {
+                        question: "Bolehkah zakat fitrah dibayar dengan uang?",
+                        options: ["Tidak boleh", "Boleh dengan syarat", "Selalu boleh", "Hanya di kota"],
+                        correct: 1,
+                        explanation: "Boleh dengan syarat setara nilai makanan pokok dan lebih bermanfaat bagi penerima."
+                    },
+                    {
+                        question: "Apa yang dimaksud dengan 1 sha' dalam takaran zakat fitrah?",
+                        options: ["1 kg", "2 kg", "2,5 kg", "3 kg"],
+                        correct: 2,
+                        explanation: "1 sha' setara dengan sekitar 2,5 kg makanan pokok seperti beras atau gandum."
+                    },
+                    {
+                        question: "Apakah bayi yang baru lahir wajib zakat fitrah?",
+                        options: ["Tidak wajib", "Wajib jika lahir sebelum maghrib akhir Ramadan", "Wajib setelah 1 tahun", "Terserah orangtua"],
+                        correct: 1,
+                        explanation: "Bayi wajib zakat fitrah jika lahir sebelum maghrib akhir Ramadan."
+                    },
+                    {
+                        question: "Bolehkah zakat fitrah diberikan kepada keluarga sendiri?",
+                        options: ["Boleh untuk semua keluarga", "Tidak boleh sama sekali", "Boleh kecuali yang menjadi tanggungan", "Hanya untuk saudara"],
+                        correct: 2,
+                        explanation: "Tidak boleh diberikan kepada yang menjadi tanggungan (istri, anak), tapi boleh untuk saudara yang membutuhkan."
+                    },
+                    {
+                        question: "Apa hukum menunda pembayaran zakat fitrah setelah Idul Fitri?",
+                        options: ["Sah dan tidak apa-apa", "Tetap sah tapi berdosa", "Tidak sah", "Harus bayar denda"],
+                        correct: 1,
+                        explanation: "Tetap sah sebagai sedekah biasa, tapi berdosa karena terlambat dan tidak mendapat pahala zakat fitrah."
+                    }
+                ]
+            },
+            praktik: {
+                title: 'Praktik dan Implementasi Zakat Fitrah',
+                content: `
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-2xl">
+                            <h4 class="text-xl font-bold text-indigo-800 mb-4">
+                                <i class="fas fa-calculator mr-2"></i>Cara Menghitung Zakat Fitrah
+                            </h4>
+                            <div class="bg-white p-4 rounded-xl">
+                                <h5 class="font-bold mb-2">Contoh Perhitungan Keluarga 4 Orang:</h5>
+                                <p class="text-lg">4 orang × 2,5 kg = <span class="font-bold text-indigo-600">10 kg beras</span></p>
+                                <p class="text-sm text-gray-600">Atau setara uang: 4 × Rp 37.500 = Rp 150.000</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl">
+                            <h4 class="text-xl font-bold text-green-800 mb-4">
+                                <i class="fas fa-hand-holding-heart mr-2"></i>Cara Menyalurkan
+                            </h4>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-white p-4 rounded-xl">
+                                    <h5 class="font-bold text-green-700 mb-2">
+                                        <i class="fas fa-mosque mr-2"></i>Melalui Masjid
+                                    </h5>
+                                    <ul class="text-sm space-y-1">
+                                        <li>• Mudah dan praktis</li>
+                                        <li>• Ada bukti penyerahan</li>
+                                        <li>• Distribusi merata</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white p-4 rounded-xl">
+                                    <h5 class="font-bold text-green-700 mb-2">
+                                        <i class="fas fa-handshake mr-2"></i>Langsung ke Mustahiq
+                                    </h5>
+                                    <ul class="text-sm space-y-1">
+                                        <li>• Lebih personal</li>
+                                        <li>• Tahu penerima pasti</li>
+                                        <li>• Pilih yang membutuhkan</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                quiz: [
+                    {
+                        question: "Keluarga 5 orang harus mengeluarkan zakat fitrah sebanyak:",
+                        options: ["10 kg", "12,5 kg", "15 kg", "20 kg"],
+                        correct: 1,
+                        explanation: "5 orang × 2,5 kg = 12,5 kg beras untuk zakat fitrah."
+                    },
+                    {
+                        question: "Jika harga beras Rp 15.000/kg, berapa zakat fitrah untuk 1 orang dalam bentuk uang?",
+                        options: ["Rp 30.000", "Rp 37.500", "Rp 40.000", "Rp 45.000"],
+                        correct: 1,
+                        explanation: "2,5 kg × Rp 15.000 = Rp 37.500 untuk zakat fitrah 1 orang."
+                    },
+                    {
+                        question: "Manakah cara terbaik menyalurkan zakat fitrah?",
+                        options: ["Melalui media sosial", "Langsung ke mustahiq atau melalui amil", "Ditabung dulu", "Diberikan ke tetangga kaya"],
+                        correct: 1,
+                        explanation: "Cara terbaik adalah langsung ke mustahiq (fakir miskin) atau melalui amil zakat terpercaya."
+                    },
+                    {
+                        question: "Kapan waktu terbaik mengeluarkan zakat fitrah?",
+                        options: ["Awal Ramadan", "Pertengahan Ramadan", "Beberapa hari sebelum Idul Fitri", "Setelah Idul Fitri"],
+                        correct: 2,
+                        explanation: "Waktu terbaik adalah beberapa hari sebelum Idul Fitri agar fakir miskin bisa merayakan Idul Fitri."
+                    },
+                    {
+                        question: "Jika keluarga 6 orang dengan harga beras Rp 12.000/kg, total zakat fitrah dalam uang adalah:",
+                        options: ["Rp 150.000", "Rp 180.000", "Rp 200.000", "Rp 220.000"],
+                        correct: 1,
+                        explanation: "6 orang × 2,5 kg × Rp 12.000 = Rp 180.000"
+                    },
+                    {
+                        question: "Apa yang harus dilakukan jika lupa membayar zakat fitrah sebelum shalat Id?",
+                        options: ["Tidak perlu bayar", "Bayar tahun depan", "Tetap bayar sebagai sedekah", "Bayar setengah saja"],
+                        correct: 2,
+                        explanation: "Tetap harus dibayar meskipun terlambat, namun statusnya menjadi sedekah biasa."
+                    },
+                    {
+                        question: "Bolehkah zakat fitrah dikumpulkan untuk membeli kebutuhan yang lebih besar?",
+                        options: ["Tidak boleh", "Boleh dengan persetujuan mustahiq", "Selalu boleh", "Hanya untuk pendidikan"],
+                        correct: 1,
+                        explanation: "Boleh jika ada persetujuan dari mustahiq dan lebih bermanfaat, seperti untuk modal usaha."
+                    },
+                    {
+                        question: "Apa yang dimaksud dengan 'amil zakat' dalam penyaluran zakat fitrah?",
+                        options: ["Penerima zakat", "Pengelola/penyalur zakat", "Pemberi zakat", "Saksi zakat"],
+                        correct: 1,
+                        explanation: "Amil zakat adalah orang atau lembaga yang bertugas mengumpulkan dan menyalurkan zakat."
+                    },
+                    {
+                        question: "Jika ada keluarga miskin yang juga Muslim, apakah mereka tetap wajib zakat fitrah?",
+                        options: ["Tidak wajib", "Wajib jika punya makanan lebih", "Wajib setengah takaran", "Terserah kemampuan"],
+                        correct: 1,
+                        explanation: "Tetap wajib jika memiliki kelebihan makanan untuk sehari, meskipun dalam kondisi miskin."
+                    },
+                    {
+                        question: "Apa hikmah membayar zakat fitrah sebelum shalat Idul Fitri?",
+                        options: ["Agar tidak lupa", "Supaya fakir miskin bisa ikut bergembira di Idul Fitri", "Tradisi turun temurun", "Lebih mudah"],
+                        correct: 1,
+                        explanation: "Agar fakir miskin juga bisa merasakan kegembiraan dan ikut merayakan Idul Fitri dengan layak."
+                    }
+                ]
+            }
+        };
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', function() {
+            checkUserProfile();
+            setupAvatarSelection();
+            setupProfileForm();
+            loadProgress();
+            updateStudyTime();
+            renderLearningModules();
+        });
+        
+        // Render learning modules with lock system
+        function renderLearningModules() {
+            const modules = [
+                {
+                    id: 'pengertian',
+                    title: 'Pengertian',
+                    description: 'Memahami definisi dan dasar hukum zakat fitrah',
+                    icon: 'fas fa-search',
+                    color: 'blue',
+                    unlocked: true
+                },
+                {
+                    id: 'ketentuan',
+                    title: 'Ketentuan',
+                    description: 'Syarat, rukun, dan ketentuan zakat fitrah',
+                    icon: 'fas fa-balance-scale',
+                    color: 'green',
+                    unlocked: learningProgress.zakatFitrah.pengertian >= 70
+                },
+                {
+                    id: 'praktik',
+                    title: 'Praktik',
+                    description: 'Cara menghitung dan menyalurkan zakat fitrah',
+                    icon: 'fas fa-hand-holding-heart',
+                    color: 'purple',
+                    unlocked: learningProgress.zakatFitrah.ketentuan >= 70
+                }
+            ];
+            
+            const container = document.getElementById('learningModules');
+            container.innerHTML = modules.map(module => {
+                const progress = learningProgress.zakatFitrah[module.id] || 0;
+                const isLocked = !module.unlocked;
+                
+                return `
+                    <div class="bg-gradient-to-br from-${module.color}-50 to-${module.color}-100 p-6 rounded-2xl card-hover ${isLocked ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}" 
+                         ${!isLocked ? `onclick="startLearning('${module.id}')"` : ''}>
+                        <div class="text-4xl mb-4 relative">
+                            <i class="${module.icon} text-${module.color}-500"></i>
+                            ${isLocked ? '<i class="fas fa-lock absolute -top-2 -right-2 text-gray-400 text-lg"></i>' : ''}
+                        </div>
+                        <h3 class="text-xl font-bold text-${module.color}-800 mb-2">${module.title}</h3>
+                        <p class="text-${module.color}-700 text-sm mb-4">${module.description}</p>
+                        
+                        ${progress > 0 ? `
+                            <div class="mb-4">
+                                <div class="flex justify-between text-xs text-${module.color}-600 mb-1">
+                                    <span>Progress</span>
+                                    <span>${progress}%</span>
+                                </div>
+                                <div class="w-full bg-white rounded-full h-2">
+                                    <div class="bg-gradient-to-r from-${module.color}-400 to-${module.color}-600 h-2 rounded-full transition-all duration-500" style="width: ${progress}%"></div>
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-${module.color}-600 font-medium">10 Soal Kuis</span>
+                            <div class="w-8 h-8 bg-${module.color}-500 rounded-full flex items-center justify-center">
+                                ${isLocked ? 
+                                    '<i class="fas fa-lock text-white text-sm"></i>' : 
+                                    progress >= 70 ? '<i class="fas fa-check text-white text-sm"></i>' : '<i class="fas fa-play text-white text-sm"></i>'
+                                }
+                            </div>
+                        </div>
+                        
+                        ${isLocked ? `
+                            <div class="mt-3 text-xs text-gray-500 text-center">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                Selesaikan ${module.id === 'ketentuan' ? 'Pengertian' : 'Ketentuan'} terlebih dahulu
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Check if user profile exists
+        function checkUserProfile() {
+            const savedProfile = localStorage.getItem('userProfile');
+            if (savedProfile) {
+                userProfile = JSON.parse(savedProfile);
+                updateUserDisplay();
+                document.getElementById('welcomeForm').style.display = 'none';
+            }
+        }
+
+        // Setup photo upload and avatar selection
+        function setupAvatarSelection() {
+            // Photo upload functionality
+            const photoInput = document.getElementById('photoInput');
+            const photoPreview = document.getElementById('photoPreview');
+            const photoPlaceholder = document.getElementById('photoPlaceholder');
+            
+            photoInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // Check file size (max 5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'File Terlalu Besar',
+                            text: 'Ukuran foto maksimal 5MB',
+                            confirmButtonColor: '#f59e0b'
+                        });
+                        return;
+                    }
+                    
+                    // Check file type
+                    if (!file.type.startsWith('image/')) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Format File Salah',
+                            text: 'Hanya file gambar (JPG, PNG) yang diperbolehkan',
+                            confirmButtonColor: '#f59e0b'
+                        });
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        userProfile.photoData = e.target.result;
+                        userProfile.avatar = 'uploaded';
+                        userProfile.avatarSvg = `<img src="${e.target.result}" alt="Foto Siswa" class="w-full h-full object-cover">`;
+                        
+                        // Update preview
+                        photoPreview.innerHTML = `<img src="${e.target.result}" alt="Preview" class="w-full h-full object-cover">`;
+                        photoPreview.classList.remove('border-dashed', 'border-gray-300');
+                        photoPreview.classList.add('border-solid', 'border-green-400');
+                        
+                        // Clear default avatar selections
+                        document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+                        
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Foto Berhasil Diupload!',
+                            text: 'Foto profil Anda telah diperbarui',
+                            confirmButtonColor: '#10b981',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Default avatar selection
+            document.querySelectorAll('.avatar-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // Clear photo upload
+                    userProfile.photoData = null;
+                    photoInput.value = '';
+                    photoPreview.innerHTML = photoPlaceholder.outerHTML;
+                    photoPreview.classList.remove('border-solid', 'border-green-400');
+                    photoPreview.classList.add('border-dashed', 'border-gray-300');
+                    
+                    // Select avatar
+                    document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    userProfile.avatar = this.dataset.avatar;
+                    
+                    // Set avatar SVG based on selection
+                    const avatarType = this.dataset.avatar;
+                    const avatarIcons = {
+                        'default1': '<div class="w-full h-full bg-blue-100 flex items-center justify-center"><i class="fas fa-user text-blue-500 text-2xl"></i></div>',
+                        'default2': '<div class="w-full h-full bg-pink-100 flex items-center justify-center"><i class="fas fa-user-graduate text-pink-500 text-2xl"></i></div>',
+                        'default3': '<div class="w-full h-full bg-green-100 flex items-center justify-center"><i class="fas fa-child text-green-500 text-2xl"></i></div>'
+                    };
+                    
+                    userProfile.avatarSvg = avatarIcons[avatarType] || avatarIcons['default1'];
+                });
+            });
+        }
+
+        // Setup profile form
+        function setupProfileForm() {
+            document.getElementById('profileForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('userName').value.trim();
+                const userClass = document.getElementById('userClass').value;
+                
+                if (!name || !userClass || (!userProfile.photoData && !userProfile.avatar)) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Data Belum Lengkap',
+                        text: 'Mohon lengkapi nama, kelas, dan foto/avatar',
+                        confirmButtonColor: '#3b82f6'
+                    });
+                    return;
+                }
+                
+                userProfile.name = name;
+                userProfile.class = userClass;
+                
+                localStorage.setItem('userProfile', JSON.stringify(userProfile));
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Selamat Datang!',
+                    text: `Halo ${name}, selamat belajar!`,
+                    confirmButtonColor: '#3b82f6'
+                }).then(() => {
+                    document.getElementById('welcomeForm').style.display = 'none';
+                    updateUserDisplay();
+                    startStudyTimer();
+                });
+            });
+        }
+
+        // Update user display
+        function updateUserDisplay() {
+            document.getElementById('userAvatar').innerHTML = userProfile.avatarSvg;
+            document.getElementById('userNameDisplay').textContent = userProfile.name;
+            document.getElementById('userClassDisplay').textContent = `Kelas ${userProfile.class}`;
+            updateUserProgress();
+        }
+        
+        // Update user progress in header
+        function updateUserProgress() {
+            const zakatProgress = Object.values(learningProgress.zakatFitrah);
+            const avgProgress = zakatProgress.reduce((a, b) => a + b, 0) / zakatProgress.length;
+            
+            document.getElementById('userProgressBar').style.width = Math.round(avgProgress) + '%';
+            document.getElementById('userProgressText').textContent = Math.round(avgProgress) + '%';
+        }
+
+        // Navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(nav => {
+                nav.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Start Learning
+        function startLearning(topic) {
+            // Check if module is unlocked
+            if (topic === 'ketentuan' && learningProgress.zakatFitrah.pengertian < 70) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Modul Terkunci',
+                    text: 'Selesaikan modul Pengertian dengan skor minimal 70% terlebih dahulu!',
+                    confirmButtonColor: '#f59e0b'
+                });
+                return;
+            }
+            
+            if (topic === 'praktik' && learningProgress.zakatFitrah.ketentuan < 70) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Modul Terkunci',
+                    text: 'Selesaikan modul Ketentuan dengan skor minimal 70% terlebih dahulu!',
+                    confirmButtonColor: '#f59e0b'
+                });
+                return;
+            }
+            
+            const content = learningContent[topic];
+            if (!content) return;
+            
+            document.getElementById('modalTitle').innerHTML = `
+                <i class="fas fa-book-open mr-2"></i>${content.title}
+            `;
+            
+            document.getElementById('modalContent').innerHTML = `
+                ${content.content}
+                <div class="mt-8 text-center">
+                    <button onclick="startQuiz('${topic}')" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:from-blue-600 hover:to-purple-700 transition-all hover:scale-105">
+                        <i class="fas fa-brain mr-2"></i>Mulai Kuis (10 Soal)
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('learningModal').classList.remove('hidden');
+        }
+
+        // Start Quiz
+        function startQuiz(topic) {
+            const content = learningContent[topic];
+            let currentQuestion = 0;
+            let correctAnswers = 0;
+            let isAnswered = false;
+            
+            function showQuestion() {
+                if (currentQuestion >= content.quiz.length) {
+                    showQuizResult();
+                    return;
+                }
+                
+                isAnswered = false;
+                const question = content.quiz[currentQuestion];
+                document.getElementById('modalContent').innerHTML = `
+                    <div class="text-center mb-6">
+                        <h4 class="text-2xl font-bold mb-2">
+                            <i class="fas fa-brain mr-2"></i>Kuis Pemahaman
+                        </h4>
+                        <p class="text-gray-600">Pertanyaan ${currentQuestion + 1} dari ${content.quiz.length}</p>
+                        <div class="w-full bg-gray-200 rounded-full h-3 mt-4">
+                            <div class="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-500" style="width: ${((currentQuestion + 1) / content.quiz.length) * 100}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl mb-6">
+                        <h5 class="text-xl font-bold text-gray-800 mb-6">${question.question}</h5>
+                        <div class="space-y-3" id="optionsContainer">
+                            ${question.options.map((option, index) => `
+                                <button class="quiz-option w-full p-4 text-left bg-white border-2 border-gray-200 rounded-xl hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 transform hover:scale-[1.02]" onclick="selectAnswer(${index})">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold mr-3 transition-all duration-300">
+                                            ${String.fromCharCode(65 + index)}
+                                        </div>
+                                        <span class="flex-1">${option}</span>
+                                    </div>
+                                </button>
+                            `).join('')}
+                        </div>
+                        <div id="explanationContainer" class="mt-6 hidden">
+                            <div class="p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded-xl">
+                                <p class="font-bold text-yellow-800 mb-2">
+                                    <i class="fas fa-lightbulb mr-2"></i>Penjelasan:
+                                </p>
+                                <p class="text-gray-700">${question.explanation}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            window.selectAnswer = function(answerIndex) {
+                if (isAnswered) return; // Prevent multiple selections
+                
+                isAnswered = true;
+                const question = content.quiz[currentQuestion];
+                const isCorrect = answerIndex === question.correct;
+                
+                if (isCorrect) correctAnswers++;
+                
+                // Disable all buttons and show results immediately
+                document.querySelectorAll('.quiz-option').forEach((btn, index) => {
+                    btn.disabled = true;
+                    btn.classList.remove('hover:border-blue-400', 'hover:bg-blue-50', 'hover:scale-[1.02]');
+                    
+                    if (index === question.correct) {
+                        // Correct answer - green
+                        btn.classList.remove('border-gray-200', 'bg-white');
+                        btn.classList.add('bg-green-500', 'text-white', 'border-green-500', 'transform', 'scale-105');
+                        btn.querySelector('.w-8').classList.remove('bg-blue-100', 'text-blue-600');
+                        btn.querySelector('.w-8').classList.add('bg-green-600', 'text-white');
+                        btn.innerHTML = btn.innerHTML.replace('</div>', ' <i class="fas fa-check"></i></div>');
+                    } else if (index === answerIndex && !isCorrect) {
+                        // Wrong selected answer - red
+                        btn.classList.remove('border-gray-200', 'bg-white');
+                        btn.classList.add('bg-red-500', 'text-white', 'border-red-500', 'transform', 'scale-105');
+                        btn.querySelector('.w-8').classList.remove('bg-blue-100', 'text-blue-600');
+                        btn.querySelector('.w-8').classList.add('bg-red-600', 'text-white');
+                        btn.innerHTML = btn.innerHTML.replace('</div>', ' <i class="fas fa-times"></i></div>');
+                    } else {
+                        // Other options - dimmed
+                        btn.classList.add('opacity-50');
+                    }
+                });
+                
+                // Show explanation with animation
+                const explanationContainer = document.getElementById('explanationContainer');
+                explanationContainer.classList.remove('hidden');
+                explanationContainer.classList.add('animate-fadeIn');
+                
+                // Auto advance to next question after 3 seconds
+                setTimeout(() => {
+                    currentQuestion++;
+                    showQuestion();
+                }, 3000);
+            };
+            
+            function showQuizResult() {
+                const percentage = Math.round((correctAnswers / content.quiz.length) * 100);
+                learningProgress.zakatFitrah[topic] = percentage;
+                
+                // Save quiz result
+                const quizResult = {
+                    date: new Date().toISOString(),
+                    score: percentage,
+                    correctAnswers: correctAnswers,
+                    totalQuestions: content.quiz.length
+                };
+                quizResults.zakatFitrah[topic].push(quizResult);
+                
+                saveProgress();
+                updateProgress();
+                
+                let resultIcon, resultTitle, resultColor;
+                if (percentage >= 80) {
+                    resultIcon = '🏆';
+                    resultTitle = 'Luar Biasa!';
+                    resultColor = 'text-yellow-600';
+                } else if (percentage >= 60) {
+                    resultIcon = '🎉';
+                    resultTitle = 'Bagus!';
+                    resultColor = 'text-green-600';
+                } else {
+                    resultIcon = '📚';
+                    resultTitle = 'Terus Belajar!';
+                    resultColor = 'text-orange-600';
+                }
+                
+                document.getElementById('modalContent').innerHTML = `
+                    <div class="text-center">
+                        <div class="text-8xl mb-6">${resultIcon}</div>
+                        <h4 class="text-3xl font-bold ${resultColor} mb-4">${resultTitle}</h4>
+                        <div class="text-6xl font-bold ${resultColor} mb-2">${percentage}%</div>
+                        <p class="text-gray-600 mb-8">${correctAnswers} dari ${content.quiz.length} jawaban benar</p>
+                        
+                        <div class="space-y-4">
+                            <button onclick="startLearning('${topic}')" class="px-6 py-3 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all mr-4">
+                                <i class="fas fa-redo mr-2"></i>Pelajari Lagi
+                            </button>
+                            <button onclick="closeLearningModal()" class="px-6 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-all">
+                                <i class="fas fa-check mr-2"></i>Selesai
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                if (percentage >= 70) {
+                    // Check if this unlocks next module
+                    let unlockedModule = '';
+                    if (topic === 'pengertian') {
+                        unlockedModule = 'Ketentuan';
+                    } else if (topic === 'ketentuan') {
+                        unlockedModule = 'Praktik';
+                    }
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Selamat!',
+                        html: `
+                            <div class="text-center">
+                                <p class="mb-4">Kamu berhasil menyelesaikan ${content.title} dengan skor ${percentage}%</p>
+                                ${unlockedModule ? `
+                                    <div class="bg-green-50 p-4 rounded-xl border border-green-200">
+                                        <i class="fas fa-unlock text-green-500 text-2xl mb-2"></i>
+                                        <p class="text-green-700 font-bold">Modul "${unlockedModule}" telah terbuka!</p>
+                                        <p class="text-green-600 text-sm">Lanjutkan pembelajaran ke materi berikutnya</p>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `,
+                        confirmButtonColor: '#10b981'
+                    });
+                } else if (percentage >= 60) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Bagus!',
+                        text: `Kamu berhasil menyelesaikan ${content.title} dengan skor ${percentage}%`,
+                        confirmButtonColor: '#10b981'
+                    });
+                }
+            }
+            
+            showQuestion();
+        }
+
+        // Calculator Functions
+        function calculateZakat() {
+            const familyMembers = parseInt(document.getElementById('familyMembers').value) || 0;
+            const ricePrice = parseInt(document.getElementById('ricePrice').value) || 0;
+            const paymentType = document.getElementById('paymentType').value;
+            
+            if (familyMembers <= 0 || ricePrice <= 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Data Tidak Valid',
+                    text: 'Mohon masukkan data yang valid',
+                    confirmButtonColor: '#f59e0b'
+                });
+                return;
+            }
+            
+            const totalRice = familyMembers * 2.5;
+            const totalMoney = totalRice * ricePrice;
+            
+            // Save calculation to history
+            const calculation = {
+                date: new Date().toISOString(),
+                familyMembers: familyMembers,
+                ricePrice: ricePrice,
+                paymentType: paymentType,
+                totalRice: totalRice,
+                totalMoney: totalMoney
+            };
+            calculatorHistory.push(calculation);
+            localStorage.setItem('calculatorHistory', JSON.stringify(calculatorHistory));
+            
+            let resultHTML = `
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-bold text-blue-800 mb-4">
+                        <i class="fas fa-chart-pie mr-2"></i>Hasil Perhitungan
+                    </h3>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500">
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium">Jumlah Anggota Keluarga:</span>
+                            <span class="font-bold text-blue-600">${familyMembers} orang</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-4 rounded-xl border-l-4 border-green-500">
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium">Total Beras:</span>
+                            <span class="font-bold text-green-600">${totalRice} kg</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-4 rounded-xl border-l-4 border-purple-500">
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium">Setara Uang:</span>
+                            <span class="font-bold text-purple-600">Rp ${totalMoney.toLocaleString('id-ID')}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <button onclick="showPaymentSimulation(${totalMoney})" class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-xl font-bold hover:from-green-600 hover:to-green-700 transition-all">
+                        <i class="fas fa-credit-card mr-2"></i>Simulasi Pembayaran
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('calculatorResult').innerHTML = resultHTML;
+        }
+
+        // Payment Simulation
+        function showPaymentSimulation(amount = null) {
+            if (!amount) {
+                // Calculate default amount for 4 people
+                amount = 4 * 2.5 * 15000; // 4 people × 2.5kg × Rp 15,000
+            }
+            
+            document.getElementById('paymentContent').innerHTML = `
+                <div class="space-y-6">
+                    <div class="text-center">
+                        <h4 class="text-2xl font-bold text-gray-800 mb-2">Pembayaran Zakat Fitrah</h4>
+                        <div class="text-3xl font-bold text-green-600">Rp ${amount.toLocaleString('id-ID')}</div>
+                        <p class="text-gray-600">Untuk keluarga 4 orang</p>
+                    </div>
+                    
+                    <div>
+                        <h5 class="font-bold text-gray-800 mb-4">Pilih Metode Pembayaran:</h5>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="payment-method p-4 border-2 border-gray-200 rounded-xl" onclick="selectPaymentMethod(this, 'transfer')">
+                                <div class="text-center">
+                                    <i class="fas fa-university text-3xl text-blue-500 mb-2"></i>
+                                    <div class="font-bold">Transfer Bank</div>
+                                    <div class="text-sm text-gray-600">BCA, Mandiri, BRI</div>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-method p-4 border-2 border-gray-200 rounded-xl" onclick="selectPaymentMethod(this, 'ewallet')">
+                                <div class="text-center">
+                                    <i class="fas fa-mobile-alt text-3xl text-green-500 mb-2"></i>
+                                    <div class="font-bold">E-Wallet</div>
+                                    <div class="text-sm text-gray-600">GoPay, OVO, DANA</div>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-method p-4 border-2 border-gray-200 rounded-xl" onclick="selectPaymentMethod(this, 'cash')">
+                                <div class="text-center">
+                                    <i class="fas fa-money-bill-wave text-3xl text-yellow-500 mb-2"></i>
+                                    <div class="font-bold">Tunai</div>
+                                    <div class="text-sm text-gray-600">Langsung ke masjid</div>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-method p-4 border-2 border-gray-200 rounded-xl" onclick="selectPaymentMethod(this, 'rice')">
+                                <div class="text-center">
+                                    <i class="fas fa-seedling text-3xl text-orange-500 mb-2"></i>
+                                    <div class="font-bold">Beras</div>
+                                    <div class="text-sm text-gray-600">10 kg beras</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button id="payButton" class="bg-gray-300 text-gray-500 px-8 py-3 rounded-xl font-bold cursor-not-allowed" disabled>
+                            Pilih Metode Pembayaran
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('paymentModal').classList.remove('hidden');
+        }
+
+        function selectPaymentMethod(element, method) {
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            
+            const payButton = document.getElementById('payButton');
+            payButton.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+            payButton.classList.add('bg-gradient-to-r', 'from-green-500', 'to-green-600', 'text-white', 'hover:from-green-600', 'hover:to-green-700');
+            payButton.disabled = false;
+            payButton.textContent = 'Bayar Sekarang';
+            payButton.onclick = () => processPayment(method);
+        }
+
+        function processPayment(method) {
+            const methodNames = {
+                transfer: 'Transfer Bank',
+                ewallet: 'E-Wallet',
+                cash: 'Tunai',
+                rice: 'Beras'
+            };
+            
+            Swal.fire({
+                title: 'Pembayaran Berhasil!',
+                html: `
+                    <div class="text-center">
+                        <i class="fas fa-check-circle text-6xl text-green-500 mb-4"></i>
+                        <p class="text-lg mb-2">Zakat fitrah telah dibayar melalui</p>
+                        <p class="text-xl font-bold text-green-600">${methodNames[method]}</p>
+                        <p class="text-sm text-gray-600 mt-4">Semoga zakat Anda diterima Allah SWT</p>
+                    </div>
+                `,
+                icon: null,
+                confirmButtonText: 'Alhamdulillah',
+                confirmButtonColor: '#10b981'
+            }).then(() => {
+                closePaymentModal();
+            });
+        }
+
+        // Modal Functions
+        function closeLearningModal() {
+            document.getElementById('learningModal').classList.add('hidden');
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.add('hidden');
+        }
+
+        // Progress Functions
+        function saveProgress() {
+            localStorage.setItem('learningProgress', JSON.stringify(learningProgress));
+            localStorage.setItem('quizResults', JSON.stringify(quizResults));
+            localStorage.setItem('badges', JSON.stringify(badges));
+        }
+
+        function loadProgress() {
+            const savedProgress = localStorage.getItem('learningProgress');
+            if (savedProgress) {
+                learningProgress = JSON.parse(savedProgress);
+            }
+            
+            const savedQuizResults = localStorage.getItem('quizResults');
+            if (savedQuizResults) {
+                quizResults = JSON.parse(savedQuizResults);
+            }
+            
+            const savedBadges = localStorage.getItem('badges');
+            if (savedBadges) {
+                badges = JSON.parse(savedBadges);
+            }
+            
+            const savedCalculatorHistory = localStorage.getItem('calculatorHistory');
+            if (savedCalculatorHistory) {
+                calculatorHistory = JSON.parse(savedCalculatorHistory);
+            }
+            
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const zakatProgress = Object.values(learningProgress.zakatFitrah);
+            const avgProgress = zakatProgress.reduce((a, b) => a + b, 0) / zakatProgress.length;
+            
+            document.getElementById('zakatProgress').textContent = Math.round(avgProgress) + '%';
+            document.getElementById('zakatProgressBar').style.width = Math.round(avgProgress) + '%';
+            
+            // Update overall progress
+            document.getElementById('overallProgress').style.width = Math.round(avgProgress) + '%';
+            document.getElementById('overallProgressText').textContent = Math.round(avgProgress) + '%';
+            
+            // Update user progress in header
+            updateUserProgress();
+            
+            // Re-render modules to update lock status
+            renderLearningModules();
+            
+            // Update completed modules count
+            const completedModules = Object.values(learningProgress.zakatFitrah).filter(score => score >= 70).length;
+            document.getElementById('completedModules').textContent = `${completedModules}/3`;
+            
+            // Update badges
+            updateBadges(avgProgress);
+            
+            // Check if certificate should be available
+            if (avgProgress >= 80) {
+                showCertificate();
+            }
+        }
+        
+        // Update badges based on progress
+        function updateBadges(avgProgress) {
+            let badgeCount = 0;
+            
+            // Badge for completing each module
+            Object.entries(learningProgress.zakatFitrah).forEach(([module, score]) => {
+                if (score >= 70) badgeCount++;
+                if (score >= 80) badgeCount++; // Excellence badge
+                if (score === 100) badgeCount++; // Perfect score badge
+            });
+            
+            // Overall completion badge
+            if (avgProgress >= 80) badgeCount++;
+            
+            document.getElementById('totalBadges').textContent = badgeCount;
+        }
+
+        // Certificate Functions
+        function showCertificate() {
+            document.getElementById('certificateContent').innerHTML = `
+                <div class="certificate max-w-4xl mx-auto p-12 rounded-3xl text-white text-center relative">
+                    <div class="absolute top-8 left-8">
+                        <i class="fas fa-star text-yellow-300 text-3xl"></i>
+                    </div>
+                    <div class="absolute top-8 right-8">
+                        <i class="fas fa-star text-yellow-300 text-3xl"></i>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <h2 class="text-4xl font-bold mb-4">SERTIFIKAT PEMBELAJARAN</h2>
+                        <div class="text-xl opacity-90">Media Pembelajaran Islam Interaktif</div>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <div class="text-lg mb-2">Diberikan kepada:</div>
+                        <div class="text-5xl font-bold mb-4">${userProfile.name}</div>
+                        <div class="text-xl">Kelas ${userProfile.class}</div>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <div class="text-lg mb-4">Telah menyelesaikan pembelajaran</div>
+                        <div class="text-3xl font-bold text-yellow-300">ZAKAT FITRAH</div>
+                        <div class="text-lg mt-2">dengan nilai kelulusan yang memuaskan</div>
+                    </div>
+                    
+                    <div class="flex justify-between items-end">
+                        <div class="text-left">
+                            <div class="text-sm opacity-75">Tanggal:</div>
+                            <div class="font-bold">${new Date().toLocaleDateString('id-ID')}</div>
+                        </div>
+                        <div class="w-16 h-16 bg-white bg-opacity-30 rounded-full overflow-hidden">
+                            ${userProfile.avatarSvg}
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm opacity-75">Skor Akhir:</div>
+                            <div class="font-bold text-2xl text-yellow-300">${Math.round(Object.values(learningProgress.zakatFitrah).reduce((a, b) => a + b, 0) / 3)}%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+                        <button onclick="downloadCertificate()" class="bg-white text-purple-600 px-6 py-3 rounded-xl font-bold hover:bg-gray-100 transition-all">
+                            <i class="fas fa-download mr-2"></i>Download Sertifikat
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function downloadCertificate() {
+            Swal.fire({
+                title: 'Pilih Format Download',
+                html: `
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        <button onclick="downloadAsImage()" class="bg-blue-500 text-white p-4 rounded-xl hover:bg-blue-600 transition-all">
+                            <i class="fas fa-image text-2xl mb-2"></i>
+                            <div class="font-bold">Download PNG</div>
+                            <div class="text-sm opacity-90">Format Gambar</div>
+                        </button>
+                        <button onclick="downloadAsPDF()" class="bg-red-500 text-white p-4 rounded-xl hover:bg-red-600 transition-all">
+                            <i class="fas fa-file-pdf text-2xl mb-2"></i>
+                            <div class="font-bold">Download PDF</div>
+                            <div class="text-sm opacity-90">Format Dokumen</div>
+                        </button>
+                    </div>
+                `,
+                showConfirmButton: false,
+                showCancelButton: true,
+                cancelButtonText: 'Batal',
+                cancelButtonColor: '#6b7280'
+            });
+        }
+
+        function downloadAsImage() {
+            Swal.close();
+            Swal.fire({
+                title: 'Memproses...',
+                text: 'Sedang membuat sertifikat dalam format gambar',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            const certificate = document.querySelector('.certificate');
+            const originalStyle = certificate.style.cssText;
+            
+            // Temporarily adjust styles for better capture
+            certificate.style.transform = 'scale(1)';
+            certificate.style.width = '800px';
+            certificate.style.height = '600px';
+            
+            html2canvas(certificate, {
+                backgroundColor: null,
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                width: 800,
+                height: 600
+            }).then(canvas => {
+                // Restore original styles
+                certificate.style.cssText = originalStyle;
+                
+                // Create download link
+                const link = document.createElement('a');
+                link.download = `Sertifikat_${userProfile.name.replace(/\s+/g, '_')}_ZakatFitrah.png`;
+                link.href = canvas.toDataURL('image/png');
+                
+                // Trigger download
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Sertifikat berhasil didownload dalam format PNG',
+                    confirmButtonColor: '#10b981'
+                });
+            }).catch(error => {
+                console.error('Error generating image:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: 'Terjadi kesalahan saat membuat gambar sertifikat',
+                    confirmButtonColor: '#ef4444'
+                });
+            });
+        }
+
+        function downloadAsPDF() {
+            Swal.close();
+            Swal.fire({
+                title: 'Memproses...',
+                text: 'Sedang membuat sertifikat dalam format PDF',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            const certificate = document.querySelector('.certificate');
+            const originalStyle = certificate.style.cssText;
+            
+            // Temporarily adjust styles for better capture
+            certificate.style.transform = 'scale(1)';
+            certificate.style.width = '800px';
+            certificate.style.height = '600px';
+            
+            html2canvas(certificate, {
+                backgroundColor: null,
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                width: 800,
+                height: 600
+            }).then(canvas => {
+                // Restore original styles
+                certificate.style.cssText = originalStyle;
+                
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'landscape',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+                
+                const imgData = canvas.toDataURL('image/png');
+                const imgWidth = 297; // A4 landscape width in mm
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                // Center the image on the page
+                const x = 0;
+                const y = (210 - imgHeight) / 2; // A4 landscape height is 210mm
+                
+                pdf.addImage(imgData, 'PNG', x, y, imgWidth, imgHeight);
+                
+                // Add metadata
+                pdf.setProperties({
+                    title: `Sertifikat Pembelajaran - ${userProfile.name}`,
+                    subject: 'Sertifikat Zakat Fitrah',
+                    author: 'FIKIH ITU MUDAH',
+                    creator: 'Learning Management System'
+                });
+                
+                // Download the PDF
+                pdf.save(`Sertifikat_${userProfile.name.replace(/\s+/g, '_')}_ZakatFitrah.pdf`);
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Sertifikat berhasil didownload dalam format PDF',
+                    confirmButtonColor: '#10b981'
+                });
+            }).catch(error => {
+                console.error('Error generating PDF:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: 'Terjadi kesalahan saat membuat PDF sertifikat',
+                    confirmButtonColor: '#ef4444'
+                });
+            });
+        }
+
+        // Study Time Functions
+        function startStudyTimer() {
+            studyStartTime = Date.now();
+        }
+
+        function updateStudyTime() {
+            const savedTime = localStorage.getItem('totalStudyTime');
+            if (savedTime) {
+                totalStudyTime = parseInt(savedTime);
+            }
+            
+            if (studyStartTime) {
+                const currentSession = Math.floor((Date.now() - studyStartTime) / 60000);
+                const total = totalStudyTime + currentSession;
+                document.getElementById('studyTime').textContent = total + ' menit';
+            } else {
+                document.getElementById('studyTime').textContent = totalStudyTime + ' menit';
+            }
+            
+            setTimeout(updateStudyTime, 60000); // Update every minute
+        }
+
+        // Save study time on page unload
+        window.addEventListener('beforeunload', function() {
+            if (studyStartTime) {
+                const sessionTime = Math.floor((Date.now() - studyStartTime) / 60000);
+                totalStudyTime += sessionTime;
+                localStorage.setItem('totalStudyTime', totalStudyTime.toString());
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'973ef76543c8462b',t:'MTc1NTk5Nzc4OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
